@@ -6,4 +6,6 @@
     <string name="pin">PIN</string>
     <string name="forgot_pin">Forgot pin?</string>
     <string name="order_new">Order new pin</string>
+    <string name="accountnumber_error">Accoutnumber not valid</string>
+    <string name="password_wrong">Password not valid</string>
 </resources>

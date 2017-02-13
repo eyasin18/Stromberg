@@ -7,4 +7,6 @@
     <string name="order_new">Neu beantragen</string>
     <string name="password">Passwort</string>
     <string name="pin">PIN</string>
+    <string name="accountnumber_error">Kontonummer nicht vorhanden</string>
+    <string name="password_wrong">Falsches Passwort</string>
 </resources>

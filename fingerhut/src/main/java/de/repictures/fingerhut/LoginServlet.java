@@ -1,6 +1,7 @@
 package de.repictures.fingerhut;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -21,8 +22,8 @@ public class LoginServlet extends HttpServlet{
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-        String accountnumber = req.getParameter("accountnumber");
-        String inputPassword = req.getParameter("password");
+        String accountnumber = URLDecoder.decode(req.getParameter("accountnumber"), "UTF-8");
+        String inputPassword = URLDecoder.decode(req.getParameter("password"), "UTF-8");
 
         Key loginKey = KeyFactory.createKey("accountnumber", accountnumber);
         Query loginQuery = new Query("Acount", loginKey);
