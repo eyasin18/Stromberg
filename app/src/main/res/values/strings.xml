@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Stromberg</string>
+    <string name="login">Log in</string>
+    <string name="account_number">Account number</string>
+    <string name="password">Password</string>
+    <string name="pin">PIN</string>
+    <string name="forgot_pin">Forgot pin?</string>
+    <string name="order_new">Order new pin</string>
+</resources>

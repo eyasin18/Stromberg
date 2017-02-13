@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkGrey"
+    tools:context="de.repictures.stromberg.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/login_background"
+        android:layout_height="360dp"
+        android:scaleType="centerCrop"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/login_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:paddingTop="32dp"
+                android:paddingBottom="32dp"
+                android:layout_centerHorizontal="true"
+                style="@style/TextAppearance.AppCompat.Title" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/login_password_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/login_account_number_edit_layout"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
+                    android:ems="10"
+                    android:id="@+id/login_password_edit"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/pin"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/login_account_number_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_below="@+id/login_title"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/login_account_number_edit"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/account_number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/login_login_button"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/login_password_edit_layout"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:theme="@style/LoginButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/login"
+                android:textColor="#ffffff"
+                android:padding="4dp"/>
+
+            <TextView
+                android:text="@string/forgot_pin"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_alignTop="@+id/login_login_button"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="32dp"
+                android:layout_marginStart="32dp"
+                android:id="@+id/login_forgot_pin"
+                style="@style/TextAppearance.AppCompat.Subhead" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
