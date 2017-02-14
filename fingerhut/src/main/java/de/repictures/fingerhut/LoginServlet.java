@@ -26,9 +26,9 @@ public class LoginServlet extends HttpServlet{
         String inputPassword = URLDecoder.decode(req.getParameter("password"), "UTF-8");
 
         Key loginKey = KeyFactory.createKey("accountnumber", accountnumber);
-        Query loginQuery = new Query("Acount", loginKey);
+        Query loginQuery = new Query("Account", loginKey);
         List<Entity> accountList = datastore.prepare(loginQuery).asList(FetchOptions.Builder.withDefaults());
-        if(accountList.size() == 1){
+        if(accountList.size() > 0){
             Entity account = accountList.get(0);
             String accountPassword = account.getProperty("password").toString();
             if(accountPassword.equals(inputPassword)){

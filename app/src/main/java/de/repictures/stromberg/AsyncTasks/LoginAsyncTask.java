@@ -1,10 +1,15 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -20,16 +25,20 @@ import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
 
-public class LoginAsyncTask extends AsyncTask<String, Void, Integer> {
+public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
     private String TAG = "LoginAsyncTask";
 
     TextInputLayout passwordEditLayout, accountnumberEditLayout;
+    private final Button loginButton;
+    private final ProgressBar loginProgressBar;
     Activity activity;
 
-    public LoginAsyncTask(TextInputLayout accountnumberEditLayout, TextInputLayout passwordEditLayout, Activity activity) {
+    public LoginAsyncTask(TextInputLayout accountnumberEditLayout, TextInputLayout passwordEditLayout, Button loginButton, ProgressBar loginProgressBar, Activity activity) {
         this.passwordEditLayout = passwordEditLayout;
         this.accountnumberEditLayout = accountnumberEditLayout;
+        this.loginButton = loginButton;
+        this.loginProgressBar = loginProgressBar;
         this.activity = activity;
     }
 
@@ -39,12 +48,12 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(String... keys) {
+    protected String doInBackground(String... keys) {
         String resp = "";
         try {
             Log.d(TAG, "doInBackground: " + keys[0] + keys[1]);
-            String baseUrl = "/login?";
-            URL url = new URL(LoginActivity.SERVERURL + baseUrl + "accountnumber=" + URLEncoder.encode(keys[0], "UTF-8") + "&password=" + URLEncoder.encode(keys[1], "UTF-8"));
+            String baseUrl = LoginActivity.SERVERURL + "/login?accountnumber=" + URLEncoder.encode(keys[0], "UTF-8") + "&password=" + URLEncoder.encode(keys[1], "UTF-8");
+            URL url = new URL(baseUrl);
             URLConnection urlConnection = url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
@@ -59,23 +68,39 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Integer> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Integer.parseInt(resp);
+        return resp + "~" + keys[0];
     }
 
     @Override
-    protected void onPostExecute(Integer response) {
-        switch (response){
+    protected void onPostExecute(String responseStr) {
+        loginButton.setText(activity.getResources().getString(R.string.login));
+        loginProgressBar.setVisibility(View.INVISIBLE);
+        String[] response = responseStr.split("~");
+        SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        switch (Integer.parseInt(response[0])){
             case 0:
                 accountnumberEditLayout.setErrorEnabled(true);
                 accountnumberEditLayout.setError(activity.getResources().getString(R.string.accountnumber_error));
+                if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
+                    editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                    editor.apply();
+                }
                 break;
             case 1:
                 passwordEditLayout.setErrorEnabled(true);
                 passwordEditLayout.setError(activity.getResources().getString(R.string.password_wrong));
+                if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
+                    editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                    editor.apply();
+                }
                 break;
             case 2:
+                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[1]);
+                editor.apply();
                 Intent i = new Intent(activity, MainActivity.class);
                 activity.startActivity(i);
+                activity.finish();
                 break;
         }
     }
