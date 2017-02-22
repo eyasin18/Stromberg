@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/financial_status">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/financial_status_content"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/financial_status_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/activity_margin_small"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:text="@string/zero_money"
+            style="@style/TextAppearance.AppCompat.Headline"/>
+
+        <TextView
+            android:id="@+id/financial_status_account_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_account"
+            android:paddingTop="@dimen/activity_margin_small"
+            android:paddingLeft="@dimen/activity_margin_small"
+            android:paddingStart="@dimen/activity_margin_small"
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:layout_alignTop="@+id/financial_status_balance"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/financial_status_account_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_number"
+            android:paddingLeft="@dimen/activity_margin_small"
+            android:paddingStart="@dimen/activity_margin_small"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/financial_status_account_type"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/financial_status_account_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_owner"
+            android:paddingLeft="@dimen/activity_margin_small"
+            android:paddingStart="@dimen/activity_margin_small"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/financial_status_account_number"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="16dp"
+        android:id="@+id/financial_status_progress_bar"
+        android:layout_alignBottom="@+id/financial_status_content"
+        android:layout_alignParentTop="true"/>
+
+</RelativeLayout>

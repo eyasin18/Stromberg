@@ -9,4 +9,8 @@
     <string name="pin">PIN</string>
     <string name="accountnumber_error">Kontonummer nicht vorhanden</string>
     <string name="password_wrong">Falsches Passwort</string>
+    <string name="account_balance_format">%1$s€</string>
+    <string name="account_owner">Besitzer</string>
+    <string name="current_account">Girokonto</string>
+    <string name="error">Fehler</string>
 </resources>

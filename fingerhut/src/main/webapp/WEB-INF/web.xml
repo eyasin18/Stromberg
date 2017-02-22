@@ -16,4 +16,12 @@
         <servlet-name>AddAccount</servlet-name>
         <url-pattern>/addaccount</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PostFinancialStatus</servlet-name>
+        <servlet-class>de.repictures.fingerhut.PostFinancialStatus</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PostFinancialStatus</servlet-name>
+        <url-pattern>/financialstatus</url-pattern>
+    </servlet-mapping>
 </web-app>

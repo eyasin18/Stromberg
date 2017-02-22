@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet{
             Entity account = accountList.get(0);
             String accountPassword = account.getProperty("password").toString();
             if(accountPassword.equals(inputPassword)){
-                resp.getWriter().println("2");
+                resp.getWriter().println("2~" + KeyFactory.keyToString(account.getKey()));
             } else {
                 resp.getWriter().println("1");
             }

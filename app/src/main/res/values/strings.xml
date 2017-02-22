@@ -8,6 +8,11 @@
     <string name="order_new">Order new pin</string>
     <string name="accountnumber_error">Accoutnumber not valid</string>
     <string name="password_wrong">Password not valid</string>
-    <string name="sp_accountnumber">SHARED_PREFERENCES_accountnumber</string>
-    <string name="sp_identifier">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
+    <string name="sp_accountnumber" translatable="false">SHARED_PREFERENCES_accountnumber</string>
+    <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
+    <string name="error">Error</string>
+    <string name="current_account">Current account</string>
+    <string name="zero_money" translatable="false">0,00€</string>
+    <string name="account_owner">Owner</string>
+    <string name="account_balance_format">%1$s€</string>
 </resources>

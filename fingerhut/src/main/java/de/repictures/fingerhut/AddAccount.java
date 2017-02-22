@@ -27,6 +27,8 @@ public class AddAccount extends HttpServlet{
         Entity account = new Entity("Account", loginKey);
         account.setProperty("accountnumber", accountnumber);
         account.setProperty("password", "0000");
+        account.setProperty("owner", "Max Mustermann");
+        account.setProperty("balance", 100.00);
         datastore.put(account);
         resp.getWriter().println("success");
     }
