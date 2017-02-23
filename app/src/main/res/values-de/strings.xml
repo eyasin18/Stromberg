@@ -13,4 +13,8 @@
     <string name="account_owner">Besitzer</string>
     <string name="current_account">Girokonto</string>
     <string name="error">Fehler</string>
+    <string name="deposit">Einzahlen</string>
+    <string name="domain">Unternehmen</string>
+    <string name="inbox">Posteingang</string>
+    <string name="transfer">Überweisen</string>
 </resources>

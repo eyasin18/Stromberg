@@ -15,4 +15,8 @@
     <string name="zero_money" translatable="false">0,00€</string>
     <string name="account_owner">Owner</string>
     <string name="account_balance_format">%1$s€</string>
+    <string name="transfer">Transfer</string>
+    <string name="inbox">Inbox</string>
+    <string name="domain">Company</string>
+    <string name="deposit">Deposit</string>
 </resources>

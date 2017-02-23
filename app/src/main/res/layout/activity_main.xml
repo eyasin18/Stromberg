@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,5 +21,131 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/financial_status"
         android:layout_centerHorizontal="true" />
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/choice_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+
+        app:alignmentMode="alignBounds"
+        app:columnCount="2"
+        app:rowOrderPreserved="false"
+        app:useDefaultMargins="true"
+        android:layout_below="@+id/view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/main_transfer"
+            android:clickable="true"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_gravity="fill"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/main_transfer_text"
+                android:text="@string/transfer"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/TextAppearance.AppCompat.Subhead" />
+
+            <ImageView
+                android:id="@+id/main_transfer_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/cash"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/main_transfer_text"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_inbox"
+            android:clickable="true"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_gravity="fill"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/main_inbox_text"
+                android:text="@string/inbox"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/TextAppearance.AppCompat.Subhead"/>
+
+            <ImageView
+                android:id="@+id/main_inbox_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/email_outline"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/main_inbox_text"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_domain"
+            android:clickable="true"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_gravity="fill"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/main_domain_text"
+                android:text="@string/domain"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/TextAppearance.AppCompat.Subhead" />
+
+            <ImageView
+                android:id="@+id/main_domain_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/domain"
+                android:layout_below="@+id/main_domain_text"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_deposit"
+            android:clickable="true"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_gravity="fill"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/main_plus_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/plus_circle_outline"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/main_plus_text"/>
+
+            <TextView
+                android:id="@+id/main_plus_text"
+                android:text="@string/deposit"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textAlignment="center"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.GridLayout>
 
 </RelativeLayout>

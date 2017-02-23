@@ -20,7 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     long pausedTime = 0;
@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.financial_status_account_owner) TextView accountOwnerText;
     @Bind(R.id.financial_status_content) RelativeLayout financialStatusContent;
     @Bind(R.id.financial_status_progress_bar) ProgressBar financialStatusProgressBar;
+    @Bind(R.id.main_transfer) RelativeLayout transferLayout;
+    @Bind(R.id.main_inbox) RelativeLayout inboxLayout;
+    @Bind(R.id.main_domain) RelativeLayout domainLayout;
+    @Bind(R.id.main_deposit) RelativeLayout depositLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         accountKey = getIntent().getStringExtra("account_key");
+        transferLayout.setOnClickListener(this);
+        inboxLayout.setOnClickListener(this);
+        domainLayout.setOnClickListener(this);
+        depositLayout.setOnClickListener(this);
 
         GetFinancialStatusAsyncTask getFinancialStatus = new GetFinancialStatusAsyncTask(this);
         getFinancialStatus.execute(accountKey);
@@ -69,4 +77,17 @@ public class MainActivity extends AppCompatActivity {
         financialStatusContent.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.main_transfer:
+                break;
+            case R.id.main_inbox:
+                break;
+            case R.id.main_domain:
+                break;
+            case R.id.main_deposit:
+                break;
+        }
+    }
 }
