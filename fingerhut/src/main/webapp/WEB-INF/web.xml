@@ -24,4 +24,12 @@
         <servlet-name>PostFinancialStatus</servlet-name>
         <url-pattern>/financialstatus</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>TransferMoney</servlet-name>
+        <servlet-class>de.repictures.fingerhut.TransferMoney</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TransferMoney</servlet-name>
+        <url-pattern>/transfer</url-pattern>
+    </servlet-mapping>
 </web-app>

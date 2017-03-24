@@ -16,8 +16,13 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.squareup.picasso.Picasso;
+
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
 import de.repictures.stromberg.uiHelper.GetPictures;
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,10 +41,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        new Thread(new GetPictures(R.drawable.strombergcover, loginBackground, this, false, true, false)).start();
         loginButton.setOnClickListener(this);
         accountnumberEdit.requestFocus();
         loginProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
