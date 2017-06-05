@@ -37,6 +37,15 @@
         <activity android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity android:name=".Fragments.TransferDialogFragment"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".TransfersActivity"
+            android:label="@string/title_activity_transfer_dialog_fragment">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.TransfersActivity" />
+        </activity>
     </application>
 
 </manifest>

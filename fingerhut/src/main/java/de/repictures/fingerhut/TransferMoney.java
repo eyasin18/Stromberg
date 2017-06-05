@@ -3,6 +3,7 @@ package de.repictures.fingerhut;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -13,9 +14,11 @@ import com.google.appengine.repackaged.org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TransferMoney extends HttpServlet {
 
     private DatastoreService datastore;
-    private ArrayList<Entity> tempArrayList = new ArrayList<>();
+    private ArrayList<String> tempArrayList = new ArrayList<>();
+    private Logger log = Logger.getLogger(TransferMoney.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,35 +37,43 @@ public class TransferMoney extends HttpServlet {
         String senderAccountnumber = URLDecoder.decode(req.getParameter("senderaccountnumber"), "UTF-8");
         String intendedPurpose = URLDecoder.decode(req.getParameter("intendedpurpose"), "UTF-8");
         float amount = Float.parseFloat(URLDecoder.decode(req.getParameter("amount"), "UTF-8"));
-        DateTimeFormatter f = DateTimeFormat.forPattern("dd MM yyyy HH:mm:ss.SSSS");
-        DateTime dateTime = f.parseDateTime(URLDecoder.decode(req.getParameter("datetime"), "UTF-8"));
+        SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", req.getLocale());
+        Calendar calendar = Calendar.getInstance();
         datastore = DatastoreServiceFactory.getDatastoreService();
 
         try {
-            Key transferKey = KeyFactory.createKey("dateandtime", dateTime.toString());
+            Key transferKey = KeyFactory.createKey("dateandtime", f.format(calendar.getTime()));
             Entity transfer = new Entity("Transfer", transferKey);
             Entity sender = getEntity("accountnumber", senderAccountnumber, "Account");
             Entity receiver = getEntity("accountnumber", receiverAccountnumber, "Account");
 
-            float senderBalance = sender != null ? (float) sender.getProperty("balance") : 0;
+            double senderBalance = sender != null ? (double) sender.getProperty("balance") : 0;
+            double receiverBalance = receiver != null ? (double) receiver.getProperty("balance") : 0;
+            log.info("Sender is here? " + (sender != null ? "true" : "false" ));
+            log.info("Receiver is here? " + (receiver != null ? "true" : "false"));
+            log.info("Sender balance? " + senderBalance);
+            log.info("Amount? " + amount);
             if(senderBalance >= amount && receiver != null){ //Überweisung klappt
                 transfer.setProperty("sender", sender.getKey());
                 transfer.setProperty("receiver", receiver.getKey());
                 transfer.setProperty("amount", amount);
-                transfer.setProperty("datetime", dateTime);
+                transfer.setProperty("datetime", f.format(calendar.getTime()));
                 transfer.setProperty("purpose", intendedPurpose);
+                transfer.setProperty("type", "Überweisung");
                 datastore.put(transfer);
 
-                Entity savedTransfer = datastore.get(transferKey);
+                Entity savedTransfer = getEntity("dateandtime", f.format(calendar.getTime()), "Transfer");
                 getTransferArrays(sender);
-                tempArrayList.add(savedTransfer);
+                tempArrayList.add(KeyFactory.keyToString(savedTransfer.getKey()));
                 sender.setProperty("transferarray", tempArrayList);
-                datastore.put(sender);
                 getTransferArrays(receiver);
-                tempArrayList.add(savedTransfer);
+                tempArrayList.add(KeyFactory.keyToString(savedTransfer.getKey()));
                 receiver.setProperty("transferarray", tempArrayList);
-                datastore.put(receiver);
 
+                sender.setProperty("balance", senderBalance - amount);
+                receiver.setProperty("balance", receiverBalance + amount);
+                datastore.put(sender);
+                datastore.put(receiver);
                 resp.getWriter().println("3");
             } else if(receiver != null){ //Konto des Senders ist nicht ausreichend gedeckt
                 resp.getWriter().println("1");
@@ -69,8 +81,9 @@ public class TransferMoney extends HttpServlet {
                 resp.getWriter().println("2");
             }
 
-        } catch (Exception e){
+        } catch (NullPointerException e){
             e.printStackTrace();
+            log.warning(e.toString());
             resp.getWriter().println("0");
         }
     }
@@ -82,12 +95,13 @@ public class TransferMoney extends HttpServlet {
         if(entityList.size() > 0){
             return entityList.get(0);
         } else {
+            log.warning("Entity " + kind + " " + name + " " + entityTitle + " was not found!");
             return null;
         }
     }
 
     private void getTransferArrays(Entity entity){
-        tempArrayList = (ArrayList<Entity>) entity.getProperty("transferarray");
+        tempArrayList = (ArrayList<String>) entity.getProperty("transferarray");
         if (tempArrayList == null) tempArrayList = new ArrayList<>();
     }
 }

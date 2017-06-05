@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground" android:id="@+id/transfer_list_layout">
+
+    <TextView
+        android:paddingTop="12dp"
+        android:id="@+id/tranfer_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Mon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/transfer_date_color"
+        android:layout_toLeftOf="@+id/transfer_type"
+        android:layout_toStartOf="@+id/transfer_type" />
+
+    <TextView
+        android:textSize="10sp"
+        android:textColor="@color/transfer_date_color"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="12dp"
+        android:id="@+id/transfer_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00 Uhr"
+        android:layout_below="@+id/tranfer_day"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:textSize="9sp"
+        android:paddingTop="12dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:id="@+id/tranfer_amount_cents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="99"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:textSize="14sp"
+        android:paddingTop="12dp"
+        android:id="@+id/tranfer_amount_euros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-999,"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tranfer_amount_cents"
+        android:layout_toStartOf="@+id/tranfer_amount_cents" />
+
+    <TextView
+        android:id="@+id/tranfer_company_name"
+        android:paddingTop="12dp"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="TextView"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tranfer_day"
+        android:layout_toEndOf="@+id/tranfer_day"
+        android:layout_above="@+id/transfer_time" />
+
+    <TextView
+        android:id="@+id/transfer_type"
+        android:textSize="10sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tranfer_company_name"
+        android:layout_toEndOf="@+id/transfer_time"
+        android:layout_toRightOf="@+id/transfer_time"
+        android:text="TextView"
+        android:layout_alignBottom="@+id/transfer_time" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/transfer_type"
+        android:background="@color/light_grey"/>
+</RelativeLayout>

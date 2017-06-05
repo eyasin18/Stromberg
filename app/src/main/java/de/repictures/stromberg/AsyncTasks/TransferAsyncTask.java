@@ -1,6 +1,8 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -13,24 +15,26 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import de.repictures.stromberg.Fragments.TransferDialogFragment;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.MainActivity;
+import de.repictures.stromberg.R;
+import de.repictures.stromberg.TransfersActivity;
 
-public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>{
+public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
-    private MainActivity mainActivity;
-    private String TAG = "GetFinancialAsyncTask";
+    private TransferDialogFragment transferDialogFragment;
+    private String TAG = "TransferAsyncTask";
 
-    public GetFinancialStatusAsyncTask(MainActivity mainActivity){
-        this.mainActivity = mainActivity;
+    public TransferAsyncTask(TransferDialogFragment transferDialogFragment){
+        this.transferDialogFragment = transferDialogFragment;
     }
 
     @Override
-    protected String doInBackground(String... accountKeys) {
+    protected String doInBackground(String... transferArray) {
         String resp = "";
         try {
-            Log.d(TAG, "doInBackground: " + accountKeys[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/financialstatus?accountkey=" + accountKeys[0];
+            String baseUrl = LoginActivity.SERVERURL + "/transfer?receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8") + "&intendedpurpose=" + URLEncoder.encode(transferArray[3], "UTF-8")
+                    + "&amount=" + URLEncoder.encode(transferArray[2], "UTF-8") + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");
             URL url = new URL(baseUrl);
             URLConnection urlConnection = url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -51,8 +55,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
 
     @Override
     protected void onPostExecute(String s) {
-        String[] response = s.split("ò");
-
-        mainActivity.setFinancialStatus(response[0], response[1], Float.parseFloat(response[2]));
+        transferDialogFragment.postResult(Integer.parseInt(s));
     }
 }
+

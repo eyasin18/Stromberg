@@ -29,10 +29,10 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
     private String TAG = "LoginAsyncTask";
 
-    TextInputLayout passwordEditLayout, accountnumberEditLayout;
+    private TextInputLayout passwordEditLayout, accountnumberEditLayout;
     private final Button loginButton;
     private final ProgressBar loginProgressBar;
-    Activity activity;
+    private Activity activity;
 
     public LoginAsyncTask(TextInputLayout accountnumberEditLayout, TextInputLayout passwordEditLayout, Button loginButton, ProgressBar loginProgressBar, Activity activity) {
         this.passwordEditLayout = passwordEditLayout;
@@ -68,14 +68,14 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return resp + "~" + keys[0];
+        return resp + "ò" + keys[0];
     }
 
     @Override
     protected void onPostExecute(String responseStr) {
         loginButton.setText(activity.getResources().getString(R.string.login));
         loginProgressBar.setVisibility(View.INVISIBLE);
-        String[] response = responseStr.split("~");
+        String[] response = responseStr.split("ò");
         SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         switch (Integer.parseInt(response[0])){
@@ -84,6 +84,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 accountnumberEditLayout.setError(activity.getResources().getString(R.string.accountnumber_error));
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                     editor.apply();
                 }
                 break;
@@ -92,14 +93,15 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 passwordEditLayout.setError(activity.getResources().getString(R.string.password_wrong));
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                     editor.apply();
                 }
                 break;
             case 2:
                 editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[2]);
+                editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
                 editor.apply();
                 Intent i = new Intent(activity, MainActivity.class);
-                i.putExtra("account_key", response[1]);
                 activity.startActivity(i);
                 activity.finish();
                 break;

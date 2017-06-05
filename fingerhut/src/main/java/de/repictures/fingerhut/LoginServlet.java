@@ -2,6 +2,7 @@ package de.repictures.fingerhut;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -32,7 +33,7 @@ public class LoginServlet extends HttpServlet{
             Entity account = accountList.get(0);
             String accountPassword = account.getProperty("password").toString();
             if(accountPassword.equals(inputPassword)){
-                resp.getWriter().println("2~" + KeyFactory.keyToString(account.getKey()));
+                resp.getWriter().println(URLEncoder.encode("2ò" + KeyFactory.keyToString(account.getKey()), "UTF-8"));
             } else {
                 resp.getWriter().println("1");
             }

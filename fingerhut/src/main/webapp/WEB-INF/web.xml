@@ -32,4 +32,12 @@
         <servlet-name>TransferMoney</servlet-name>
         <url-pattern>/transfer</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PostTransfers</servlet-name>
+        <servlet-class>de.repictures.fingerhut.PostTransfers</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PostTransfers</servlet-name>
+        <url-pattern>/posttransfers</url-pattern>
+    </servlet-mapping>
 </web-app>
