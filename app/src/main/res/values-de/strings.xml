@@ -17,4 +17,32 @@
     <string name="domain">Unternehmen</string>
     <string name="inbox">Posteingang</string>
     <string name="transfer">Überweisen</string>
+    <string name="title_activity_transfers">Überweisungen</string>
+    <string name="accountnumber_short">Kntnr.</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="optionee">Begünstigter</string>
+    <string name="title_activity_transfer_dialog_fragment">Neue Überweisung</string>
+    <string name="amount">Betrag</string>
+    <string name="execute_later">Später ausführen</string>
+    <string name="execute_at">Ausführen am</string>
+    <string name="purpose">Verwendungszweck</string>
+    <string name="oclock">Uhr</string>
+    <string name="error_owner_empty">Sie müssen einen Empfänger angeben</string>
+    <string name="transfer_no_money">Ihr Konto ist nicht ausreichend gedeckt</string>
+    <string name="transfer_receiver_not_exist">Der angegebene Empfänger existiert nicht</string>
+    <string name="transfer_success">Überweisung erfolgreich</string>
+    <string name="server_error">Serverfehler</string>
+    <string name="cancel_transfer">Überweisung verwerfen</string>
+    <string name="delete_transfer">Überweisung löschen</string>
+    <string name="delete">Verwerfen</string>
+    <string name="you_will_lose_data">Alle ausgefüllten Felder werden gelöscht</string>
+    <array name="weekdays_short">
+        <item>So</item>
+        <item>Mo</item>
+        <item>Di</item>
+        <item>Mi</item>
+        <item>Do</item>
+        <item>Fr</item>
+        <item>Sa</item>
+    </array>
 </resources>

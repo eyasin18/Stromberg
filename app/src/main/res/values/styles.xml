@@ -35,4 +35,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.Dialog" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/dialog_background_scrim</item>
+        <!--<item name="android:windowAnimationStyle">@null</item>-->
+        <!--<item name="android:windowContentTransitions">true</item>-->
+    </style>
+
+    <style name="AppTheme.TransferDialog" parent="AppTheme.NoActionBar">
+        <item name="android:homeAsUpIndicator">@drawable/ic_clear_white_24dp</item>
+    </style>
+
 </resources>

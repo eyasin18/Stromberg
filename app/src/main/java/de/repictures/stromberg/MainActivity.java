@@ -1,6 +1,8 @@
 package de.repictures.stromberg;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        accountKey = getIntent().getStringExtra("account_key");
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        accountKey = sharedPref.getString(getResources().getString(R.string.sp_accountkey), "");
         transferLayout.setOnClickListener(this);
         inboxLayout.setOnClickListener(this);
         domainLayout.setOnClickListener(this);
@@ -68,9 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setFinancialStatus(String accountnumber, String accountowner, float accountbalance){
+
         DecimalFormat df = new DecimalFormat("#.00");
         accountBalanceText.setTextColor(getResources().getColor(accountbalance <= 0 ? R.color.balance_minus : R.color.balance_plus));
-        accountBalanceText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(accountbalance)));
+        accountBalanceText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(round(accountbalance, 2))));
         accountNumberText.setText(accountnumber);
         accountOwnerText.setText(accountowner);
         financialStatusProgressBar.setVisibility(View.GONE);
@@ -79,8 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Intent i;
         switch (view.getId()){
             case R.id.main_transfer:
+                i = new Intent(MainActivity.this, TransfersActivity.class);
+                startActivity(i);
                 break;
             case R.id.main_inbox:
                 break;
@@ -89,5 +97,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_deposit:
                 break;
         }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
