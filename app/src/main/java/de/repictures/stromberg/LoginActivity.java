@@ -1,4 +1,4 @@
-package de.repictures.stromberg;
+package de.repictures.stromberg;// Nicer Kommentar
 
 import android.content.Context;
 import android.content.SharedPreferences;
