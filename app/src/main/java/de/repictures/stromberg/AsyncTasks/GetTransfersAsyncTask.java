@@ -51,7 +51,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String s) {
         Log.d(TAG, "onPostExecute: " + s);
-        if(s.endsWith("<>^")){
+        if(s.endsWith("ĵ")){
             transfersActivity.updateRecycler();
         } else if (s.length() > 0){
             String[] response = s.split("ň");

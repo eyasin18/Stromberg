@@ -59,7 +59,7 @@ public class PostTransfers extends HttpServlet {
             resp.getWriter().println(URLEncoder.encode(output, "UTF-8"));
         } catch (EntityNotFoundException e){
             log.warning(e.toString());
-            resp.getWriter().println(URLEncoder.encode("<>^", "UTF-8"));
+            resp.getWriter().println(URLEncoder.encode("ĵ", "UTF-8"));
         }
     }
 

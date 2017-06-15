@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="forbidden_characters" >
+        <item>ò</item>
+        <item>ň</item>
+        <item>ĵ</item>
+    </string-array>
+</resources>

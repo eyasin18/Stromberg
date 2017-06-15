@@ -11,11 +11,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +27,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -41,6 +40,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TransferAsyncTask;
 import de.repictures.stromberg.R;
+import de.repictures.stromberg.uiHelper.ForbiddenCharactersFilter;
 
 public class TransferDialogFragment extends AppCompatActivity implements View.OnClickListener {
 
@@ -70,6 +70,8 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_transfer);
         ButterKnife.bind(this);
+
+        //Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.transfer_fragment_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_clear_white_24dp);
@@ -82,6 +84,8 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
                         .setMessage(TransferDialogFragment.this.getResources().getString(R.string.you_will_lose_data))
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
                                 finish();
                             }
                         })
@@ -94,8 +98,12 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
             }
         });
 
+        //Setup EditTexts
         ArrayAdapter<String> ownersDummy = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, owners);
+        ForbiddenCharactersFilter filter = new ForbiddenCharactersFilter(this);
+        purposeEditText.setFilters(new InputFilter[]{filter});
+        ownerAutoComplete.setFilters(new InputFilter[]{filter});
         ownerAutoComplete.setThreshold(1);
         ownerAutoComplete.setAdapter(ownersDummy);
         ownerAutoComplete.addTextChangedListener(new TextWatcher() {
@@ -116,6 +124,7 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
 
             }
         });
+        accountnumberEditText.setFilters(new InputFilter[]{filter});
         accountnumberEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -134,6 +143,8 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
 
             }
         });
+
+        //Setup Date-/TimePickers
         dateSpinner.setOnClickListener(this);
         timeSpinner.setOnClickListener(this);
         dateSpinner.setEnabled(false);
@@ -178,7 +189,7 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(dataIsFilledIn()){
+        if(dataWithoutError()){
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogFragment.this);
             asyncTask.execute(sharedPref.getString(getResources().getString(R.string.sp_accountnumber), ""), accountnumberEditText.getText().toString(),
@@ -187,7 +198,7 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean dataIsFilledIn() {
+    private boolean dataWithoutError() {
         boolean noError = true;
         ownerInputLayout.setError("");
         ownerInputLayout.setErrorEnabled(false);
@@ -195,7 +206,7 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
         accountInputLayout.setErrorEnabled(false);
         amountInputLayout.setError("");
         amountInputLayout.setErrorEnabled(false);
-        Log.d(TAG, "dataIsFilledIn: " + ownerAutoComplete.getText().toString().length());
+        Log.d(TAG, "dataWithoutError: " + ownerAutoComplete.getText().toString().length());
         if(ownerAutoComplete.getText().toString().length() < 1){
             ownerInputLayout.setErrorEnabled(true);
             ownerInputLayout.setError(getResources().getString(R.string.error_owner_empty));
