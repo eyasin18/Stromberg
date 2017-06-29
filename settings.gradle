@@ -1,1 +1,1 @@
-include ':app', ':fingerhut'
+include ':app'
