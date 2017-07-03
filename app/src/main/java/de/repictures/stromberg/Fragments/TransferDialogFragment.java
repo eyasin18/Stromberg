@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -59,8 +60,8 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
     @Bind(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
     @Bind(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
 
-    List<String> owners = Arrays.asList("Yasin Ekinci", "Max Musterman", "Rodi GmbH");
-    List<String> accountnumbers = Arrays.asList("0001", "0003", "0002");
+    ArrayList<String> owners = new ArrayList<>();
+    ArrayList<String> accountnumbers = new ArrayList<>();
     SimpleDateFormat dateFormat, timeFormat;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -97,6 +98,16 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
                         .show();
             }
         });
+
+        //Fill Arraylists
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String savedAccountsStr = sharedPref.getString(getResources().getString(R.string.sp_accountslist), "");
+        String[] savedAccounts = savedAccountsStr.split("ň");
+        for (String savedAccountEntity : savedAccounts){
+            String[] savedAccountEntityElements = savedAccountEntity.split("ĵ");
+            accountnumbers.add(savedAccountEntityElements[0]);
+            owners.add(savedAccountEntityElements[1]);
+        }
 
         //Setup EditTexts
         ArrayAdapter<String> ownersDummy = new ArrayAdapter<String>

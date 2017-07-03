@@ -98,9 +98,11 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 }
                 break;
             case 2:
-                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[2]);
+                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[3]);
                 editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
+                editor.putString(activity.getResources().getString(R.string.sp_accountslist), response[2]);
                 editor.apply();
+                Log.d(TAG, "onPostExecute: " + response[2]);
                 Intent i = new Intent(activity, MainActivity.class);
                 activity.startActivity(i);
                 activity.finish();
