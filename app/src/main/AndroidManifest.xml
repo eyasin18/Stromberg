@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.repictures.stromberg">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -29,19 +30,28 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.MainActivity" />
         </activity>
+        <activity
+            android:name=".ScanActivity"
+            android:label="@string/title_activity_scan"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="78ed52ec022c6bc124bc7fad0a645f956076813b" />
 
-        <activity android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity android:name=".Fragments.TransferDialogFragment"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Fragments.TransferDialogFragment"
+            android:label="@string/title_activity_transfer_dialog_fragment"
             android:parentActivityName=".TransfersActivity"
-            android:label="@string/title_activity_transfer_dialog_fragment">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.TransfersActivity" />

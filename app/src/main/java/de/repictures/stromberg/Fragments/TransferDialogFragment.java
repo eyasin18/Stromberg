@@ -192,6 +192,26 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(TransferDialogFragment.this)
+                .setTitle(TransferDialogFragment.this.getResources().getString(R.string.delete_transfer))
+                .setMessage(TransferDialogFragment.this.getResources().getString(R.string.you_will_lose_data))
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent();
+                        setResult(RESULT_OK, i);
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.fragment_transfer_menu, menu);
@@ -262,6 +282,9 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
                 i.putExtra("success", true);
                 setResult(RESULT_OK, i);
                 finish();
+                break;
+            case 4:
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_equals_sender), Snackbar.LENGTH_SHORT).show();
                 break;
         }
     }

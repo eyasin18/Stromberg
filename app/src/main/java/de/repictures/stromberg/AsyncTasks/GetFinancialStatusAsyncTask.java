@@ -30,7 +30,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
         String resp = "";
         try {
             Log.d(TAG, "doInBackground: " + accountKeys[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/financialstatus?accountkey=" + accountKeys[0];
+            String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
             URL url = new URL(baseUrl);
             URLConnection urlConnection = url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

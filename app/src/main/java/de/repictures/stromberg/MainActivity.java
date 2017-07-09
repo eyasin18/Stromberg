@@ -3,10 +3,8 @@ package de.repictures.stromberg;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -15,9 +13,6 @@ import android.widget.TextView;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.main_transfer) RelativeLayout transferLayout;
     @Bind(R.id.main_inbox) RelativeLayout inboxLayout;
     @Bind(R.id.main_domain) RelativeLayout domainLayout;
-    @Bind(R.id.main_deposit) RelativeLayout depositLayout;
+    @Bind(R.id.main_scan) RelativeLayout scanLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transferLayout.setOnClickListener(this);
         inboxLayout.setOnClickListener(this);
         domainLayout.setOnClickListener(this);
-        depositLayout.setOnClickListener(this);
+        scanLayout.setOnClickListener(this);
 
         GetFinancialStatusAsyncTask getFinancialStatus = new GetFinancialStatusAsyncTask(this);
         getFinancialStatus.execute(accountKey);
@@ -94,7 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_domain:
                 break;
-            case R.id.main_deposit:
+            case R.id.main_scan:
+                i = new Intent(MainActivity.this, ScanActivity.class);
+                startActivity(i);
                 break;
         }
     }

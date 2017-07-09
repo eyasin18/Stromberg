@@ -28,6 +28,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
         for (String[] transfer : transfers) {
             for (String aTransfer : transfer) {
                 transferStr += aTransfer;
+                transferStr += "~";
             }
         }
         Log.d(TAG, "TransferListAdapter: " + transferStr);
@@ -49,7 +50,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        holder.transferDay.setText(activity.getResources().getStringArray(R.array.weekdays_short)[calendar.get(Calendar.DAY_OF_WEEK)]);
+        holder.transferDay.setText(activity.getResources().getStringArray(R.array.weekdays_short)[calendar.get(Calendar.DAY_OF_WEEK)-1]);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         holder.transferTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));

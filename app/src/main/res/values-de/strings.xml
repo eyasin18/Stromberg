@@ -45,4 +45,7 @@
         <item>Fr</item>
         <item>Sa</item>
     </array>
+    <string name="error_amount_empty">Ungültig</string>
+    <string name="transfer_receiver_equals_sender">Du kannst dir selbst kein Geld überweisen</string>
+    <string name="scan">Scannen</string>
 </resources>

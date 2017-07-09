@@ -20,7 +20,7 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "de.repictures.stromberg"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -50,4 +50,5 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:26.0.0-alpha1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-vision:11.0.2'
 }

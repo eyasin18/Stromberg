@@ -44,6 +44,8 @@
     <string name="delete_transfer">Delete transfer</string>
     <string name="delete">Delete</string>
     <string name="error_amount_empty">Invalid</string>
+    <string name="transfer_receiver_equals_sender">You cannot transfer money to yourself</string>
+    <string name="scan">Scan</string>
     <array name="weekdays_short">
         <item>Su</item>
         <item>Mo</item>
@@ -53,4 +55,25 @@
         <item>Fr</item>
         <item>Sa</item>
     </array>
+
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
+    <string name="title_activity_main">Ocr Detector Sample</string>
+    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="read_text">Detect Text</string>
+    <string name="auto_focus">Auto Focus</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="ocr_success">Text read successfully</string>
+    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_error">"Error reading text: %1$s"</string>
+    <string name="title_activity_scan">ScanActivity</string>
+    <string name="buy">Buy</string>
+    <string name="request_camera_title">Allow camera access</string>
+    <string name="request_camera_text">In order to scan barcodes, we need access to your camera</string>
+    <string name="grant">Grant</string>
+    <string name="deny">Deny</string>
+
+
 </resources>

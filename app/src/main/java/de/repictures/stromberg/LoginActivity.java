@@ -1,4 +1,4 @@
-package de.repictures.stromberg;// Nicer Kommentar
+package de.repictures.stromberg;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,7 +27,7 @@ import io.fabric.sdk.android.Fabric;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
-    public static String SERVERURL = "http://fingerhut388.appspot.com";
+    public static String SERVERURL = "https://fingerhut388.appspot.com";
 
     @Bind(R.id.login_background) ImageView loginBackground;
     @Bind(R.id.login_login_button) Button loginButton;

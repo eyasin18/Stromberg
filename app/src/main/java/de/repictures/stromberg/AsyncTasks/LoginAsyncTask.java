@@ -20,10 +20,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Arrays;
 
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
+import de.repictures.stromberg.uiHelper.Cryptor;
 
 public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -49,26 +51,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... keys) {
-        String resp = "";
-        try {
-            Log.d(TAG, "doInBackground: " + keys[0] + keys[1]);
-            String baseUrl = LoginActivity.SERVERURL + "/login?accountnumber=" + URLEncoder.encode(keys[0], "UTF-8") + "&password=" + URLEncoder.encode(keys[1], "UTF-8");
-            URL url = new URL(baseUrl);
-            URLConnection urlConnection = url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
-            }
-            Log.d(TAG, "doInBackground: " + total);
-            resp += total;
-            resp = URLDecoder.decode(resp, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resp + "ò" + keys[0];
+        return getAccountInformation(keys);
     }
 
     @Override
@@ -108,6 +91,29 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 activity.finish();
                 break;
         }
+    }
+
+    private String getAccountInformation(String[] keys) {
+        String resp = "";
+        try {
+            Log.d(TAG, "doInBackground: " + keys[0] + keys[1]);
+            String baseUrl = LoginActivity.SERVERURL + "/login?firstRequest=false&accountnumber=" + URLEncoder.encode(keys[0], "UTF-8") + "&password=" + URLEncoder.encode(keys[1], "UTF-8");
+            URL url = new URL(baseUrl);
+            URLConnection urlConnection = url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+            }
+            Log.d(TAG, "doInBackground: " + total);
+            resp += total;
+            resp = URLDecoder.decode(resp, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return resp + "ò" + keys[0];
     }
 }
 
