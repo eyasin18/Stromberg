@@ -1,5 +1,6 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,22 +16,23 @@ import java.net.URLEncoder;
 
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
+import de.repictures.stromberg.ScanActivity;
 
-public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>{
+public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
 
-    private MainActivity mainActivity;
-    private String TAG = "GetFinancialAsyncTask";
+    private ScanActivity scanActivity;
+    private String TAG = "GetProductAsyncTask";
 
-    public GetFinancialStatusAsyncTask(MainActivity mainActivity){
-        this.mainActivity = mainActivity;
+    public GetProductAsyncTask(ScanActivity scanActivity){
+        this.scanActivity = scanActivity;
     }
 
     @Override
-    protected String doInBackground(String... accountKeys) {
+    protected String doInBackground(String... codes) {
         String resp = "";
         try {
-            Log.d(TAG, "doInBackground: " + accountKeys[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
+            Log.d(TAG, "doInBackground: " + codes[0]);
+            String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0];
             URL url = new URL(baseUrl);
             URLConnection urlConnection = url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -51,7 +53,15 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
 
     @Override
     protected void onPostExecute(String s) {
-        String[] response = s.split("ò");
-        mainActivity.setFinancialStatus(response[0], response[1], Float.parseFloat(response[2]));
+        if (s.length() == 1 && s.charAt(0) == '0'){
+            //Produkt gibts nicht
+        } else {
+            String[] responsesRaw = s.split("ň");
+            String[][] products = new String[responsesRaw.length][4];
+            for (int i = 0; i < products.length; i++) {
+                products[i] = responsesRaw[i].split("ò");
+            }
+            scanActivity.receiveResult(products);
+        }
     }
 }

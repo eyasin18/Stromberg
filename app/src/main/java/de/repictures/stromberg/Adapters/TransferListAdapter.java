@@ -64,10 +64,9 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
         }
         double amountFrac = amount%1;
         double amountWhole = amount - amountFrac;
-        long amountFraction = Math.round((amountFrac)*100);
+        long amountFraction = Math.abs(Math.round((amountFrac)*100));
         String amountWholeStr = String.valueOf(amountWhole);
-        String amountFractionStr = String.valueOf(amountFraction);
-        if(amountFractionStr.length() < 2) amountFractionStr += "0";
+        String amountFractionStr = String.format(Locale.getDefault(), "%02d", amountFraction);
         holder.tranferAmountCents.setText(amountFractionStr);
         holder.transferAmountEuros.setText(amountWholeStr.substring(0, amountWholeStr.length() - 2));
         holder.transferCompanyName.setText(transfers[position][1]);

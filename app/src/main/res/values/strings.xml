@@ -74,6 +74,8 @@
     <string name="request_camera_text">In order to scan barcodes, we need access to your camera</string>
     <string name="grant">Grant</string>
     <string name="deny">Deny</string>
+    <string name="swipe_to_view">Swipe up to view</string>
+    <string name="more_results" formatted="false">%1$d more result%s</string>
 
 
 </resources>

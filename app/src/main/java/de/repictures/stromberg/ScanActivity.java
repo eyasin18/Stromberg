@@ -1,50 +1,67 @@
 package de.repictures.stromberg;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.repictures.stromberg.AsyncTasks.GetProductAsyncTask;
+import de.repictures.stromberg.uiHelper.GetPictures;
 
 public class ScanActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
 
     private static final int PERMISSION_REQUEST_CAMERA = 42;
-    @Bind(R.id.camera_view)
-    SurfaceView cameraView;
+    @Bind(R.id.camera_view) SurfaceView cameraView;
     @Bind(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
+    @Bind(R.id.product_layout) RelativeLayout productLayout;
+    @Bind(R.id.product_progress_bar) ProgressBar productProgressBar;
+    @Bind(R.id.product_second_element) RelativeLayout secondElement;
+    @Bind(R.id.product_card) CardView productCard;
+    @Bind(R.id.product_prev_pic) ImageView productImage;
+    @Bind(R.id.product_title) TextView productTitle;
+    @Bind(R.id.product_vendor) TextView productVendor;
 
     private static final String TAG = "ScanActivity";
-    int fieldsUsed = 0;
+    private static final String imageDummyUrl = "https://c1.staticflickr.com/5/4123/4793188726_5d34ab7120_z.jpg";
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;
+    RecyclerView.Adapter scanAdapter;
+    ArrayList<String> scanResults = new ArrayList<>();
+    private boolean animated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +77,13 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onCreate: " + cameraView.getHeight());
+        productCard.setY(cameraView.getHeight()-45f);
+    }
+
     private void createCameraSource() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -73,15 +97,6 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
                 .setRequestedPreviewSize(height/ 2, width / 2)
                 .setAutoFocusEnabled(true)
                 .build();
-    }
-
-    private void addResult(String displayValue) {
-
-    }
-
-    public float dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     private SurfaceHolder.Callback surfaceHolderCallback() {
@@ -126,7 +141,7 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            //TODO: Kamera acitiviert sich nicht, nachdem der Zugriff zugelassen wurde
+            //TODO: Kamera aktiviert sich nicht, nachdem der Zugriff zugelassen wurde
             createCameraSource();
             return;
         }
@@ -181,11 +196,74 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
 
     @Override
     public void receiveDetections(Detector.Detections<Barcode> detections) {
-        SparseArray<Barcode> barcodes = detections.getDetectedItems();
-        if (barcodes.size() > 0){
-            for (int i = 0; i < barcodes.size(); i++){
-                Log.d(TAG, "receiveDetections: " + barcodes.valueAt(i).displayValue);
+        SparseArray<Barcode> allBarcodes = detections.getDetectedItems();
+        ArrayList<Barcode> sortedBarcodes = new ArrayList<>();
+        for (int i = 0; i < allBarcodes.size(); i++){
+            Barcode barcode = allBarcodes.valueAt(i);
+            if ((barcode.displayValue.length() == 8 || barcode.displayValue.length() == 13) && !scanResults.contains(barcode.displayValue)){
+                sortedBarcodes.add(barcode);
+                scanResults.add(barcode.displayValue);
             }
         }
+        if (sortedBarcodes.size() > 0){
+            if (!animated){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -productCard.getHeight()/2);
+                        translateAnimation.setDuration(250);
+                        translateAnimation.setFillAfter(true);
+                        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
+                        productCard.setY(cameraView.getHeight());
+                        productCard.setVisibility(View.VISIBLE);
+                        productCard.startAnimation(translateAnimation);
+                        animated = true;
+                        Log.d(TAG, "run: animated");
+                    }
+                });
+
+            }
+            for (int i = 0; i < sortedBarcodes.size(); i++){
+                Log.d(TAG, "receiveDetections: " + sortedBarcodes.get(i).displayValue);
+                GetProductAsyncTask asyncTask = new GetProductAsyncTask(ScanActivity.this);
+                asyncTask.execute(sortedBarcodes.get(i).displayValue);
+            }
+        }
+    }
+
+    public void receiveResult(String[][] products){
+        productTitle.setText(products[0][0]);
+        productVendor.setText(products[0][1]);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                productLayout.setVisibility(View.VISIBLE);
+                final Animation animation = new AlphaAnimation(0f, 1f);
+                animation.setDuration(250);
+                productProgressBar.animate().alpha(0f).setDuration(250).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                        productLayout.setVisibility(View.VISIBLE);
+                        productLayout.startAnimation(animation);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                }).start();
+            }
+        });
+        new Thread(new GetPictures(imageDummyUrl, productImage, ScanActivity.this, true, true, false)).start();
     }
 }

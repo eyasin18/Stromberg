@@ -48,4 +48,11 @@
     <string name="error_amount_empty">Ungültig</string>
     <string name="transfer_receiver_equals_sender">Du kannst dir selbst kein Geld überweisen</string>
     <string name="scan">Scannen</string>
+    <string name="auto_focus">Autofocus</string>
+    <string name="buy">Kaufen</string>
+    <string name="deny">Ablehnen</string>
+    <string name="grant">Zulassen</string>
+    <string name="low_storage_error"></string>
+    <string name="more_results" formatted="false">%1$d weitere%s Ergebnis%s</string>
+    <string name="swipe_to_view">Nach oben wischen zum ansehen</string>
 </resources>
