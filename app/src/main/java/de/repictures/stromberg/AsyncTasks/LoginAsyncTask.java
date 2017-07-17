@@ -68,6 +68,8 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
                 break;
@@ -77,13 +79,16 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
                 break;
             case 2:
-                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[3]);
+                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[4]);
                 editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
                 editor.putString(activity.getResources().getString(R.string.sp_accountslist), response[2]);
+                editor.putString(activity.getResources().getString(R.string.sp_featureslist), response[3]);
                 editor.apply();
                 Log.d(TAG, "onPostExecute: " + response[2]);
                 Intent i = new Intent(activity, MainActivity.class);

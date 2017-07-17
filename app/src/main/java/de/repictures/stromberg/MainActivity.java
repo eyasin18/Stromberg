@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_inbox:
                 break;
             case R.id.main_domain:
+                i = new Intent(MainActivity.this, AddProductActivity.class);
+                startActivity(i);
                 break;
             case R.id.main_scan:
                 i = new Intent(MainActivity.this, ScanActivity.class);

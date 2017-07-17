@@ -76,6 +76,7 @@
     <string name="deny">Deny</string>
     <string name="swipe_to_view">Swipe up to view</string>
     <string name="more_results" formatted="false">%1$d more result%s</string>
+    <string name="sp_featureslist">SHARED_PREFERENCES_featureslist</string>
 
 
 </resources>

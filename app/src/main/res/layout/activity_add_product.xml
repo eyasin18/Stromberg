@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.repictures.stromberg.AddProductActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:layout_below="@+id/barcode"
+            android:layout_alignLeft="@+id/barcode"
+            android:layout_alignStart="@+id/barcode"
+            android:hint="Name"/>
+
+        <EditText
+            android:id="@+id/barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="Barcode" />
+
+        <EditText
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/name"
+            android:layout_alignRight="@+id/name"
+            android:layout_below="@+id/name"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:hint="Preis" />
+
+        <EditText
+            android:id="@+id/company_accountnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/price"
+            android:layout_alignStart="@+id/price"
+            android:layout_below="@+id/price"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="Kontonummer" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/company_accountnumber"
+            android:layout_centerHorizontal="true"
+            android:text="Los!" />
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
