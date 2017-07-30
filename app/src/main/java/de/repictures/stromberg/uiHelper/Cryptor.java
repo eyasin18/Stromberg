@@ -1,18 +1,50 @@
 package de.repictures.stromberg.uiHelper;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
+import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
-import java.security.*;
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Cryptor {
 
-    public byte[] encrypt(String input, byte[] key){
+    public String hashToString(String input){
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");//Wir wollen auf SHA-256 verschlüsseln
+            messageDigest.update(input.getBytes()); //Input wird verschlüsselt
+            return bytesToHex(messageDigest.digest()); //Hash wird als Hexadezimalzahl ausgegeben
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public byte[] hashToByte(String input){
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");//Wir wollen auf SHA-256 verschlüsseln
+            messageDigest.update(input.getBytes()); //Input wird verschlüsselt
+            return messageDigest.digest(); //Hash wird als Hexadezimalzahl ausgegeben
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public byte[] encryptSymetricFromString(String input, byte[] key){
         try{
             Cipher cipher = Cipher.getInstance("AES"); //Cipher Objekt wird erzeugt. Wir wollen auf AES verschlüsseln.
             SecretKey originalKey = new SecretKeySpec(key, 0, key.length, "AES"); //bytearray wir zum "SecretKey" gemacht (key [benutzter Schlüssel als bytearray], offset, [wie lang unser Schlüssel sein soll], algorithm [welchen verschlüsselungsargorythums verwenden wir?])
@@ -24,7 +56,19 @@ public class Cryptor {
         }
     }
 
-    public String decrypt(byte[] encryptedInput, byte[] key){
+    public byte[] encryptSymetricFromByte(byte[] input, byte[] key){
+        try{
+            Cipher cipher = Cipher.getInstance("AES"); //Cipher Objekt wird erzeugt. Wir wollen auf AES verschlüsseln.
+            SecretKey originalKey = new SecretKeySpec(key, 0, key.length, "AES"); //bytearray wir zum "SecretKey" gemacht (key [benutzter Schlüssel als bytearray], offset, [wie lang unser Schlüssel sein soll], algorithm [welchen verschlüsselungsargorythums verwenden wir?])
+            cipher.init(Cipher.ENCRYPT_MODE, originalKey); //Cipher wird initialisiert
+            return cipher.doFinal(input); //Input wird verschlüsselt
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String decryptSymetricToString(byte[] encryptedInput, byte[] key){
         try {
             Cipher cipher = Cipher.getInstance("AES"); //Cipher Objekt wird erzeugt. Wir wollen auf AES entschlüsseln.
             SecretKey originalKey = new SecretKeySpec(key, 0, key.length, "AES"); //bytearray wir zum "SecretKey" gemacht (key [benutzter Schlüssel als bytearray], offset, [wie lang unser Schlüssel sein soll], algorithm [welchen verschlüsselungsargorythums verwenden wir?])
@@ -37,24 +81,75 @@ public class Cryptor {
         }
     }
 
-    //Sinnlose methode die wir vielleicht mal wieder gebrauchen könnten. Ich vermute dass hier der Punkt von der Kreisbahn abgelesen wird.
-    private AlgorithmParameterSpec getIV(Cipher cipher){
-        byte[] iv = new byte[cipher.getBlockSize()];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
-    }
-
-    private byte[] hashKey = "ppies2QU5r2zvm3ezE0G".getBytes();//Veralteter Schlüssel zum Hashen.
-
-    //Veraltete Hashmethode
-    public byte[] manualHash(String input) {
+    public byte[] decryptSymetricToByte(byte[] encryptedInput, byte[] key){
         try {
-            KeySpec spec = new PBEKeySpec(input.toCharArray(), hashKey, 65536, 256);
-            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            return f.generateSecret(spec).getEncoded();
-        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            Cipher cipher = Cipher.getInstance("AES"); //Cipher Objekt wird erzeugt. Wir wollen auf AES entschlüsseln.
+            SecretKey originalKey = new SecretKeySpec(key, 0, key.length, "AES"); //bytearray wir zum "SecretKey" gemacht (key [benutzter Schlüssel als bytearray], offset, [wie lang unser Schlüssel sein soll], algorithm [welchen verschlüsselungsargorythums verwenden wir?])
+            cipher.init(Cipher.DECRYPT_MODE, originalKey); //cipher wird initialisiert
+            return cipher.doFinal(encryptedInput); //input wird entschlüsselt
+        } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public byte[] encryptAsymetric(String input, PublicKey publicKey){ // Verschlüsselt asymetrisch
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            return cipher.doFinal(input.getBytes());
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String decryptAsymetric(byte[] input, PrivateKey privateKey){ // Entschlüsselt asymetrisch
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] decryptedBytes = cipher.doFinal(input);
+            return new String(decryptedBytes);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public KeyPair generateKeyPair(){ // Generiert Schlüsselpaar zur asymetrischen Verschlüsselung
+        try {
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+            kpg.initialize(2048);
+            return kpg.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String generateAuthPin(int length){ // Generiert zufälligen String mit n Zeichen
+        SecureRandom sr = new SecureRandom();
+        return new BigInteger(130, sr).toString(32);
+    }
+
+    public String bytesToHex(byte[] bytes) {
+        final char[] hexArray = "0123456789ABCDEF".toCharArray();
+        StringBuilder output = new StringBuilder();
+        for (byte aByte : bytes) {
+            int v = aByte & 0xFF;
+            output.append(hexArray[v >>> 4]);
+            output.append(hexArray[v & 0x0F]);
+        }
+        return output.toString();
+    }
+
+    public byte[] hexToBytes(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 }

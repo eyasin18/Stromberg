@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.repictures.stromberg.Features.AddAuthKeyActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/authkey_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="AuthKey" />
+
+        <EditText
+            android:id="@+id/accountnumber_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/authkey_edit"
+            android:layout_alignRight="@+id/authkey_edit"
+            android:layout_below="@+id/authkey_edit"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="Kontonummer" />
+
+        <Button
+            android:id="@+id/send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accountnumber_edit"
+            android:layout_centerHorizontal="true"
+            android:text="Senden" />
+
+        <ImageView
+            android:id="@+id/qrPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/getButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/getButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abfragen"
+            android:layout_below="@+id/send_button"
+            android:layout_alignLeft="@+id/send_button"
+            android:layout_alignStart="@+id/send_button" />
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

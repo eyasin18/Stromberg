@@ -1,4 +1,4 @@
-package de.repictures.stromberg;
+package de.repictures.stromberg.Features;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.PostProductAsyncTask;
+import de.repictures.stromberg.R;
 
 public class AddProductActivity extends AppCompatActivity {
 

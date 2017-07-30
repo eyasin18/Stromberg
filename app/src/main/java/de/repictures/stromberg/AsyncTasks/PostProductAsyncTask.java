@@ -11,11 +11,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
-import de.repictures.stromberg.AddProductActivity;
+import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.MainActivity;
 
 public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
 

@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "LoginActivity";
     public static String SERVERURL = "https://fingerhut388.appspot.com";
+    public static String PIN = "";
 
     @Bind(R.id.login_background) ImageView loginBackground;
     @Bind(R.id.login_login_button) Button loginButton;
@@ -66,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     accountnumberEditLayout.setError("");
                     passwordEditLayout.setError("");
                     passwordEditLayout.setErrorEnabled(false);
+                    PIN = passwordEdit.getText().toString();
                     LoginAsyncTask mAuth = new LoginAsyncTask(accountnumberEditLayout, passwordEditLayout, loginButton, loginProgressBar, LoginActivity.this);
                     mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString());
                 }

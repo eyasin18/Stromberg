@@ -56,7 +56,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.TransfersActivity" />
         </activity>
-        <activity android:name=".AddProductActivity"></activity>
+        <activity android:name=".Features.AddProductActivity" />
+        <activity android:name=".CompanyActivity" />
+        <activity android:name=".Features.AddAuthKeyActivity"></activity>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
+import de.repictures.stromberg.Features.AddProductActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_inbox:
                 break;
             case R.id.main_domain:
-                i = new Intent(MainActivity.this, AddProductActivity.class);
+                i = new Intent(MainActivity.this, CompanyActivity.class);
                 startActivity(i);
                 break;
             case R.id.main_scan:
