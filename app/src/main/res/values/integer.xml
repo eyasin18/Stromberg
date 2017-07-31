@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="accountnumberlength">4</integer>
+    <integer name="auth_key_length">16</integer>
+</resources>

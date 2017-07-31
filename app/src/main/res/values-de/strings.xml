@@ -55,4 +55,10 @@
     <string name="low_storage_error"></string>
     <string name="more_results" formatted="false">%1$d weitere%s Ergebnis%s</string>
     <string name="swipe_to_view">Nach oben wischen zum ansehen</string>
+    <string name="authenticate">Authentifizieren</string>
+    <string name="not_authenticated">Du bist nicht authentifiziert</string>
+    <string name="wrong_auth">Du bist für diesen Account nicht authentifiziert</string>
+    <string name="internet_problems">Netzwerkfehler: Überprüfe deine Internetverbindung</string>
+    <string name="no_such_authkey">Dies ist kein gültiger Authentifikationsschlüssel</string>
+    <string name="authenticate_progress">Authentifiziere...</string>
 </resources>

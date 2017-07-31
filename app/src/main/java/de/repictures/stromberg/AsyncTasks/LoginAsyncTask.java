@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -35,6 +36,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     private final Button loginButton;
     private final ProgressBar loginProgressBar;
     private Activity activity;
+    private Cryptor cryptor = new Cryptor();
 
     public LoginAsyncTask(TextInputLayout accountnumberEditLayout, TextInputLayout passwordEditLayout, Button loginButton, ProgressBar loginProgressBar, Activity activity) {
         this.passwordEditLayout = passwordEditLayout;
@@ -45,13 +47,56 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
     protected String doInBackground(String... keys) {
-        return getAccountInformation(keys);
+        String postResp = "";
+        String getResp = "";
+        try {
+            String getUrlStr = LoginActivity.SERVERURL + "/login?authPart=" + keys[2] + "&accountnumber=" + keys[0];
+            URL getUrl = new URL(getUrlStr);
+            URLConnection urlConnection = getUrl.openConnection();
+
+            InputStream getInputStream = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader getBufferedReader = new BufferedReader(new InputStreamReader(getInputStream, "UTF-8"));
+            StringBuilder getTotal = new StringBuilder();
+            String getLine;
+            while ((getLine = getBufferedReader.readLine()) != null) {
+                getTotal.append(getLine);
+            }
+            Log.d(TAG, "doInBackground: " + getTotal);
+            getResp += getTotal;
+            getResp = URLDecoder.decode(getResp, "UTF-8");
+            getInputStream.close();
+            String getResults[] = getResp.split("~");
+            if (!getResults[0].equals(keys[3])){
+                return "3";
+            }
+
+            keys[1] = cryptor.hashToString(cryptor.hashToString(keys[1]) + getResults[1]);
+            Log.d(TAG, "doInBackground:\nAccountnumber: " + keys[0] + "\nSaltetPin: " + keys[1]);
+            String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + URLEncoder.encode(keys[0], "UTF-8") + "&password=" + URLEncoder.encode(keys[1], "UTF-8");
+            URL postUrl = new URL(postUrlStr);
+
+            HttpURLConnection httpURLConnection = (HttpURLConnection) postUrl.openConnection();
+            httpURLConnection.setUseCaches(false);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+
+            InputStream postInputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+            BufferedReader postBufferedReader = new BufferedReader(new InputStreamReader(postInputStream, "UTF-8"));
+            StringBuilder postTotal = new StringBuilder();
+            String postLine;
+            while ((postLine = postBufferedReader.readLine()) != null) {
+                postTotal.append(postLine);
+            }
+            Log.d(TAG, "doInBackground: " + postTotal);
+            postResp += postTotal;
+            postResp = URLDecoder.decode(postResp, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+            postResp = "-1";
+        }
+        return postResp + "ò" + keys[0];
     }
 
     @Override
@@ -94,6 +139,21 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 Intent i = new Intent(activity, MainActivity.class);
                 activity.startActivity(i);
                 activity.finish();
+                break;
+            case 3:
+                accountnumberEditLayout.setErrorEnabled(true);
+                accountnumberEditLayout.setError(activity.getResources().getString(R.string.wrong_auth));
+                if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
+                    editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountkey));
+                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_featureslist));
+                    editor.apply();
+                }
+                break;
+            case -1:
+                accountnumberEditLayout.setErrorEnabled(true);
+                accountnumberEditLayout.setError(activity.getResources().getString(R.string.internet_problems));
                 break;
         }
     }

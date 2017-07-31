@@ -42,6 +42,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String>{
             Log.d(TAG, "doInBackground: " + total);
             resp += total;
             resp = URLDecoder.decode(resp, "UTF-8");
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

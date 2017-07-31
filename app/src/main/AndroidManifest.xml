@@ -31,7 +31,7 @@
                 android:value="de.repictures.stromberg.MainActivity" />
         </activity>
         <activity
-            android:name=".ScanActivity"
+            android:name=".ScanProductActivity"
             android:label="@string/title_activity_scan"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar">
@@ -48,7 +48,7 @@
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Fragments.TransferDialogFragment"
+            android:name=".Features.TransferDialogActivity"
             android:label="@string/title_activity_transfer_dialog_fragment"
             android:parentActivityName=".TransfersActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -58,7 +58,11 @@
         </activity>
         <activity android:name=".Features.AddProductActivity" />
         <activity android:name=".CompanyActivity" />
-        <activity android:name=".Features.AddAuthKeyActivity"></activity>
+        <activity android:name=".Features.AddAuthKeyActivity" />
+        <activity android:name=".AuthScanActivity"
+            android:label="@string/title_activity_auth_scan"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar"/>
     </application>
 
 </manifest>

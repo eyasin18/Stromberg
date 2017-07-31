@@ -1,6 +1,5 @@
 package de.repictures.stromberg.AsyncTasks;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,19 +11,17 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.MainActivity;
-import de.repictures.stromberg.ScanActivity;
+import de.repictures.stromberg.ScanProductActivity;
 
 public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
 
-    private ScanActivity scanActivity;
+    private ScanProductActivity scanProductActivity;
     private String TAG = "GetProductAsyncTask";
 
-    public GetProductAsyncTask(ScanActivity scanActivity){
-        this.scanActivity = scanActivity;
+    public GetProductAsyncTask(ScanProductActivity scanProductActivity){
+        this.scanProductActivity = scanProductActivity;
     }
 
     @Override
@@ -45,6 +42,7 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
             Log.d(TAG, "doInBackground: " + total);
             resp += total;
             resp = URLDecoder.decode(resp, "UTF-8");
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +59,7 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
             for (int i = 0; i < products.length; i++) {
                 products[i] = responsesRaw[i].split("ò");
             }
-            scanActivity.receiveResult(products);
+            scanProductActivity.receiveResult(products);
         }
     }
 }

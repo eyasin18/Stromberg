@@ -17,12 +17,11 @@ import java.text.DecimalFormat;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
-import de.repictures.stromberg.Features.AddProductActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "MainActivity";
-    long pausedTime = 0;
+    private final String TAG = "MainActivity";
+    public static long pausedTime = 0;
     String accountKey;
 
     @Bind(R.id.financial_status_account_number) TextView accountNumberText;
@@ -54,14 +53,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        pausedTime = System.currentTimeMillis();
+        MainActivity.pausedTime = System.currentTimeMillis();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(pausedTime != 0 && System.currentTimeMillis() - pausedTime > 30000){
+        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
             Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             this.finish();
         }
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             case R.id.main_scan:
-                i = new Intent(MainActivity.this, ScanActivity.class);
+                i = new Intent(MainActivity.this, ScanProductActivity.class);
                 startActivity(i);
                 break;
         }

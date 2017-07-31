@@ -1,8 +1,6 @@
 package de.repictures.stromberg.AsyncTasks;
 
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -15,18 +13,16 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import de.repictures.stromberg.Fragments.TransferDialogFragment;
+import de.repictures.stromberg.Features.TransferDialogActivity;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.R;
-import de.repictures.stromberg.TransfersActivity;
 
 public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
-    private TransferDialogFragment transferDialogFragment;
+    private TransferDialogActivity transferDialogActivity;
     private String TAG = "TransferAsyncTask";
 
-    public TransferAsyncTask(TransferDialogFragment transferDialogFragment){
-        this.transferDialogFragment = transferDialogFragment;
+    public TransferAsyncTask(TransferDialogActivity transferDialogActivity){
+        this.transferDialogActivity = transferDialogActivity;
     }
 
     @Override
@@ -47,6 +43,7 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
             Log.d(TAG, "doInBackground: " + total);
             resp += total;
             resp = URLDecoder.decode(resp, "UTF-8");
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +52,7 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        transferDialogFragment.postResult(Integer.parseInt(s));
+        transferDialogActivity.postResult(Integer.parseInt(s));
     }
 }
 

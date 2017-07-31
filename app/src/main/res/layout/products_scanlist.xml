@@ -18,35 +18,35 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/product_prev_pic"
+                    android:id="@+id/auth_scan_progressbar"
                     android:layout_margin="16dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
 
                 <TextView
                     android:paddingTop="16dp"
-                    android:layout_toRightOf="@+id/product_prev_pic"
+                    android:layout_toRightOf="@+id/auth_scan_progressbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/error"
                     style="@style/TextAppearance.AppCompat.Title"
                     android:textSize="24sp"
-                    android:id="@+id/product_title"/>
+                    android:id="@+id/auth_scan_title"/>
 
                 <TextView
-                    android:layout_toRightOf="@+id/product_prev_pic"
-                    android:layout_below="@+id/product_title"
+                    android:layout_toRightOf="@+id/auth_scan_progressbar"
+                    android:layout_below="@+id/auth_scan_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/error"
                     android:paddingBottom="16dp"
                     android:textSize="14sp"
-                    android:id="@+id/product_vendor"/>
+                    android:id="@+id/auth_scan_vendor"/>
 
             </RelativeLayout>
 
             <ProgressBar
-                android:id="@+id/product_progress_bar"
+                android:id="@+id/auth_scan_progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/product_second_element"
-                android:layout_below="@+id/product_progress_bar"
+                android:layout_below="@+id/auth_scan_progress_bar"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="16dp"

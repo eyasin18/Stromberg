@@ -14,6 +14,7 @@ import java.security.SecureRandom;
 
 import de.repictures.stromberg.AsyncTasks.GetQRAsyncTask;
 import de.repictures.stromberg.AsyncTasks.UploadQRAsyncTask;
+import de.repictures.stromberg.R;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -23,21 +24,24 @@ public class QRCode {
     private Activity activity;
     private static final int SIZE = 300;
 
+    private String authCode;
     private ImageView qrView;
 
     public QRCode(Activity activity){
         this.activity = activity;
     }
 
-    public Bitmap generate(String authKey) {
-        authKey = authKey.trim();
-        if (authKey.length() == 0){
+    public Bitmap generate(String authKey, String accountnumber) {
+        if (authKey == null){
             SecureRandom sr = new SecureRandom();
-            authKey = new BigInteger(130, sr).toString(32);
+            authCode = accountnumber;
+            authCode += new BigInteger(activity.getResources().getInteger(R.integer.auth_key_length)*5, sr).toString(32);
+        } else {
+            authCode = (accountnumber + authKey);
         }
         BitMatrix result;
         try {
-            result = new MultiFormatWriter().encode(authKey,
+            result = new MultiFormatWriter().encode(authCode,
                     BarcodeFormat.QR_CODE, SIZE, SIZE, null);
         } catch (IllegalArgumentException | WriterException e) {
             return null;
@@ -56,7 +60,7 @@ public class QRCode {
         return bitmap;
     }
 
-    public void upload(Bitmap qrCode, String accountnumber, String authCode){
+    public void upload(Bitmap qrCode, String accountnumber){
         UploadQRAsyncTask uploadQRAsyncTask = new UploadQRAsyncTask(activity, accountnumber, authCode);
         uploadQRAsyncTask.execute(qrCode);
     }

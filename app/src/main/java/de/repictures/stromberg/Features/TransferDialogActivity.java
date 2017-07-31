@@ -1,4 +1,4 @@
-package de.repictures.stromberg.Fragments;
+package de.repictures.stromberg.Features;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -32,20 +32,20 @@ import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TransferAsyncTask;
+import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
 import de.repictures.stromberg.uiHelper.ForbiddenCharactersFilter;
 
-public class TransferDialogFragment extends AppCompatActivity implements View.OnClickListener {
+public class TransferDialogActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "TransferDialogFragment";
+    private static final String TAG = "TransferDialogActivity";
 
     @Bind(R.id.transfer_fragment_owner_input_layout) TextInputLayout ownerInputLayout;
     @Bind(R.id.transfer_fragment_accountnumber_input_layout) TextInputLayout accountInputLayout;
@@ -80,9 +80,9 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
 
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(TransferDialogFragment.this)
-                        .setTitle(TransferDialogFragment.this.getResources().getString(R.string.delete_transfer))
-                        .setMessage(TransferDialogFragment.this.getResources().getString(R.string.you_will_lose_data))
+                new AlertDialog.Builder(TransferDialogActivity.this)
+                        .setTitle(TransferDialogActivity.this.getResources().getString(R.string.delete_transfer))
+                        .setMessage(TransferDialogActivity.this.getResources().getString(R.string.you_will_lose_data))
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent();
@@ -192,10 +192,28 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        MainActivity.pausedTime = System.currentTimeMillis();
+        Log.d(TAG, "onPause: called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            this.finish();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(TransferDialogFragment.this)
-                .setTitle(TransferDialogFragment.this.getResources().getString(R.string.delete_transfer))
-                .setMessage(TransferDialogFragment.this.getResources().getString(R.string.you_will_lose_data))
+        new AlertDialog.Builder(TransferDialogActivity.this)
+                .setTitle(TransferDialogActivity.this.getResources().getString(R.string.delete_transfer))
+                .setMessage(TransferDialogActivity.this.getResources().getString(R.string.you_will_lose_data))
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent();
@@ -222,7 +240,7 @@ public class TransferDialogFragment extends AppCompatActivity implements View.On
     public boolean onOptionsItemSelected(MenuItem item) {
         if(dataWithoutError()){
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-            TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogFragment.this);
+            TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
             asyncTask.execute(sharedPref.getString(getResources().getString(R.string.sp_accountnumber), ""), accountnumberEditText.getText().toString(),
                         amountEditText.getText().toString(), purposeEditText.getText().toString());
         }

@@ -1,5 +1,6 @@
 package de.repictures.stromberg;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,5 +25,22 @@ public class CompanyActivity extends AppCompatActivity {
         featuresAdapter = new FeaturesListAdapter(CompanyActivity.this);
         featuresRecycler.setAdapter(featuresAdapter);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainActivity.pausedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            this.finish();
+        }
     }
 }

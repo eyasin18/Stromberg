@@ -1,6 +1,7 @@
 package de.repictures.stromberg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
@@ -25,10 +26,12 @@ import de.repictures.stromberg.uiHelper.GetPictures;
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    //TODO Wenn LoginActivity aufgrund eines Timeouts gestartet wurde, soll die Ursprüngliche Activity wieder aufgerufen werden (BUG!)
 
     private static final String TAG = "LoginActivity";
     public static String SERVERURL = "https://fingerhut388.appspot.com";
     public static String PIN = "";
+    private String authCode;
 
     @Bind(R.id.login_background) ImageView loginBackground;
     @Bind(R.id.login_login_button) Button loginButton;
@@ -36,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.login_account_number_edit_layout) TextInputLayout accountnumberEditLayout;
     @Bind(R.id.login_password_edit) TextInputEditText passwordEdit;
     @Bind(R.id.login_account_number_edit) TextInputEditText accountnumberEdit;
-    @Bind(R.id.login_forgot_pin) TextView forgotPin;
+    @Bind(R.id.login_authenticate) TextView authenticateText;
     @Bind(R.id.login_progress_bar) ProgressBar loginProgressBar;
 
     @Override
@@ -47,10 +50,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
 
         loginButton.setOnClickListener(this);
+        authenticateText.setOnClickListener(this);
         accountnumberEdit.requestFocus();
         loginProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
+        authCode = sharedPref.getString(getResources().getString(R.string.sp_authcode), null);
         if(savedAccountnumber != ""){
             accountnumberEdit.setText(savedAccountnumber);
         }
@@ -60,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_login_button:
-                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0) {
+                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0 /*&& authCode != null*/) {
                     loginButton.setText("");
                     loginProgressBar.setVisibility(View.VISIBLE);
                     accountnumberEditLayout.setErrorEnabled(false);
@@ -69,8 +74,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     passwordEditLayout.setErrorEnabled(false);
                     PIN = passwordEdit.getText().toString();
                     LoginAsyncTask mAuth = new LoginAsyncTask(accountnumberEditLayout, passwordEditLayout, loginButton, loginProgressBar, LoginActivity.this);
-                    mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString());
+                    String[] authParts = {authCode.substring(0, getResources().getInteger(R.integer.auth_key_length)/2), authCode.substring(getResources().getInteger(R.integer.auth_key_length)/2)};
+                    mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1]);
+                } else if (authCode == null){
+                    accountnumberEditLayout.setErrorEnabled(false);
+                    accountnumberEditLayout.setError(getResources().getString(R.string.not_authenticated));
                 }
+                break;
+            case R.id.login_authenticate:
+                Intent i = new Intent(LoginActivity.this, AuthScanActivity.class);
+                startActivityForResult(i, 1);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            authCode = data.getStringExtra("authcode");
+        } else {
+            Log.d(TAG, "onActivityResult: failed!");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory( Intent.CATEGORY_HOME );
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
     }
 }

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.repictures.stromberg.ScanActivity"
-    android:id="@+id/activity_scan_layout">
+    tools:context="de.repictures.stromberg.ScanProductActivity"
+    android:id="@+id/activity_auth_scan_layout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,9 +13,9 @@
         <SurfaceView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/camera_view" />
+            android:id="@+id/auth_scan_camera_view" />
 
-        <include layout="@layout/scanlist" />
+        <include layout="@layout/auth_code_scanlist"/>
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

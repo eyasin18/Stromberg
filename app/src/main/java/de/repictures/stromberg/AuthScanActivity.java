@@ -1,9 +1,9 @@
 package de.repictures.stromberg;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -14,19 +14,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -39,34 +34,29 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.repictures.stromberg.AsyncTasks.GetProductAsyncTask;
-import de.repictures.stromberg.uiHelper.GetPictures;
+import de.repictures.stromberg.AsyncTasks.TryAuthAsyncTask;
 
-public class ScanActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
+public class AuthScanActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
 
     private static final int PERMISSION_REQUEST_CAMERA = 42;
-    @Bind(R.id.camera_view) SurfaceView cameraView;
-    @Bind(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
-    @Bind(R.id.product_layout) RelativeLayout productLayout;
-    @Bind(R.id.product_progress_bar) ProgressBar productProgressBar;
-    @Bind(R.id.product_second_element) RelativeLayout secondElement;
-    @Bind(R.id.product_card) CardView productCard;
-    @Bind(R.id.product_prev_pic) ImageView productImage;
-    @Bind(R.id.product_title) TextView productTitle;
-    @Bind(R.id.product_vendor) TextView productVendor;
+    private static final String TAG = "AuthScanActivity";
 
-    private static final String TAG = "ScanActivity";
-    private static final String imageDummyUrl = "https://c1.staticflickr.com/5/4123/4793188726_5d34ab7120_z.jpg";
-    BarcodeDetector barcodeDetector;
-    CameraSource mCameraSource;
-    RecyclerView.Adapter scanAdapter;
-    ArrayList<String> scanResults = new ArrayList<>();
+    @Bind(R.id.auth_scan_camera_view) SurfaceView cameraView;
+    @Bind(R.id.activity_auth_scan_layout) CoordinatorLayout scanLayout;
+    @Bind(R.id.auth_scan_card) CardView authScanCard;
+    @Bind(R.id.auth_scan_progressbar) ProgressBar authScanProgressBar;
+    @Bind(R.id.auth_scan_title) TextView authScanTitle;
+
+    private BarcodeDetector barcodeDetector;
+    private CameraSource mCameraSource;
     private boolean animated = false;
+    private ArrayList<String> sortedBarcodeValues = new ArrayList<>();
+    private int sortedBarcodesSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_auth_scan);
         ButterKnife.bind(this);
 
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -81,7 +71,24 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onCreate: " + cameraView.getHeight());
-        productCard.setY(cameraView.getHeight()-45f);
+        authScanCard.setY(cameraView.getHeight()-45f);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainActivity.pausedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            this.finish();
+        }
     }
 
     private void createCameraSource() {
@@ -91,7 +98,9 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
         int width = size.x;
         int height = size.y;
         cameraView.getHolder().addCallback(surfaceHolderCallback());
-        barcodeDetector = new BarcodeDetector.Builder(this).build();
+        barcodeDetector = new BarcodeDetector.Builder(this)
+                .setBarcodeFormats(Barcode.QR_CODE)
+                .build();
         barcodeDetector.setProcessor(this);
         mCameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setRequestedPreviewSize(height/ 2, width / 2)
@@ -105,11 +114,11 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 try {
-                    if (ActivityCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(ScanActivity.this, Manifest.permission.CAMERA)){
+                    if (ActivityCompat.checkSelfPermission(AuthScanActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(AuthScanActivity.this, Manifest.permission.CAMERA)){
 
                         } else {
-                            ActivityCompat.requestPermissions(ScanActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                            ActivityCompat.requestPermissions(AuthScanActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
                         }
                     }
                     mCameraSource.start(cameraView.getHolder());
@@ -162,6 +171,55 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
                 .show();
     }
 
+    @Override
+    public void release() {
+
+    }
+
+    @Override
+    public void receiveDetections(Detector.Detections<Barcode> detections) {
+        SparseArray<Barcode> allBarcodes = detections.getDetectedItems();
+        for (int i = 0; i < allBarcodes.size(); i++){
+            Barcode barcode = allBarcodes.valueAt(i);
+            if (barcode.displayValue.length() == getResources().getInteger(R.integer.accountnumberlength)+ getResources().getInteger(R.integer.auth_key_length) && !sortedBarcodeValues.contains(barcode.displayValue)){
+                sortedBarcodeValues.add(barcode.displayValue);
+                Log.d(TAG, "receiveDetections: Barcode " + barcode.displayValue + " added");
+            }
+        }
+        if (sortedBarcodeValues.size() > sortedBarcodesSize){
+            if (!animated){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -authScanCard.getHeight());
+                        translateAnimation.setDuration(250);
+                        translateAnimation.setFillAfter(true);
+                        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
+                        authScanCard.setY(cameraView.getHeight());
+                        authScanCard.setVisibility(View.VISIBLE);
+                        authScanCard.startAnimation(translateAnimation);
+                        animated = true;
+                        Log.d(TAG, "run: animated");
+                    }
+                });
+            }
+            authScanProgressBar.setVisibility(View.VISIBLE);
+            authScanTitle.setText(getResources().getString(R.string.authenticate_progress));
+            for (int i = 0; i < sortedBarcodeValues.size(); i++){
+                Log.d(TAG, "receiveDetections: " + sortedBarcodeValues.get(i));
+                TryAuthAsyncTask asyncTask = new TryAuthAsyncTask(AuthScanActivity.this);
+                asyncTask.execute(sortedBarcodeValues.get(i));
+            }
+            Log.d(TAG, "receiveDetections: " + sortedBarcodesSize);
+            sortedBarcodesSize = sortedBarcodeValues.size();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
     private void requestCameraPermission() {
         Log.w(TAG, "Camera permission is not granted. Requesting permission");
 
@@ -189,81 +247,16 @@ public class ScanActivity extends AppCompatActivity implements Detector.Processo
                 .show();
     }
 
-    @Override
-    public void release() {
-
-    }
-
-    @Override
-    public void receiveDetections(Detector.Detections<Barcode> detections) {
-        SparseArray<Barcode> allBarcodes = detections.getDetectedItems();
-        ArrayList<Barcode> sortedBarcodes = new ArrayList<>();
-        for (int i = 0; i < allBarcodes.size(); i++){
-            Barcode barcode = allBarcodes.valueAt(i);
-            if ((barcode.displayValue.length() == 8 || barcode.displayValue.length() == 13) && !scanResults.contains(barcode.displayValue)){
-                sortedBarcodes.add(barcode);
-                scanResults.add(barcode.displayValue);
-            }
+    public void getAuthResult(Boolean result, String authKey){
+        if (result){
+            Intent intent = new Intent();
+            intent.putExtra("authcode", authKey);
+            Log.d(TAG, "receiveDetections: " + authKey);
+            AuthScanActivity.this.setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            authScanProgressBar.setVisibility(View.INVISIBLE);
+            authScanTitle.setText(getResources().getString(R.string.no_such_authkey));
         }
-        if (sortedBarcodes.size() > 0){
-            if (!animated){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -productCard.getHeight()/2);
-                        translateAnimation.setDuration(250);
-                        translateAnimation.setFillAfter(true);
-                        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
-                        productCard.setY(cameraView.getHeight());
-                        productCard.setVisibility(View.VISIBLE);
-                        productCard.startAnimation(translateAnimation);
-                        animated = true;
-                        Log.d(TAG, "run: animated");
-                    }
-                });
-
-            }
-            for (int i = 0; i < sortedBarcodes.size(); i++){
-                Log.d(TAG, "receiveDetections: " + sortedBarcodes.get(i).displayValue);
-                GetProductAsyncTask asyncTask = new GetProductAsyncTask(ScanActivity.this);
-                asyncTask.execute(sortedBarcodes.get(i).displayValue);
-            }
-        }
-    }
-
-    public void receiveResult(String[][] products){
-        productTitle.setText(products[0][0]);
-        productVendor.setText(products[0][1]);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                productLayout.setVisibility(View.VISIBLE);
-                final Animation animation = new AlphaAnimation(0f, 1f);
-                animation.setDuration(250);
-                productProgressBar.animate().alpha(0f).setDuration(250).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                        productLayout.setVisibility(View.VISIBLE);
-                        productLayout.startAnimation(animation);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                }).start();
-            }
-        });
-        new Thread(new GetPictures(imageDummyUrl, productImage, ScanActivity.this, true, true, false)).start();
     }
 }
