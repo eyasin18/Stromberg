@@ -1,9 +1,11 @@
 package de.repictures.stromberg.uiHelper;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -35,6 +37,7 @@ public class BlurTransform implements Transformation {
         mSampling = sampling;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public Bitmap transform(Bitmap source) {
 

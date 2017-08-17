@@ -65,10 +65,10 @@ public class QRCode {
         uploadQRAsyncTask.execute(qrCode);
     }
 
-    public void getQRCode(String accountnumber, ImageView qrView){
+    public void getQRCode(String accountnumber, String requestingAccountnumber, ImageView qrView){
         this.qrView = qrView;
         GetQRAsyncTask getQRAsyncTask = new GetQRAsyncTask(QRCode.this);
-        getQRAsyncTask.execute(accountnumber);
+        getQRAsyncTask.execute(accountnumber, requestingAccountnumber);
     }
 
     public void setView(Bitmap qrCode){

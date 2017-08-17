@@ -192,24 +192,6 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MainActivity.pausedTime = System.currentTimeMillis();
-        Log.d(TAG, "onPause: called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
-            Intent i = new Intent(this, LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            this.finish();
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         new AlertDialog.Builder(TransferDialogActivity.this)
                 .setTitle(TransferDialogActivity.this.getResources().getString(R.string.delete_transfer))

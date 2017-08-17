@@ -25,14 +25,17 @@ import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
 import de.repictures.stromberg.uiHelper.GetPictures;
 import io.fabric.sdk.android.Fabric;
 
+//LoginScreen. Startactivity der App.
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     //TODO Wenn LoginActivity aufgrund eines Timeouts gestartet wurde, soll die Ursprüngliche Activity wieder aufgerufen werden (BUG!)
 
-    private static final String TAG = "LoginActivity";
+    private final String TAG = "LoginActivity";
     public static String SERVERURL = "https://fingerhut388.appspot.com";
     public static String PIN = "";
+    public static String ACCOUNTNUMBER = "";
     private String authCode;
 
+    //Views aus der XML werden Javaobjekten zugeordnet.
     @Bind(R.id.login_background) ImageView loginBackground;
     @Bind(R.id.login_login_button) Button loginButton;
     @Bind(R.id.login_password_edit_layout) TextInputLayout passwordEditLayout;
@@ -49,10 +52,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        //Die Buttons sollen triggern, wenn sie gedrückt werden.
         loginButton.setOnClickListener(this);
         authenticateText.setOnClickListener(this);
+
         accountnumberEdit.requestFocus();
         loginProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        //Gespeicherte Kontonummer wird in vorgesehenen EditText geschrieben.
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
         authCode = sharedPref.getString(getResources().getString(R.string.sp_authcode), null);
@@ -65,11 +71,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_login_button:
-                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0 /*&& authCode != null*/) {
+                //Hat der Nutzer in die Felder Daten eingetragen und ist authentifiziert?
+                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0 && authCode != null) {
                     loginButton.setText("");
                     loginProgressBar.setVisibility(View.VISIBLE);
                     accountnumberEditLayout.setErrorEnabled(false);
                     accountnumberEditLayout.setError("");
+                    ACCOUNTNUMBER = accountnumberEdit.getText().toString();
                     passwordEditLayout.setError("");
                     passwordEditLayout.setErrorEnabled(false);
                     PIN = passwordEdit.getText().toString();

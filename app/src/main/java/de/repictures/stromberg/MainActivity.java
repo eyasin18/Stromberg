@@ -45,30 +45,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inboxLayout.setOnClickListener(this);
         domainLayout.setOnClickListener(this);
         scanLayout.setOnClickListener(this);
-
-        GetFinancialStatusAsyncTask getFinancialStatus = new GetFinancialStatusAsyncTask(this);
-        getFinancialStatus.execute(accountKey);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MainActivity.pausedTime = System.currentTimeMillis();
     }
 
     @Override
     protected void onResume() {
+        //Rufe Finanzstatus im Hintergrund ab.
         super.onResume();
-        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
-            Intent i = new Intent(this, LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            this.finish();
-        }
+        GetFinancialStatusAsyncTask getFinancialStatus = new GetFinancialStatusAsyncTask(this);
+        getFinancialStatus.execute(accountKey);
     }
 
+    //Wenn Finanzstatus erfolgreich eingegangen ist, dann...
     public void setFinancialStatus(String accountnumber, String accountowner, float accountbalance){
-
         DecimalFormat df = new DecimalFormat("#.00");
         accountBalanceText.setTextColor(getResources().getColor(accountbalance <= 0 ? R.color.balance_minus : R.color.balance_plus));
         accountBalanceText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(round(accountbalance, 2))));

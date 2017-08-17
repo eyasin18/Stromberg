@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 
+import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.TransfersActivity;
 
@@ -26,7 +27,9 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String>{
 
     @Override
     protected String doInBackground(String... accountKeys) {
-        String resp = "";
+        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0];
+        return new Internet().doGetString(baseUrl);
+        /*String resp = "";
         try {
             Log.d(TAG, "doInBackground: " + accountKeys[0]);
             String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0];
@@ -46,7 +49,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String>{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return resp;
+        return resp;*/
     }
 
     @Override

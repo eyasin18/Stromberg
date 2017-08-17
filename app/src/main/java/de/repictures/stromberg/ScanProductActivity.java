@@ -85,23 +85,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         productCard.setY(cameraView.getHeight()-45f);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MainActivity.pausedTime = System.currentTimeMillis();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(MainActivity.pausedTime != 0 && System.currentTimeMillis() - MainActivity.pausedTime > 30000){
-            Intent i = new Intent(this, LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            this.finish();
-        }
-    }
-
     private void createCameraSource() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -161,6 +144,11 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             // We have permission, so create the camerasource
             //TODO: Kamera aktiviert sich nicht, nachdem der Zugriff zugelassen wurde
             createCameraSource();
+            try{
+                mCameraSource.start(cameraView.getHolder());
+            } catch (IOException | SecurityException e) {
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -218,7 +206,8 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         ArrayList<Barcode> sortedBarcodes = new ArrayList<>();
         for (int i = 0; i < allBarcodes.size(); i++){
             Barcode barcode = allBarcodes.valueAt(i);
-            if ((barcode.displayValue.length() == 8 || barcode.displayValue.length() == 13) && !scanResults.contains(barcode.displayValue)){
+            Log.d(TAG, "receiveDetections: " + barcode.displayValue);
+            if (barcodeHasCorrectLength(barcode.displayValue.length()) && !scanResults.contains(barcode.displayValue)){
                 sortedBarcodes.add(barcode);
                 scanResults.add(barcode.displayValue);
             }
@@ -283,5 +272,10 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             }
         });
         new Thread(new GetPictures(imageDummyUrl, productImage, ScanProductActivity.this, true, true, false)).start();
+    }
+
+    private boolean barcodeHasCorrectLength(int length){
+        if (length > 7 && length < 17) return true;
+        else return false;
     }
 }

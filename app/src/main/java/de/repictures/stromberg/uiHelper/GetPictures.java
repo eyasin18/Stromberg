@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -20,13 +21,13 @@ import java.util.List;
 public class GetPictures implements Runnable {
 
     private static final String TAG = "GetPictures";
-    String url;
-    int id;
-    Uri uri;
-    ImageView imageView;
+    private String url;
+    private int id;
+    private Uri uri;
+    private ImageView imageView;
     private Drawable drawable;
-    Activity activity;
-    Boolean transfrom;
+    private Activity activity;
+    private Boolean transfrom;
     private boolean transition;
     private boolean blur;
 
@@ -145,6 +146,8 @@ public class GetPictures implements Runnable {
                 }
             };
         }
+        final int androidVer = android.os.Build.VERSION.SDK_INT;
+        final int androidSdk17 = Build.VERSION_CODES.JELLY_BEAN_MR1;
         final Target finalTarget = target;
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -155,7 +158,7 @@ public class GetPictures implements Runnable {
                         if (url != null) Picasso.with(activity).load(url).transform(new CircleTransform()).into(finalTarget);
                         else if (id != 0) Picasso.with(activity).load(id).transform(new CircleTransform()).into(finalTarget);
                         else if (uri != null) Picasso.with(activity).load(uri).transform(new CircleTransform()).into(finalTarget);
-                    } else if (blur && !transfrom) {
+                    } else if (blur && !transfrom && androidVer >= androidSdk17) {
                         if (url != null) Picasso.with(activity).load(url).transform(new BlurTransform(activity, 25, 1)).into(finalTarget);
                         else if (id != 0) Picasso.with(activity).load(id).transform(new BlurTransform(activity, 25, 1)).into(finalTarget);
                         else if (uri != null) Picasso.with(activity).load(uri).transform(new BlurTransform(activity, 25, 1)).into(finalTarget);

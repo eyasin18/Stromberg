@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
 
@@ -27,7 +28,10 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
 
     @Override
     protected String doInBackground(String... accountKeys) {
-        String resp = "";
+        String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
+        Internet internetHelper = new Internet();
+        return internetHelper.doGetString(baseUrl);
+        /*String resp = "";
         try {
             Log.d(TAG, "doInBackground: " + accountKeys[0]);
             String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
@@ -47,7 +51,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return resp;
+        return resp;*/
     }
 
     @Override

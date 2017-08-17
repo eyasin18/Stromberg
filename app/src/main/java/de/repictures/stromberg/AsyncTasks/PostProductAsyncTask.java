@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 
 import de.repictures.stromberg.Features.AddProductActivity;
+import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
 
 public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
@@ -26,7 +27,9 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
 
     @Override
     protected String doInBackground(String... productInfo) {
-        String resp = "";
+        String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfo[0] + "&name=" + productInfo[1] + "&price=" + productInfo[2] + "&accountnumber=" + productInfo[3];
+        return new Internet().doGetString(baseUrl);
+        /*String resp = "";
         try {
             Log.d(TAG, "doInBackground: " + productInfo[0]);
             String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfo[0] + "&name=" + productInfo[1] + "&price=" + productInfo[2] + "&accountnumber=" + productInfo[3];
@@ -46,7 +49,7 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return resp;
+        return resp;*/
     }
 
     @Override

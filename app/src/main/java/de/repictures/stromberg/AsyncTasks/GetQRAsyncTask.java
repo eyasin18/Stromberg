@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.uiHelper.Cryptor;
+import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.uiHelper.QRCode;
 
 public class GetQRAsyncTask extends AsyncTask<String, Void, Bitmap> {
@@ -52,7 +52,7 @@ public class GetQRAsyncTask extends AsyncTask<String, Void, Bitmap> {
                 in.close();
             }
 
-            String postURLStr = LoginActivity.SERVERURL + "/getqr";
+            String postURLStr = LoginActivity.SERVERURL + "/getqr?accountnumber=" + accountnumbers[0] + "&reqaccountnumber=" + accountnumbers[1];
             URL postURL = new URL(postURLStr);
             HttpURLConnection httpURLConnection;
             httpURLConnection = (HttpURLConnection) postURL.openConnection();
