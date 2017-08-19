@@ -19,7 +19,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
 import de.repictures.stromberg.uiHelper.GetPictures;
@@ -49,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+        Log.d(TAG, "onCreate: " + FirebaseInstanceId.getInstance().getToken());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "337864032929",
+    "firebase_url": "https://fingerhut388.firebaseio.com",
+    "project_id": "fingerhut388",
+    "storage_bucket": "fingerhut388.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337864032929:android:4e295cbb44b95572",
+        "android_client_info": {
+          "package_name": "de.repictures.stromberg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337864032929-47bbuhgprpid48eeu3g0ndgoevlfhhrv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.repictures.stromberg",
+            "certificate_hash": "a1f5793eae441d42e96820e69d87b21bbcc93552"
+          }
+        },
+        {
+          "client_id": "337864032929-3pjam2m9g6foirup1f2p7j7p5ahi7rns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByT9J6AMNfpe1D4tEaC8xxQXQ_KNX6LNc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337864032929-3pjam2m9g6foirup1f2p7j7p5ahi7rns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
