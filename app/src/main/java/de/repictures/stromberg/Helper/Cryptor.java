@@ -1,7 +1,5 @@
 package de.repictures.stromberg.Helper;
 
-import android.util.Base64;
-
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -17,6 +15,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -26,6 +25,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Cryptor {
+    private Logger log = Logger.getLogger(Cryptor.class.getName());
 
     public String hashToString(String input){
         try {
@@ -81,6 +81,7 @@ public class Cryptor {
             byte[] decryptedBytes = cipher.doFinal(encryptedInput); //input wird entschlüsselt
             return new String(decryptedBytes); //bytearray wird zum string gemacht
         } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
+            log.warning(e.toString());
             e.printStackTrace();
             return null;
         }
@@ -94,27 +95,27 @@ public class Cryptor {
             return cipher.doFinal(encryptedInput); //input wird entschlüsselt
         } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
+            log.warning(e.toString());
             return null;
         }
     }
 
-    public byte[] encryptAsymetric(String input, PublicKey publicKey){ // Verschlüsselt asymetrisch
+    public byte[] encryptAsymetric(byte[] input, PublicKey publicKey){ // Verschlüsselt asymetrisch
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            return cipher.doFinal(input.getBytes());
+            return cipher.doFinal(input);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public String decryptAsymetric(byte[] input, PrivateKey privateKey){ // Entschlüsselt asymetrisch
+    public byte[] decryptAsymetric(byte[] input, PrivateKey privateKey){ // Entschlüsselt asymetrisch
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] decryptedBytes = cipher.doFinal(input);
-            return new String(decryptedBytes);
+            return cipher.doFinal(input);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
             return null;
@@ -124,7 +125,8 @@ public class Cryptor {
     public KeyPair generateKeyPair(){ // Generiert Schlüsselpaar zur asymetrischen Verschlüsselung
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-            kpg.initialize(2048);
+            SecureRandom secureRandom = new SecureRandom();
+            kpg.initialize(2048, secureRandom);
             return kpg.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

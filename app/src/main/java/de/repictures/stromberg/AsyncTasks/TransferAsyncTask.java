@@ -45,8 +45,8 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
             String[] publicKeys = getUrlRespStr.split("ò");
             PublicKey senderPublicKey = cryptor.stringToPublicKey(publicKeys[0]);
             PublicKey receiverPublicKey = cryptor.stringToPublicKey(publicKeys[1]);
-            byte[] encryptedSenderPurpose = cryptor.encryptAsymetric(transferArray[3], senderPublicKey);
-            byte[] encryptedReceiverPurpose = cryptor.encryptAsymetric(transferArray[3], receiverPublicKey);
+            byte[] encryptedSenderPurpose = cryptor.encryptAsymetric(transferArray[3].getBytes("ISO-8859-1"), senderPublicKey);
+            byte[] encryptedReceiverPurpose = cryptor.encryptAsymetric(transferArray[3].getBytes("ISO-8859-1"), receiverPublicKey);
             String postUrlStr = LoginActivity.SERVERURL + "/transfer?senderpurpose=" + cryptor.bytesToHex(encryptedSenderPurpose) + "&receiverpurpose=" + cryptor.bytesToHex(encryptedReceiverPurpose)
                     + "&amount=" + URLEncoder.encode(transferArray[2], "UTF-8") + "&receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
                     + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");

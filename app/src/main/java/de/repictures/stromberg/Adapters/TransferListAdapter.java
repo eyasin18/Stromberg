@@ -1,18 +1,30 @@
 package de.repictures.stromberg.Adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.UnsupportedEncodingException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import de.repictures.stromberg.Helper.Cryptor;
+import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.R;
 
 public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHolder> {
@@ -20,6 +32,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
     private static final String TAG = "TransferListAdapter";
     private Activity activity;
     private String[][] transfers;
+    private Cryptor cryptor = new Cryptor();
 
     public TransferListAdapter(Activity activity, String[][] transfers) {
         this.activity = activity;
@@ -69,7 +82,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
         String amountFractionStr = String.format(Locale.getDefault(), "%02d", amountFraction);
         holder.tranferAmountCents.setText(amountFractionStr);
         holder.transferAmountEuros.setText(amountWholeStr.substring(0, amountWholeStr.length() - 2));
-        holder.transferCompanyName.setText(transfers[position][1]);
+        holder.transferCompanyName.setText(getDecryptedOwnerStr(transfers[position][1]));
         holder.transferType.setText(transfers[position][3]);
         holder.setClickListener(new TransferListViewHolder.ClickListener(){
 
@@ -78,6 +91,24 @@ public class TransferListAdapter extends RecyclerView.Adapter<TransferListViewHo
 
             }
         });
+    }
+
+    private String getDecryptedOwnerStr(String encryptedOwnerHex) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String encryptedPrivateKeyHex = sharedPref.getString(activity.getResources().getString(R.string.sp_encrypted_private_key_hex), null);
+        if (encryptedPrivateKeyHex == null) return "0";
+        byte[] encryptedPrivateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
+        byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
+        String privateKeyHex = cryptor.decryptSymetricToString(encryptedPrivateKey, hashedPassword);
+        PrivateKey privateKey = cryptor.stringToPrivateKey(privateKeyHex);
+        byte[] encryptedOwner = cryptor.hexToBytes(encryptedOwnerHex);
+        byte[] decryptedOwner = cryptor.decryptAsymetric(encryptedOwner, privateKey);
+        try {
+            return new String(decryptedOwner, "ISO-8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

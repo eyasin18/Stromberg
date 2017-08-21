@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static String SERVERURL = "https://fingerhut388.appspot.com";
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
+    public static String DEVICE_TOKEN = "";
     private String authCode;
 
     //Views aus der XML werden Javaobjekten zugeordnet.
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     PIN = passwordEdit.getText().toString();
                     LoginAsyncTask mAuth = new LoginAsyncTask(accountnumberEditLayout, passwordEditLayout, loginButton, loginProgressBar, LoginActivity.this);
                     String[] authParts = {authCode.substring(0, getResources().getInteger(R.integer.auth_key_length)/2), authCode.substring(getResources().getInteger(R.integer.auth_key_length)/2)};
-                    mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1]);
+                    mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1], FirebaseInstanceId.getInstance().getToken());
                 } else if (authCode == null){
                     accountnumberEditLayout.setErrorEnabled(false);
                     accountnumberEditLayout.setError(getResources().getString(R.string.not_authenticated));

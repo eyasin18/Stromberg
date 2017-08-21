@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -49,12 +50,18 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... keys) {
         Internet internetHelper = new Internet();
-        String getUrlStr = LoginActivity.SERVERURL + "/login?authPart=" + keys[2] + "&accountnumber=" + keys[0];
+        String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
         String[] doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
         if (!doGetResponse[0].equals(keys[3])) return "3";
 
         String hashedSaltetPassword = cryptor.hashToString(cryptor.hashToString(keys[1]) + doGetResponse[1]);
-        String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&password=" + hashedSaltetPassword + "&servertimestamp=" + doGetResponse[1];
+        try {
+            keys[4] = URLEncoder.encode(keys[4], "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
+                + "&token=" + keys[4] + "&password=" + hashedSaltetPassword + "&servertimestamp=" + doGetResponse[1];
         return internetHelper.doPostString(postUrlStr) + "ò" + keys[0];
     }
 

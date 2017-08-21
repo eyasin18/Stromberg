@@ -1,8 +1,12 @@
 package de.repictures.stromberg.Firebase;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import de.repictures.stromberg.R;
 
 public class FirebaseInstanceIdService extends com.google.firebase.iid.FirebaseInstanceIdService {
 
@@ -17,6 +21,9 @@ public class FirebaseInstanceIdService extends com.google.firebase.iid.FirebaseI
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        //TODO: sendRegistrationToServer(refreshedToken);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getApplicationContext().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getApplicationContext().getResources().getString(R.string.sp_device_token), refreshedToken);
+        editor.apply();
     }
 }
