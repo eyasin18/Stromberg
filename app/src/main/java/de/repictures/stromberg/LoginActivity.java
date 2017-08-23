@@ -37,6 +37,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
     public static String DEVICE_TOKEN = "";
+
+    public boolean loginButtonClicked = false;
+
     private String authCode;
 
     //Views aus der XML werden Javaobjekten zugeordnet.
@@ -77,7 +80,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()){
             case R.id.login_login_button:
                 //Hat der Nutzer in die Felder Daten eingetragen und ist authentifiziert?
-                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0 && authCode != null) {
+                if(accountnumberEdit.getText().toString().length() > 0 && passwordEdit.getText().toString().length() > 0 && authCode != null && !loginButtonClicked) {
+                    Log.d(TAG, "onClick: clicked");
+                    loginButtonClicked = true;
                     loginButton.setText("");
                     loginProgressBar.setVisibility(View.VISIBLE);
                     accountnumberEditLayout.setErrorEnabled(false);
@@ -86,10 +91,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     passwordEditLayout.setError("");
                     passwordEditLayout.setErrorEnabled(false);
                     PIN = passwordEdit.getText().toString();
+
                     LoginAsyncTask mAuth = new LoginAsyncTask(accountnumberEditLayout, passwordEditLayout, loginButton, loginProgressBar, LoginActivity.this);
                     String[] authParts = {authCode.substring(0, getResources().getInteger(R.integer.auth_key_length)/2), authCode.substring(getResources().getInteger(R.integer.auth_key_length)/2)};
                     mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1], FirebaseInstanceId.getInstance().getToken());
-                } else if (authCode == null){
+                } else if (authCode == null && !loginButtonClicked){
                     accountnumberEditLayout.setErrorEnabled(false);
                     accountnumberEditLayout.setError(getResources().getString(R.string.not_authenticated));
                 }

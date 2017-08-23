@@ -9,8 +9,10 @@ import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -20,6 +22,7 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -49,12 +52,24 @@ public class Cryptor {
         }
     }
 
+    public byte[] generateRandomAesKey(){
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(256);
+            SecretKey secretKey = keyGen.generateKey();
+            return secretKey.getEncoded();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public byte[] encryptSymetricFromString(String input, byte[] key){
         try{
             Cipher cipher = Cipher.getInstance("AES"); //Cipher Objekt wird erzeugt. Wir wollen auf AES verschlüsseln.
             SecretKey originalKey = new SecretKeySpec(key, 0, key.length, "AES"); //bytearray wir zum "SecretKey" gemacht (key [benutzter Schlüssel als bytearray], offset, [wie lang unser Schlüssel sein soll], algorithm [welchen verschlüsselungsargorythums verwenden wir?])
             cipher.init(Cipher.ENCRYPT_MODE, originalKey); //Cipher wird initialisiert
-            return cipher.doFinal(input.getBytes("UTF-8")); //Input wird verschlüsselt
+            return cipher.doFinal(input.getBytes("ISO-8859-1")); //Input wird verschlüsselt
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e){
             e.printStackTrace();
             return null;
@@ -102,7 +117,8 @@ public class Cryptor {
 
     public byte[] encryptAsymetric(byte[] input, PublicKey publicKey){ // Verschlüsselt asymetrisch
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Provider provider = Security.getProvider("BC");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", provider);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             return cipher.doFinal(input);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
@@ -113,7 +129,8 @@ public class Cryptor {
 
     public byte[] decryptAsymetric(byte[] input, PrivateKey privateKey){ // Entschlüsselt asymetrisch
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Provider provider = Security.getProvider("BC");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", provider);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             return cipher.doFinal(input);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {

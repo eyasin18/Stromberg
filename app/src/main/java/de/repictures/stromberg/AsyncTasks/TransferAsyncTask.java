@@ -1,28 +1,16 @@
 package de.repictures.stromberg.AsyncTasks;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import de.repictures.stromberg.Features.TransferDialogActivity;
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.R;
 
 public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -45,10 +33,22 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
             String[] publicKeys = getUrlRespStr.split("ò");
             PublicKey senderPublicKey = cryptor.stringToPublicKey(publicKeys[0]);
             PublicKey receiverPublicKey = cryptor.stringToPublicKey(publicKeys[1]);
-            byte[] encryptedSenderPurpose = cryptor.encryptAsymetric(transferArray[3].getBytes("ISO-8859-1"), senderPublicKey);
-            byte[] encryptedReceiverPurpose = cryptor.encryptAsymetric(transferArray[3].getBytes("ISO-8859-1"), receiverPublicKey);
-            String postUrlStr = LoginActivity.SERVERURL + "/transfer?senderpurpose=" + cryptor.bytesToHex(encryptedSenderPurpose) + "&receiverpurpose=" + cryptor.bytesToHex(encryptedReceiverPurpose)
-                    + "&amount=" + URLEncoder.encode(transferArray[2], "UTF-8") + "&receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
+            byte[] senderAesKey = cryptor.generateRandomAesKey();
+            byte[] receiverAesKey = cryptor.generateRandomAesKey();
+
+            byte[] encryptedSenderPurpose = cryptor.encryptSymetricFromString(transferArray[3], senderAesKey);
+            byte[] encryptedReceiverPurpose = cryptor.encryptSymetricFromString(transferArray[3], receiverAesKey);
+
+            byte[] encryptedSenderAesKey = cryptor.encryptAsymetric(senderAesKey, senderPublicKey);
+            byte[] encryptedReceiverAesKey = cryptor.encryptAsymetric(receiverAesKey, receiverPublicKey);
+
+            String postUrlStr = LoginActivity.SERVERURL + "/transfer"
+                    + "?senderpurpose=" + cryptor.bytesToHex(encryptedSenderPurpose)
+                    + "&senderkey=" + cryptor.bytesToHex(encryptedSenderAesKey)
+                    + "&receiverpurpose=" + cryptor.bytesToHex(encryptedReceiverPurpose)
+                    + "&receiverkey=" + cryptor.bytesToHex(encryptedReceiverAesKey)
+                    + "&amount=" + URLEncoder.encode(transferArray[2], "UTF-8")
+                    + "&receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
                     + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");
 
             return internetHelper.doPostString(postUrlStr);

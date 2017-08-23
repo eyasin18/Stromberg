@@ -58,19 +58,29 @@
         <item>Sa</item>
     </array>
 
+    <array name="weekdays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </array>
+
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
-    <string name="title_activity_main">Ocr Detector Sample</string>
-    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="title_activity_main">Fingerhut</string>
+    <string name="ocr_header" translatable="false">Click &quot;Detect Text&quot; to detect text</string>
     <string name="read_text">Detect Text</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Use Flash</string>
     <string name="ocr_success">Text read successfully</string>
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
-    <string name="title_activity_scan">ScanActivity</string>
+    <string name="title_activity_scan">Scan Product</string>
     <string name="buy">Buy</string>
     <string name="request_camera_title">Allow camera access</string>
     <string name="request_camera_text">In order to scan barcodes, we need access to your camera</string>
@@ -78,15 +88,21 @@
     <string name="deny">Deny</string>
     <string name="swipe_to_view">Swipe up to view</string>
     <string name="more_results" formatted="false">%1$d more result%s</string>
-    <string name="sp_featureslist">SHARED_PREFERENCES_featureslist</string>
-    <string name="title_activity_auth_scan">AuthScan</string>
+    <string name="sp_featureslist" translatable="false">SHARED_PREFERENCES_featureslist</string>
+    <string name="title_activity_auth_scan">Scan Authentification Code</string>
     <string name="authenticate">Authenticate</string>
-    <string name="sp_authcode">SHARED_PREFERENCES_authcode</string>
+    <string name="sp_authcode" translatable="false">SHARED_PREFERENCES_authcode</string>
     <string name="not_authenticated">You are not authenticated</string>
     <string name="wrong_auth">You are not athentificated for this account</string>
     <string name="internet_problems">Network error: check your internet connection</string>
     <string name="no_such_authkey">This is not a valid authentification key</string>
     <string name="authenticate_progress">Authentificate...</string>
+    <string name="OK">OK</string>
+    <string name="show_transfer_detail_dialog_title">Transfer from %1$2s at %2$2s</string>
+    <string name="transfer_type">Type</string>
+    <string name="transfer_sender">Sender</string>
+    <string name="transfer_receiver">Receiver</string>
+    <string name="send_transfer_loading">Sending transfer...</string>
 
 
 </resources>

@@ -83,6 +83,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
+                ((LoginActivity)activity).loginButtonClicked = false;
                 break;
             case 1:
                 passwordEditLayout.setErrorEnabled(true);
@@ -94,6 +95,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
+                ((LoginActivity)activity).loginButtonClicked = false;
                 break;
             case 2:
                 editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[4]);
@@ -116,10 +118,12 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
+                ((LoginActivity)activity).loginButtonClicked = false;
                 break;
             case -1:
                 accountnumberEditLayout.setErrorEnabled(true);
                 accountnumberEditLayout.setError(activity.getResources().getString(R.string.internet_problems));
+                ((LoginActivity)activity).loginButtonClicked = false;
                 break;
         }
     }

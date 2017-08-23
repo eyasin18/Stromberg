@@ -11,6 +11,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TransferAsyncTask;
+import de.repictures.stromberg.Fragments.LoadingDialogFragment;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
@@ -46,6 +48,8 @@ import de.repictures.stromberg.uiHelper.ForbiddenCharactersFilter;
 public class TransferDialogActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "TransferDialogActivity";
+
+    private boolean sendButtonClicked = false;
 
     @Bind(R.id.transfer_fragment_owner_input_layout) TextInputLayout ownerInputLayout;
     @Bind(R.id.transfer_fragment_accountnumber_input_layout) TextInputLayout accountInputLayout;
@@ -65,6 +69,7 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     SimpleDateFormat dateFormat, timeFormat;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+    LoadingDialogFragment loadingDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +194,10 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
                 timeSpinner.setText(hour + ":" + minute + " " + getResources().getString(R.string.oclock));
             }
         }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
+
+        //Setup the Loading Dialog
+        loadingDialogFragment = new LoadingDialogFragment();
+        loadingDialogFragment.setCancelable(false);
     }
 
     @Override
@@ -220,7 +229,12 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(dataWithoutError()){
+        if(dataWithoutError() && !sendButtonClicked){
+            sendButtonClicked = true;
+
+            FragmentManager fm = getSupportFragmentManager();
+            loadingDialogFragment.show(fm, "loadingDialogFragment");
+
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
             asyncTask.execute(sharedPref.getString(getResources().getString(R.string.sp_accountnumber), ""), accountnumberEditText.getText().toString(),
@@ -267,6 +281,8 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
     public void postResult(int result){
         Log.d(TAG, "postResult: " + result);
+        sendButtonClicked = false;
+        loadingDialogFragment.dismiss();
         switch (result){
             case 0:
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.server_error), Snackbar.LENGTH_SHORT).show();
