@@ -103,6 +103,10 @@
     <string name="transfer_sender">Sender</string>
     <string name="transfer_receiver">Receiver</string>
     <string name="send_transfer_loading">Sending transfer...</string>
+    <string name="notification_channel_name">Fingerhut</string>
+    <string name="notification_channel_description">All messages postet from Fingerhut will be displayed here</string>
+    <string name="new_transfer_notification_title">New transfer</string>
+    <string name="new_transfer_notification_body">Account %1$2s received a new transfer</string>
 
 
 </resources>

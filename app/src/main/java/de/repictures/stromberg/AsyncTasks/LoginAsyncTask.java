@@ -54,9 +54,16 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         String[] doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
         if (!doGetResponse[0].equals(keys[3])) return "3";
 
+        try {
+            doGetResponse[1] = URLDecoder.decode(doGetResponse[1], "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String hashedSaltetPassword = cryptor.hashToString(cryptor.hashToString(keys[1]) + doGetResponse[1]);
+        Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
         try {
             keys[4] = URLEncoder.encode(keys[4], "UTF-8");
+            doGetResponse[1] = URLEncoder.encode(doGetResponse[1], "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package de.repictures.stromberg.Features;
+package de.repictures.stromberg.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

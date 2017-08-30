@@ -1,5 +1,6 @@
 package de.repictures.stromberg;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -71,6 +72,8 @@ public class TransfersActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(0);
         refreshListener.onRefresh();
     }
 

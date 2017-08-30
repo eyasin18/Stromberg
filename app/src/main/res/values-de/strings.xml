@@ -89,4 +89,8 @@
     <string name="transfer_receiver">Empfänger</string>
     <string name="transfer_sender">Auftraggeber</string>
     <string name="send_transfer_loading">Überweisung wird gesendet...</string>
+    <string name="new_transfer_notification_body">Es ist eine neue Überweisung auf das Konto mit der Kontonummer %1$2s eingegangen</string>
+    <string name="new_transfer_notification_title">Neue Überweisung</string>
+    <string name="notification_channel_description">Alle Benachrichtigungen von Fingerhut werden hier angezeigt</string>
+    <string name="notification_channel_name">Fingerhut</string>
 </resources>

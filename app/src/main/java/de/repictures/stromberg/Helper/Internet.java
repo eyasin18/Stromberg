@@ -40,6 +40,7 @@ public class Internet {
 
     public String doPostString(String urlStr){
         try {
+            Log.d(TAG, "doPostString: " + urlStr);
             URL postUrl = new URL(urlStr);
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) postUrl.openConnection();
@@ -48,6 +49,7 @@ public class Internet {
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
 
+            Log.d(TAG, "doPostString: " + httpURLConnection.getResponseCode());
             InputStream postInputStream = new BufferedInputStream(httpURLConnection.getInputStream());
             BufferedReader postBufferedReader = new BufferedReader(new InputStreamReader(postInputStream, "UTF-8"));
             StringBuilder postTotal = new StringBuilder();

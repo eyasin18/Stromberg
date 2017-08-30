@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="472dp"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/auth_scan_card"
+    android:visibility="invisible">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/auth_scan_layout"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/auth_scan_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:indeterminate="true"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/auth_scan_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textSize="24sp"
+                android:id="@+id/auth_scan_title"
+                android:gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignBottom="@+id/auth_scan_progressbar" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
