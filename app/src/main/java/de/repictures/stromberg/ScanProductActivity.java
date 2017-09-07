@@ -60,7 +60,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     private static final String imageDummyUrl = "https://c1.staticflickr.com/5/4123/4793188726_5d34ab7120_z.jpg";
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;
-    RecyclerView.Adapter scanAdapter;
     ArrayList<String> scanResults = new ArrayList<>();
     private boolean animated = false;
 

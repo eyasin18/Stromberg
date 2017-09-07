@@ -27,36 +27,27 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String>
     }
 
     @Override
-    protected String doInBackground(String... accountKeys) {
-        String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
+    protected String doInBackground(String... parameters) {
+        String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + parameters[0];
+        Log.d(TAG, "doInBackground: " + baseUrl);
         Internet internetHelper = new Internet();
         return internetHelper.doGetString(baseUrl);
-        /*String resp = "";
-        try {
-            Log.d(TAG, "doInBackground: " + accountKeys[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountkey=" + accountKeys[0];
-            URL url = new URL(baseUrl);
-            URLConnection urlConnection = url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
-            }
-            Log.d(TAG, "doInBackground: " + total);
-            resp += total;
-            resp = URLDecoder.decode(resp, "UTF-8");
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resp;*/
     }
 
     @Override
     protected void onPostExecute(String s) {
         String[] response = s.split("ò");
-        mainActivity.setFinancialStatus(response[0], response[1], Float.parseFloat(response[2]));
+        switch (Integer.parseInt(response[0])){
+            case 0:
+                //Account mit dieser Accountnumber wurde nicht gefunden
+                break;
+            case 1:
+                mainActivity.setFinancialStatus(response[1], response[2], Float.parseFloat(response[3]));
+                break;
+            case 2:
+                //Webstring falsch
+                //TODO: Return to login
+                break;
+        }
     }
 }

@@ -86,7 +86,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
-                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
@@ -98,7 +98,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
-                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }
@@ -107,7 +107,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
             case 2:
                 editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[4]);
                 editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
-                editor.putString(activity.getResources().getString(R.string.sp_accountslist), response[2]);
+                editor.putString(activity.getResources().getString(R.string.sp_webstring), response[2]);
                 editor.putString(activity.getResources().getString(R.string.sp_featureslist), response[3]);
                 editor.apply();
                 Log.d(TAG, "onPostExecute: " + response[2]);
@@ -121,7 +121,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 if(sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != ""){
                     editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
-                    editor.remove(activity.getResources().getString(R.string.sp_accountslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
                     editor.apply();
                 }

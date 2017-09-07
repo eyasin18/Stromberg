@@ -57,18 +57,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     @Bind(R.id.transfer_fragment_accountnumber_auto_complete_text) TextInputEditText accountnumberEditText;
     @Bind(R.id.transfer_fragment_amount_edit_text) TextInputEditText amountEditText;
     @Bind(R.id.transfer_fragment_amount_layout) TextInputLayout amountInputLayout;
-    @Bind(R.id.transfer_fragment_check_box) CheckBox planCheckBox;
-    @Bind(R.id.transfer_fragment_date_spinner) TextView dateSpinner;
-    @Bind(R.id.transfer_fragment_time_spinner) TextView timeSpinner;
-    @Bind(R.id.transfer_fragment_execute_at_text) TextView executeAtText;
     @Bind(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
     @Bind(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
 
-    ArrayList<String> owners = new ArrayList<>();
-    ArrayList<String> accountnumbers = new ArrayList<>();
-    SimpleDateFormat dateFormat, timeFormat;
-    DatePickerDialog datePickerDialog;
-    TimePickerDialog timePickerDialog;
     LoadingDialogFragment loadingDialogFragment;
 
     @Override
@@ -103,97 +94,6 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
                         .show();
             }
         });
-
-        //Fill Arraylists
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        String savedAccountsStr = sharedPref.getString(getResources().getString(R.string.sp_accountslist), "");
-        String[] savedAccounts = savedAccountsStr.split("ň");
-        for (String savedAccountEntity : savedAccounts){
-            String[] savedAccountEntityElements = savedAccountEntity.split("ĵ");
-            accountnumbers.add(savedAccountEntityElements[0]);
-            owners.add(savedAccountEntityElements[1]);
-        }
-
-        //Setup EditTexts
-        ArrayAdapter<String> ownersDummy = new ArrayAdapter<String>
-                (this, android.R.layout.select_dialog_item, owners);
-        ForbiddenCharactersFilter filter = new ForbiddenCharactersFilter(this);
-        purposeEditText.setFilters(new InputFilter[]{filter});
-        ownerAutoComplete.setFilters(new InputFilter[]{filter});
-        ownerAutoComplete.setThreshold(1);
-        ownerAutoComplete.setAdapter(ownersDummy);
-        ownerAutoComplete.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(owners.contains(charSequence.toString()) && ownerAutoComplete.hasFocus()){
-                    accountnumberEditText.setText(accountnumbers.get(owners.indexOf(charSequence.toString())));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        accountnumberEditText.setFilters(new InputFilter[]{filter});
-        accountnumberEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (accountnumbers.contains(charSequence.toString()) && accountnumberEditText.hasFocus()){
-                    ownerAutoComplete.setText(owners.get(accountnumbers.indexOf(charSequence.toString())));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        //Setup Date-/TimePickers
-        dateSpinner.setOnClickListener(this);
-        timeSpinner.setOnClickListener(this);
-        dateSpinner.setEnabled(false);
-        timeSpinner.setEnabled(false);
-        executeAtText.setEnabled(false);
-        Calendar calendar = Calendar.getInstance(Locale.GERMANY);
-        dateFormat = new SimpleDateFormat("EEEE, dd. MM YYYY", Locale.GERMANY);
-        timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
-        dateSpinner.setText(dateFormat.format(calendar.getTime()));
-        timeSpinner.setText(timeFormat.format(calendar.getTime()) + " " + getResources().getString(R.string.oclock));
-        planCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                dateSpinner.setEnabled(isChecked);
-                timeSpinner.setEnabled(isChecked);
-                executeAtText.setEnabled(isChecked);
-            }
-        });
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                Calendar dateCalendar = Calendar.getInstance();
-                dateCalendar.set(year, month, day);
-                Log.d(TAG, "onDateSet: " + dateCalendar);
-                dateSpinner.setText(dateFormat.format(dateCalendar.getTime()));
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                timeSpinner.setText(hour + ":" + minute + " " + getResources().getString(R.string.oclock));
-            }
-        }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
 
         //Setup the Loading Dialog
         loadingDialogFragment = new LoadingDialogFragment();
@@ -236,8 +136,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
             loadingDialogFragment.show(fm, "loadingDialogFragment");
 
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
             TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
-            asyncTask.execute(sharedPref.getString(getResources().getString(R.string.sp_accountnumber), ""), accountnumberEditText.getText().toString(),
+            asyncTask.execute(LoginActivity.ACCOUNTNUMBER, accountnumberEditText.getText().toString(), webString,
                         amountEditText.getText().toString(), purposeEditText.getText().toString());
         }
         return super.onOptionsItemSelected(item);
@@ -272,11 +173,6 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        if(view == dateSpinner){
-            datePickerDialog.show();
-        } else if(view == timeSpinner){
-            timePickerDialog.show();
-        }
     }
 
     public void postResult(int result){

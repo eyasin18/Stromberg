@@ -27,17 +27,23 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
         try {
             Internet internetHelper = new Internet();
             String getUrlStr = LoginActivity.SERVERURL + "/transfer?receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
-                    + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");
+                    + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8") + "&webstring=" + transferArray[2];
             String getUrlRespStr = internetHelper.doGetString(getUrlStr);
 
-            String[] publicKeys = getUrlRespStr.split("ò");
-            PublicKey senderPublicKey = cryptor.stringToPublicKey(publicKeys[0]);
-            PublicKey receiverPublicKey = cryptor.stringToPublicKey(publicKeys[1]);
+            String[] getResponse = getUrlRespStr.split("ò");
+
+            if (Integer.parseInt(getResponse[0]) != 1){
+                return null;
+                //TODO: Return to login
+            }
+
+            PublicKey senderPublicKey = cryptor.stringToPublicKey(getResponse[1]);
+            PublicKey receiverPublicKey = cryptor.stringToPublicKey(getResponse[2]);
             byte[] senderAesKey = cryptor.generateRandomAesKey();
             byte[] receiverAesKey = cryptor.generateRandomAesKey();
 
-            byte[] encryptedSenderPurpose = cryptor.encryptSymetricFromString(transferArray[3], senderAesKey);
-            byte[] encryptedReceiverPurpose = cryptor.encryptSymetricFromString(transferArray[3], receiverAesKey);
+            byte[] encryptedSenderPurpose = cryptor.encryptSymetricFromString(transferArray[4], senderAesKey);
+            byte[] encryptedReceiverPurpose = cryptor.encryptSymetricFromString(transferArray[4], receiverAesKey);
 
             byte[] encryptedSenderAesKey = cryptor.encryptAsymetric(senderAesKey, senderPublicKey);
             byte[] encryptedReceiverAesKey = cryptor.encryptAsymetric(receiverAesKey, receiverPublicKey);
@@ -47,7 +53,7 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
                     + "&senderkey=" + cryptor.bytesToHex(encryptedSenderAesKey)
                     + "&receiverpurpose=" + cryptor.bytesToHex(encryptedReceiverPurpose)
                     + "&receiverkey=" + cryptor.bytesToHex(encryptedReceiverAesKey)
-                    + "&amount=" + URLEncoder.encode(transferArray[2], "UTF-8")
+                    + "&amount=" + URLEncoder.encode(transferArray[3], "UTF-8")
                     + "&receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
                     + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");
 

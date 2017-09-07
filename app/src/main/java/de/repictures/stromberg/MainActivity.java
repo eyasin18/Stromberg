@@ -21,8 +21,7 @@ import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = "MainActivity";
-    public static long pausedTime = 0;
-    String accountKey;
+    String accountKey, webstring;
 
     @Bind(R.id.financial_status_account_number) TextView accountNumberText;
     @Bind(R.id.financial_status_balance) TextView accountBalanceText;
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        webstring = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
         accountKey = sharedPref.getString(getResources().getString(R.string.sp_accountkey), "");
         transferLayout.setOnClickListener(this);
         inboxLayout.setOnClickListener(this);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Rufe Finanzstatus im Hintergrund ab.
         super.onResume();
         GetFinancialStatusAsyncTask getFinancialStatus = new GetFinancialStatusAsyncTask(this);
-        getFinancialStatus.execute(accountKey);
+        getFinancialStatus.execute(webstring);
     }
 
     //Wenn Finanzstatus erfolgreich eingegangen ist, dann...

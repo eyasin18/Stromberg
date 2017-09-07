@@ -103,83 +103,13 @@
             android:gravity="center"
             android:text="@string/currency" />
 
-        <CheckBox
-            android:id="@+id/transfer_fragment_check_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_amount_layout"
-            android:layout_marginTop="8dp"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:text="@string/execute_later" />
-
-        <TextView
-            android:id="@+id/transfer_fragment_execute_at_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/transfer_fragment_check_box"
-            android:layout_marginTop="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/execute_at" />
-
-        <TextView
-            android:id="@+id/transfer_fragment_date_spinner"
-            style="@android:style/Widget.DeviceDefault.Light.Spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_execute_at_text"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@+id/transfer_fragment_time_spinner"
-            android:layout_toStartOf="@+id/transfer_fragment_time_spinner"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:textSize="18sp" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_alignEnd="@+id/transfer_fragment_date_spinner"
-            android:layout_alignRight="@+id/transfer_fragment_date_spinner"
-            android:layout_below="@+id/transfer_fragment_date_spinner"
-            android:background="@color/light_grey"
-            android:layout_marginRight="16dp" />
-
-        <TextView
-            android:id="@+id/transfer_fragment_time_spinner"
-            style="@android:style/Widget.DeviceDefault.Light.Spinner"
-            android:layout_width="128dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/transfer_fragment_date_spinner"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:textSize="18sp" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_alignEnd="@+id/transfer_fragment_time_spinner"
-            android:layout_alignLeft="@+id/transfer_fragment_time_spinner"
-            android:layout_alignRight="@+id/transfer_fragment_time_spinner"
-            android:layout_alignStart="@+id/transfer_fragment_time_spinner"
-            android:layout_below="@+id/transfer_fragment_time_spinner"
-            android:layout_toRightOf="@+id/transfer_fragment_date_spinner"
-            android:layout_marginRight="16dp"
-            android:background="@color/light_grey" />
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/transfer_fragment_purpose_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_date_spinner"
+            android:layout_below="@+id/transfer_fragment_currency"
             android:layout_marginTop="16dp"
             android:paddingBottom="4dp">
 

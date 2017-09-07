@@ -6,7 +6,7 @@
     <string name="pin">PIN</string>
     <string name="forgot_pin">Forgot pin?</string>
     <string name="order_new">Order new pin</string>
-    <string name="accountnumber_error">Accoutnumber not valid</string>
+    <string name="accountnumber_error">Accout number not valid</string>
     <string name="password_wrong">Password not valid</string>
     <string name="sp_accountnumber" translatable="false">SHARED_PREFERENCES_accountnumber</string>
     <string name="sp_accountkey" translatable="false">SHARED_PREFERENCES_accountkey</string>
@@ -107,6 +107,7 @@
     <string name="notification_channel_description">All messages postet from Fingerhut will be displayed here</string>
     <string name="new_transfer_notification_title">New transfer</string>
     <string name="new_transfer_notification_body">Account %1$2s received a new transfer</string>
+    <string name="sp_webstring" translatable="false">SHARED_PREFERENCES_webstring</string>
 
 
 </resources>
