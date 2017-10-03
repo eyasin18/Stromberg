@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.Helper.Internet;
@@ -26,30 +27,16 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
     }
 
     @Override
-    protected String doInBackground(String... productInfo) {
-        String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfo[0] + "&name=" + productInfo[1] + "&price=" + productInfo[2] + "&accountnumber=" + productInfo[3];
-        return new Internet().doGetString(baseUrl);
-        /*String resp = "";
+    protected String doInBackground(String... productInfos) {
         try {
-            Log.d(TAG, "doInBackground: " + productInfo[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfo[0] + "&name=" + productInfo[1] + "&price=" + productInfo[2] + "&accountnumber=" + productInfo[3];
-            URL url = new URL(baseUrl);
-            URLConnection urlConnection = url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
+            for (int i = 0; i < productInfos.length; i++) {
+                productInfos[i] = URLEncoder.encode(productInfos[i], "UTF-8");
             }
-            Log.d(TAG, "doInBackground: " + total);
-            resp += total;
-            resp = URLDecoder.decode(resp, "UTF-8");
-            in.close();
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
-        return resp;*/
+        String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfos[0] + "&name=" + productInfos[1] + "&price=" + productInfos[2] + "&accountnumber=" + productInfos[3];
+        return new Internet().doGetString(baseUrl);
     }
 
     @Override

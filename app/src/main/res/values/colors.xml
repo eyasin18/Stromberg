@@ -20,6 +20,9 @@
     <color name="divider_grey">#e4e4e5</color>
     <color name="snakbar_background">#323232</color>
     <color name="white">#ffffff</color>
+    <color name="grey200">#EEEEEE</color>
+    <color name="color_red">#F44336</color>
+    <color name="transparent_grey">#29000000</color>
 
     <array name="rect_color">
         <item>@color/color_blue</item>

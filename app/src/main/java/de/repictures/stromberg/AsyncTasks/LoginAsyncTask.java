@@ -51,9 +51,14 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... keys) {
         Internet internetHelper = new Internet();
         String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
-        String[] doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
+        String[] doGetResponse;
+        try {
+            doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
+        } catch (NullPointerException e){
+            e.printStackTrace();
+            return "-2";
+        }
         if (!doGetResponse[0].equals(keys[3])) return "3";
-
         try {
             doGetResponse[1] = URLDecoder.decode(doGetResponse[1], "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -130,6 +135,11 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
             case -1:
                 accountnumberEditLayout.setErrorEnabled(true);
                 accountnumberEditLayout.setError(activity.getResources().getString(R.string.internet_problems));
+                ((LoginActivity)activity).loginButtonClicked = false;
+                break;
+            case -2:
+                accountnumberEditLayout.setErrorEnabled(true);
+                accountnumberEditLayout.setError(activity.getResources().getString(R.string.server_down));
                 ((LoginActivity)activity).loginButtonClicked = false;
                 break;
         }

@@ -16,9 +16,9 @@
     <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
     <string name="error">Error</string>
     <string name="current_account">Current account</string>
-    <string name="zero_money" translatable="false">0,00€</string>
+    <string name="zero_money" translatable="false">0,00S</string>
     <string name="account_owner">Owner</string>
-    <string name="account_balance_format">%1$s€</string>
+    <string name="account_balance_format">%1$sS</string>
     <string name="transfer">Transfer</string>
     <string name="inbox">Inbox</string>
     <string name="domain">Company</string>
@@ -80,14 +80,14 @@
     <string name="ocr_success">Text read successfully</string>
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
-    <string name="title_activity_scan">Scan Product</string>
+    <string name="title_activity_scan">Scan Bar- or QR-Code</string>
     <string name="buy">Buy</string>
     <string name="request_camera_title">Allow camera access</string>
     <string name="request_camera_text">In order to scan barcodes, we need access to your camera</string>
     <string name="grant">Grant</string>
     <string name="deny">Deny</string>
     <string name="swipe_to_view">Swipe up to view</string>
-    <string name="more_results" formatted="false">%1$d more result%s</string>
+    <string name="more_results" formatted="false">%1$d more results</string>
     <string name="sp_featureslist" translatable="false">SHARED_PREFERENCES_featureslist</string>
     <string name="title_activity_auth_scan">Scan Authentification Code</string>
     <string name="authenticate">Authenticate</string>
@@ -108,6 +108,21 @@
     <string name="new_transfer_notification_title">New transfer</string>
     <string name="new_transfer_notification_body">Account %1$2s received a new transfer</string>
     <string name="sp_webstring" translatable="false">SHARED_PREFERENCES_webstring</string>
+    <string name="more_results_suffix">s</string>
+    <string name="one_more_result">1 more result</string>
+    <string name="can_only_be_bought_on_checkout">Can only be bought at the checkout</string>
+    <string name="checkout">Checkout</string>
+    <string name="server_down">Servers are currently not available: try again later</string>
+    <string name="scan_product">Scan Bar- or QR-Code</string>
+    <string name="product_invalid">Product invalid</string>
+    <string name="only_one_seller_message">You can not have products of more than one sellers in your cart</string>
+    <string name="finish_purchase">Finish purchase</string>
+    <string name="finish">Finish</string>
+    <string name="buy_products_in_cart">Einkauf in Höhe von %.2fS abschließen?</string>
+    <string name="session_invalid">Session invalid</string>
+    <string name="loged_in_on_other_device">You are loged in on an other device</string>
+    <string name="not_enough_money">Not enough money</string>
+    <string name="not_enough_money_message">You don\'t have enough money to buy these items</string>
 
 
 </resources>

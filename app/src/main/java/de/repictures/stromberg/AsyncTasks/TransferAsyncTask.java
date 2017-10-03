@@ -55,7 +55,8 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
                     + "&receiverkey=" + cryptor.bytesToHex(encryptedReceiverAesKey)
                     + "&amount=" + URLEncoder.encode(transferArray[3], "UTF-8")
                     + "&receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
-                    + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8");
+                    + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8")
+                    + "&code=" + transferArray[2];
 
             return internetHelper.doPostString(postUrlStr);
         } catch (UnsupportedEncodingException e) {

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="de.repictures.stromberg.ScanProductActivity"
     android:id="@+id/activity_scan_layout">
 
@@ -13,9 +14,48 @@
         <SurfaceView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/camera_view" />
+            android:id="@+id/camera_view"
+            android:clickable="false"/>
 
-        <include layout="@layout/products_scanlist" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/activity_scan_fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            app:fabSize="normal"
+            android:src="@drawable/ic_cart_outline_white_48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp" />
+
+        <ProgressBar
+            android:id="@+id/scan_product_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_alignTop="@+id/activity_scan_fab"
+            android:layout_alignLeft="@+id/activity_scan_fab"
+            android:layout_alignStart="@+id/activity_scan_fab"
+            android:layout_alignBottom="@+id/activity_scan_fab"
+            android:layout_alignRight="@+id/activity_scan_fab"
+            android:layout_alignEnd="@+id/activity_scan_fab"
+            android:elevation="6dp"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_activity_scan"
+        android:fitsSystemWindows="true"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:layout_margin="16dp"
+        style="@style/TextAppearance.AppCompat.Headline"/>
+
+    <include layout="@layout/content_slide_up_view"
+        android:id="@+id/include" />
+
 </android.support.design.widget.CoordinatorLayout>

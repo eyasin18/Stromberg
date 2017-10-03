@@ -1,67 +1,75 @@
 package de.repictures.stromberg;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.mancj.slideup.SlideUp;
+import com.mancj.slideup.SlideUpBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.repictures.stromberg.Adapters.ShoppingCartListAdapter;
+import de.repictures.stromberg.AsyncTasks.BuyItemsAsyncTask;
 import de.repictures.stromberg.AsyncTasks.GetProductAsyncTask;
-import de.repictures.stromberg.uiHelper.GetPictures;
 
-public class ScanProductActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
+public class ScanProductActivity extends AppCompatActivity implements Detector.Processor<Barcode>, View.OnClickListener {
 
     private static final int PERMISSION_REQUEST_CAMERA = 42;
+    private static final String TAG = "ScanProductActivity";
+
+    private SlideUp slideUp;
+
     @Bind(R.id.camera_view) SurfaceView cameraView;
     @Bind(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
-    @Bind(R.id.product_layout) RelativeLayout productLayout;
-    @Bind(R.id.auth_scan_progress_bar) ProgressBar productProgressBar;
-    @Bind(R.id.product_second_element) RelativeLayout secondElement;
-    @Bind(R.id.product_card) CardView productCard;
-    @Bind(R.id.auth_scan_progressbar) ImageView productImage;
-    @Bind(R.id.auth_scan_title) TextView productTitle;
-    @Bind(R.id.auth_scan_vendor) TextView productVendor;
+    @Bind(R.id.shopping_list_slide_down_view) View slideView;
+    @Bind(R.id.activity_scan_fab) FloatingActionButton floatingActionButton;
+    @Bind(R.id.shopping_list_recycler_view) RecyclerView shoppingRecycler;
+    @Bind(R.id.shopping_list_slide_down_arrow) ImageView slideDownArrow;
+    @Bind(R.id.scan_product_progress_bar) ProgressBar scanProgressBar;
+    @Bind(R.id.shopping_list_checkout_button) Button checkoutButton;
+    @Bind(R.id.shopping_list_checkout_progress_bar) ProgressBar checkoutProgressBar;
 
-    private static final String TAG = "ScanProductActivity";
-    private static final String imageDummyUrl = "https://c1.staticflickr.com/5/4123/4793188726_5d34ab7120_z.jpg";
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;
-    ArrayList<String> scanResults = new ArrayList<>();
-    private boolean animated = false;
+    public ArrayList<String> scanResults = new ArrayList<>();
+    public ArrayList<String[]> productsList = new ArrayList<>();
+    public List<Integer> productAmounts = new ArrayList<>();
+    RecyclerView.Adapter shoppingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +83,63 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         } else {
             requestCameraPermission();
         }
-    }
+        floatingActionButton.setOnClickListener(this);
+        slideView.setOnClickListener(this);
+        slideDownArrow.setOnClickListener(this);
+        checkoutButton.setOnClickListener(this);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onCreate: " + cameraView.getHeight());
-        productCard.setY(cameraView.getHeight()-45f);
+        slideUp = new SlideUpBuilder(slideView)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withStartGravity(Gravity.BOTTOM)
+                .withGesturesEnabled(false)
+                .withListeners(new SlideUp.Listener.Events(){
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE){
+                            floatingActionButton.show();
+                        }
+                    }
+
+                    @Override
+                    public void onSlide(float percent) {
+
+                    }
+                })
+                .build();
+
+        shoppingRecycler.setHasFixedSize(true);
+        shoppingRecycler.setLayoutManager(new LinearLayoutManager(this));
+        shoppingAdapter = new ShoppingCartListAdapter(ScanProductActivity.this, productsList);
+        shoppingRecycler.setAdapter(shoppingAdapter);
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Log.d(TAG, "onMove: moded");
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                int productIndex = scanResults.indexOf(productsList.get(position)[6]);
+                if (productIndex > -1) scanResults.remove(productIndex);
+                productsList.remove(position);
+                shoppingAdapter.notifyItemRemoved(position);
+                shoppingAdapter.notifyItemRangeChanged(position, productsList.size());
+                if (productsList.size() < 1){
+                    enableCheckoutButton(false);
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(shoppingRecycler);
+
+        scanProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        scanProgressBar.bringToFront();
+        checkoutProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        checkoutProgressBar.bringToFront();
     }
 
     private void createCameraSource() {
@@ -212,25 +270,9 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             }
         }
         if (sortedBarcodes.size() > 0){
-            if (!animated){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -productCard.getHeight()/2);
-                        translateAnimation.setDuration(250);
-                        translateAnimation.setFillAfter(true);
-                        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
-                        productCard.setY(cameraView.getHeight());
-                        productCard.setVisibility(View.VISIBLE);
-                        productCard.startAnimation(translateAnimation);
-                        animated = true;
-                        Log.d(TAG, "run: animated");
-                    }
-                });
-
-            }
             for (int i = 0; i < sortedBarcodes.size(); i++){
                 Log.d(TAG, "receiveDetections: " + sortedBarcodes.get(i).displayValue);
+                showScanProgressBar(true);
                 GetProductAsyncTask asyncTask = new GetProductAsyncTask(ScanProductActivity.this);
                 asyncTask.execute(sortedBarcodes.get(i).displayValue);
             }
@@ -238,43 +280,176 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     }
 
     public void receiveResult(String[][] products){
-        productTitle.setText(products[0][0]);
-        productVendor.setText(products[0][1]);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                productLayout.setVisibility(View.VISIBLE);
-                final Animation animation = new AlphaAnimation(0f, 1f);
-                animation.setDuration(250);
-                productProgressBar.animate().alpha(0f).setDuration(250).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                        productLayout.setVisibility(View.VISIBLE);
-                        productLayout.startAnimation(animation);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                }).start();
+        showScanProgressBar(false);
+        for (final String[] product : products){
+            if (productsList.size() > 0) Log.d(TAG, "receiveResult: \n" + product[2] + "\n" + productsList.get(0)[2]);
+            if (productsList.size() > 0 && !product[2].equals(productsList.get(0)[2])){
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScanProductActivity.this);
+                builder.setTitle(getResources().getString(R.string.product_invalid))
+                        .setMessage(getResources().getString(R.string.only_one_seller_message))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                int productIndex = scanResults.indexOf(product[6]);
+                                if (productIndex > -1) scanResults.remove(productIndex);
+                                if (productsList.size() < 1){
+                                    enableCheckoutButton(false);
+                                }
+                            }
+                        })
+                        .show();
+            } else {
+                productsList.add(product);
             }
-        });
-        new Thread(new GetPictures(imageDummyUrl, productImage, ScanProductActivity.this, true, true, false)).start();
+        }
+        shoppingAdapter.notifyDataSetChanged();
+        if (shoppingAdapter.getItemCount() > 0){
+            checkoutButton.setEnabled(true);
+        }
+    }
+
+    public void receiveResult(){
+        showScanProgressBar(false);
     }
 
     private boolean barcodeHasCorrectLength(int length){
-        if (length > 7 && length < 17) return true;
-        else return false;
+        return length > 7 && length < 17;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "onClick: " + view.getId() + " was clicked");
+        switch (view.getId()){
+            case R.id.activity_scan_fab:
+                Log.d(TAG, "onClick: FAB was clicked");
+                floatingActionButton.hide();
+                slideUp.show();
+                break;
+            case R.id.shopping_list_slide_down_view:
+                Log.d(TAG, "onClick: SlideView was clicked");
+                break;
+            case R.id.shopping_list_slide_down_arrow:
+                slideUp.hide();
+                break;
+            case R.id.shopping_list_checkout_button:
+                float priceSum = 0.0f;
+                for (int i = 0; i < productsList.size(); i++){
+                    float productPrice = Float.parseFloat(productsList.get(i)[3]);
+                    int count = productAmounts.get(i);
+                    priceSum += (float) (count*productPrice);
+                }
+                Log.d(TAG, "onClick: " + priceSum);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScanProductActivity.this);
+                builder.setTitle(getResources().getString(R.string.finish_purchase))
+                        .setMessage(String.format(Locale.getDefault(), getResources().getString(R.string.buy_products_in_cart), priceSum))
+                        .setPositiveButton(R.string.finish, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                sendShoppingList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+                break;
+            default:
+                Log.d(TAG, "onClick: Clicked anywhere else");
+                break;
+        }
+    }
+
+    private void sendShoppingList() {
+        checkoutButton.setText("");
+        checkoutProgressBar.setVisibility(View.VISIBLE);
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
+        String companyNumber = productsList.get(0)[2];
+
+        StringBuilder shoppingListBuilder = new StringBuilder();
+        for (int i = 0; i < productsList.size(); i++){
+            String[] product = productsList.get(i);
+
+            shoppingListBuilder.append(product[6]);
+            shoppingListBuilder.append("ò");
+            shoppingListBuilder.append(product[3]);
+            shoppingListBuilder.append("ò");
+            shoppingListBuilder.append(product[5]);
+            shoppingListBuilder.append("ò");
+            shoppingListBuilder.append(productAmounts.get(i));
+            shoppingListBuilder.append("ň");
+        }
+
+        BuyItemsAsyncTask asyncTask = new BuyItemsAsyncTask(ScanProductActivity.this);
+        asyncTask.execute(webString, LoginActivity.ACCOUNTNUMBER, companyNumber, shoppingListBuilder.toString());
+    }
+
+    public void buyItemResult(int responsecode){
+        checkoutProgressBar.setVisibility(View.INVISIBLE);
+        checkoutButton.setText(getResources().getString(R.string.checkout));
+        AlertDialog.Builder builder;
+        switch (responsecode){
+            case -1:
+                builder = new AlertDialog.Builder(ScanProductActivity.this);
+                builder.setTitle(getResources().getString(R.string.session_invalid))
+                        .setMessage(getResources().getString(R.string.loged_in_on_other_device))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+                break;
+            case 0:
+                break;
+            case 1:
+                for (int i = 0; i < productsList.size(); i++){
+                    shoppingAdapter.notifyItemRemoved(i);
+                    shoppingAdapter.notifyItemRangeChanged(i, productsList.size() - (i+1));
+                }
+                scanResults.clear();
+                productsList.clear();
+                if (productsList.size() < 1){
+                    enableCheckoutButton(false);
+                }
+                break;
+            case 2:
+                builder = new AlertDialog.Builder(ScanProductActivity.this);
+                builder.setTitle(getResources().getString(R.string.not_enough_money))
+                        .setMessage(getResources().getString(R.string.not_enough_money_message))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showScanProgressBar(final boolean show){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                floatingActionButton.setImageDrawable(show ? null : getResources().getDrawable(R.drawable.ic_cart_outline_white_48dp));
+                scanProgressBar.setVisibility(show && !slideUp.isVisible() ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (slideUp.isVisible()){
+            slideUp.hide();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void enableCheckoutButton(boolean enabled){
+        checkoutButton.setEnabled(enabled);
     }
 }

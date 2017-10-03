@@ -29,33 +29,13 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
     protected String doInBackground(String... codes) {
         String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0];
         return new Internet().doGetString(baseUrl);
-        /*String resp = "";
-        try {
-            Log.d(TAG, "doInBackground: " + codes[0]);
-            String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0];
-            URL url = new URL(baseUrl);
-            URLConnection urlConnection = url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
-            }
-            Log.d(TAG, "doInBackground: " + total);
-            resp += total;
-            resp = URLDecoder.decode(resp, "UTF-8");
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resp;*/
     }
 
     @Override
     protected void onPostExecute(String s) {
         if (s.length() == 1 && s.charAt(0) == '0'){
             //Produkt gibts nicht
+            scanProductActivity.receiveResult();
         } else {
             String[] responsesRaw = s.split("ň");
             String[][] products = new String[responsesRaw.length][4];

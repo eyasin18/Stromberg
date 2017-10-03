@@ -71,7 +71,8 @@
             app:layout_rowWeight="1"
             app:layout_gravity="fill"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground">
+            android:enabled="false">
+            <!--TODO: android:background="?attr/selectableItemBackground"-->
 
             <TextView
                 android:id="@+id/main_inbox_text"
@@ -79,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerHorizontal="true"
-                style="@style/TextAppearance.AppCompat.Subhead"/>
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:enabled="false"/>
 
             <ImageView
                 android:id="@+id/main_inbox_image"
@@ -87,7 +89,8 @@
                 android:layout_height="64dp"
                 android:src="@drawable/email_outline"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/main_inbox_text"/>
+                android:layout_below="@+id/main_inbox_text"
+                android:enabled="false"/>
 
         </RelativeLayout>
 

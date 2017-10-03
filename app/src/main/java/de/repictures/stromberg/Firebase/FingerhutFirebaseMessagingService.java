@@ -65,6 +65,9 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
                         .setContentIntent(contentIntent);
                 mNotificationManager.notify(notificationId, mBuilder.build());
                 break;
+            case "1":
+                Log.d(TAG, "onMessageReceived: Message from Company Shopping Requests Update: " + remoteMessage.getData().get("updateKey"));
+                break;
             default:
                 break;
         }

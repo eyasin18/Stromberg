@@ -3,11 +3,10 @@ package de.repictures.stromberg;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,17 +14,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
-import de.repictures.stromberg.uiHelper.GetPictures;
 import io.fabric.sdk.android.Fabric;
 
 //LoginScreen. Startactivity der App.
@@ -41,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public boolean loginButtonClicked = false;
 
     private String authCode;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     //Views aus der XML werden Javaobjekten zugeordnet.
     @Bind(R.id.login_background) ImageView loginBackground;
@@ -55,8 +51,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         Log.d(TAG, "onCreate: " + FirebaseInstanceId.getInstance().getToken());
+        Fabric.with(this, new Crashlytics());
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 

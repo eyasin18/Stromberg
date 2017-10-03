@@ -9,7 +9,7 @@
     <string name="pin">PIN</string>
     <string name="accountnumber_error">Kontonummer nicht vorhanden</string>
     <string name="password_wrong">Falsches Passwort</string>
-    <string name="account_balance_format">%1$s€</string>
+    <string name="account_balance_format">%1$sS</string>
     <string name="account_owner">Besitzer</string>
     <string name="current_account">Girokonto</string>
     <string name="error">Fehler</string>
@@ -62,7 +62,7 @@
     <string name="deny">Ablehnen</string>
     <string name="grant">Zulassen</string>
     <string name="low_storage_error">Ocr Abhängigkeiten können aufgrund von wenig freiem Speicher nicht heruntergeladen werden</string>
-    <string name="more_results" formatted="false">%1$d weitere%s Ergebnis%s</string>
+    <string name="more_results" formatted="false">%1$d weitere Ergebnisse</string>
     <string name="swipe_to_view">Nach oben wischen zum ansehen</string>
     <string name="authenticate">Authentifizieren</string>
     <string name="not_authenticated">Du bist nicht authentifiziert</string>
@@ -83,7 +83,7 @@
     <string name="show_transfer_detail_dialog_title">Überweisung vom %1$2s um %2$2s Uhr</string>
     <string name="title_activity_auth_scan">Authentifizierungscode scannen</string>
     <string name="title_activity_main">Fingerhut</string>
-    <string name="title_activity_scan">Produkt scannen</string>
+    <string name="title_activity_scan">Kamera auf den Bar- oder QR-Code eines Produktes halten</string>
     <string name="use_flash">Flash benutzen</string>
     <string name="transfer_type">Art</string>
     <string name="transfer_receiver">Empfänger</string>
@@ -93,4 +93,19 @@
     <string name="new_transfer_notification_title">Neue Überweisung</string>
     <string name="notification_channel_description">Alle Benachrichtigungen von Fingerhut werden hier angezeigt</string>
     <string name="notification_channel_name">Fingerhut</string>
+    <string name="more_results_suffix">se</string>
+    <string name="one_more_result">1 weiteres Ergebnis</string>
+    <string name="can_only_be_bought_on_checkout">Kann nur an der Kasse bezahlt werden</string>
+    <string name="checkout">Zur Kasse</string>
+    <string name="server_down">Server sind momentan nicht erreichbar: Versuche es später erneut</string>
+    <string name="only_one_seller_message">Du kannst nicht Produkte von mehreren Verkäufern in deinen Warenkorb legen</string>
+    <string name="product_invalid">Scanfehler</string>
+    <string name="scan_product">Bar- oder QR-Code scannen</string>
+    <string name="finish_purchase">Kauf abschließen</string>
+    <string name="buy_products_in_cart">Einkauf in Höhe von %.2fS abschließen?</string>
+    <string name="finish">Abschließen</string>
+    <string name="loged_in_on_other_device">Du bist auf einem anderen Gerät angemeldet</string>
+    <string name="not_enough_money">Kontostand reicht nicht aus</string>
+    <string name="not_enough_money_message">Du hast nicht genügend Geld auf deinem Konto um diese Produkte zu kaufen</string>
+    <string name="session_invalid">Session abgelaufen</string>
 </resources>
