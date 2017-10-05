@@ -21,9 +21,18 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
 
     private AddProductActivity addProductActivity;
     private String TAG = "PostProductAsyncTask";
+    private Internet internetHelper = new Internet();
 
     public PostProductAsyncTask(AddProductActivity addProductActivity){
         this.addProductActivity = addProductActivity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(addProductActivity)){
+            cancel(true);
+            onPostExecute("-1");
+        }
     }
 
     @Override
@@ -35,12 +44,16 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
         } catch (IOException e){
             e.printStackTrace();
         }
-        String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfos[0] + "&name=" + productInfos[1] + "&price=" + productInfos[2] + "&accountnumber=" + productInfos[3];
+        String baseUrl = LoginActivity.SERVERURL + "/getproduct?code=" + productInfos[0]
+                + "&name=" + productInfos[1]
+                + "&price=" + productInfos[2]
+                + "&accountnumber=" + productInfos[3]
+                + "&selfbuy=" + productInfos[4];
         return new Internet().doGetString(baseUrl);
     }
 
     @Override
-    protected void onPostExecute(String s) {
-
+    protected void onPostExecute(String response) {
+        addProductActivity.processResult(Integer.parseInt(response));
     }
 }

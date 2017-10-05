@@ -50,44 +50,6 @@ public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
     @Override
     protected String[] doInBackground(Bitmap... transferArray) {
         try {
-            /*ByteArrayOutputStream bao = new ByteArrayOutputStream();
-            transferArray[0].compress(Bitmap.CompressFormat.PNG, 100, bao);
-            byte[] rawImage = bao.toByteArray();
-            byte[] imageData = cryptor.encryptSymetricFromByte(rawImage, cryptor.hashToByte(LoginActivity.PIN));
-            authcode = cryptor.bytesToHex(cryptor.encryptSymetricFromString(authcode, cryptor.hashToByte(LoginActivity.PIN)));
-            accountnumber = URLEncoder.encode(accountnumber, "UTF-8");
-            String postImgUrlStr = LoginActivity.SERVERURL + "/saveqr?accountnumber=" + accountnumber + "&bytelength=" + imageData.length + "&authcode=" + authcode
-                    + "&imagedata=" + cryptor.bytesToHex(imageData);
-            String[] results = new String[2];
-
-            HttpURLConnection httpURLConnection;
-            URL postImageURL = new URL(postImgUrlStr);
-            Log.d(TAG, "doInBackground: " + postImageURL.toString());
-            httpURLConnection = (HttpURLConnection) postImageURL.openConnection();
-            httpURLConnection.setUseCaches(false);
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
-
-            DataOutputStream request = new DataOutputStream(httpURLConnection.getOutputStream());
-            request.write(imageData);
-
-            request.flush();
-            request.close();
-
-            InputStream responseStream = new BufferedInputStream(httpURLConnection.getInputStream());
-            BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-
-            String line;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            while ((line = responseStreamReader.readLine()) != null){
-                stringBuilder.append(line).append("\n");
-            }
-            results[1] = stringBuilder.toString();
-            responseStream.close();
-            return results;*/
-
             HttpClient client = HttpClientBuilder.create().build();
 
             String baseUrl = LoginActivity.SERVERURL + "/saveqr";

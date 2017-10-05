@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="forbidden_characters" >
+    <string-array name="forbidden_characters" translatable="false" >
         <item>ò</item>
         <item>ň</item>
         <item>ĵ</item>
+    </string-array>
+    <string-array name="featuresNames" translatable="false">
+        <item>Produkt hinzufügen</item>
+        <item>QR-Code hinzufügen</item>
+        <item>Rechte zuweisen</item>
+        <item>Account erstellen</item>
     </string-array>
 </resources>

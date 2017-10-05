@@ -19,6 +19,7 @@ import de.repictures.stromberg.ScanProductActivity;
 public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
 
     private ScanProductActivity scanProductActivity;
+    private Internet internetHelper = new Internet();
     private String TAG = "GetProductAsyncTask";
 
     public GetProductAsyncTask(ScanProductActivity scanProductActivity){
@@ -26,9 +27,17 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
     }
 
     @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(scanProductActivity)){
+            cancel(true);
+            onPostExecute("0");
+        }
+    }
+
+    @Override
     protected String doInBackground(String... codes) {
         String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0];
-        return new Internet().doGetString(baseUrl);
+        return internetHelper.doGetString(baseUrl);
     }
 
     @Override

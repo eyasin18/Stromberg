@@ -1,7 +1,5 @@
 package de.repictures.stromberg.Features;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,35 +13,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TransferAsyncTask;
 import de.repictures.stromberg.Fragments.LoadingDialogFragment;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
-import de.repictures.stromberg.uiHelper.ForbiddenCharactersFilter;
 
 public class TransferDialogActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -180,14 +162,17 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
         sendButtonClicked = false;
         loadingDialogFragment.dismiss();
         switch (result){
+            case -1:
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.internet_problems), Snackbar.LENGTH_LONG).show();
+                break;
             case 0:
-                Snackbar.make(coordinatorLayout, getResources().getString(R.string.server_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.server_error), Snackbar.LENGTH_LONG).show();
                 break;
             case 1:
-                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_no_money), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_no_money), Snackbar.LENGTH_LONG).show();
                 break;
             case 2:
-                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_not_exist), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_not_exist), Snackbar.LENGTH_LONG).show();
                 break;
             case 3:
                 Intent i = new Intent();
@@ -196,7 +181,7 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
                 finish();
                 break;
             case 4:
-                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_equals_sender), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_equals_sender), Snackbar.LENGTH_LONG).show();
                 break;
         }
     }

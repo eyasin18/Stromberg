@@ -22,6 +22,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
@@ -38,6 +40,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     private final ProgressBar loginProgressBar;
     private Activity activity;
     private Cryptor cryptor = new Cryptor();
+    private Internet internetHelper = new Internet();
 
     public LoginAsyncTask(TextInputLayout accountnumberEditLayout, TextInputLayout passwordEditLayout, Button loginButton, ProgressBar loginProgressBar, Activity activity) {
         this.passwordEditLayout = passwordEditLayout;
@@ -48,8 +51,15 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(activity)){
+            cancel(true);
+            onPostExecute("-1");
+        }
+    }
+
+    @Override
     protected String doInBackground(String... keys) {
-        Internet internetHelper = new Internet();
         String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
         String[] doGetResponse;
         try {
@@ -79,6 +89,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String responseStr) {
+        Log.d(TAG, "onPostExecute: " + responseStr);
         loginButton.setText(activity.getResources().getString(R.string.login));
         loginProgressBar.setVisibility(View.INVISIBLE);
         String[] response = responseStr.split("ò");
@@ -93,6 +104,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                     editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_group));
                     editor.apply();
                 }
                 ((LoginActivity)activity).loginButtonClicked = false;
@@ -105,15 +117,17 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                     editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_group));
                     editor.apply();
                 }
                 ((LoginActivity)activity).loginButtonClicked = false;
                 break;
             case 2:
-                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[4]);
+                editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[5]);
                 editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
                 editor.putString(activity.getResources().getString(R.string.sp_webstring), response[2]);
-                editor.putString(activity.getResources().getString(R.string.sp_featureslist), response[3]);
+                editor.putStringSet(activity.getResources().getString(R.string.sp_featureslist), new HashSet<>(Arrays.asList(response[3].split("ň"))));
+                editor.putString(activity.getResources().getString(R.string.sp_group), response[4]);
                 editor.apply();
                 Log.d(TAG, "onPostExecute: " + response[2]);
                 Intent i = new Intent(activity, MainActivity.class);
@@ -128,6 +142,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                     editor.remove(activity.getResources().getString(R.string.sp_webstring));
                     editor.remove(activity.getResources().getString(R.string.sp_featureslist));
+                    editor.remove(activity.getResources().getString(R.string.sp_group));
                     editor.apply();
                 }
                 ((LoginActivity)activity).loginButtonClicked = false;

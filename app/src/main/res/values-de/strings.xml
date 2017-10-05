@@ -81,7 +81,7 @@
     <string name="request_camera_text">Um Barcodes lesen zu können brauchen wir Zugriff auf die Kamera</string>
     <string name="request_camera_title">Kamera Zugriff erlauben</string>
     <string name="show_transfer_detail_dialog_title">Überweisung vom %1$2s um %2$2s Uhr</string>
-    <string name="title_activity_auth_scan">Authentifizierungscode scannen</string>
+    <string name="title_activity_auth_scan">Kamera auf einen Authentifizierungscode halten</string>
     <string name="title_activity_main">Fingerhut</string>
     <string name="title_activity_scan">Kamera auf den Bar- oder QR-Code eines Produktes halten</string>
     <string name="use_flash">Flash benutzen</string>
@@ -108,4 +108,12 @@
     <string name="not_enough_money">Kontostand reicht nicht aus</string>
     <string name="not_enough_money_message">Du hast nicht genügend Geld auf deinem Konto um diese Produkte zu kaufen</string>
     <string name="session_invalid">Session abgelaufen</string>
+    <string name="barcode_not_available">Es gibt bereits ein Produkt mit diesem Produktcode</string>
+    <string name="customer_can_buy_product_by_himself">Kunde kann sich das Produkt selbst kaufen</string>
+    <string name="send_product_loading">Produkt wird gesendet...</string>
+    <string name="send_product_success">Produkt wurde gespeichert</string>
+    <string name="error_barcode_wrong_length">Dies ist kein gültiger Barcode</string>
+    <string name="error_price_empty">Du musst deinem Produkt einen Preis geben</string>
+    <string name="error_product_name_empty">Du musst deinem Produkt einen Namen geben</string>
+    <string name="title_add_product">Produkt hinzufügen</string>
 </resources>

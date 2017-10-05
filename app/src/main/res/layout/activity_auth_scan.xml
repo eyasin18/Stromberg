@@ -17,5 +17,15 @@
 
         <include layout="@layout/auth_code_scanlist"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_auth_scan"
+            android:fitsSystemWindows="true"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:layout_margin="16dp"
+            style="@style/TextAppearance.AppCompat.Headline"/>
+
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

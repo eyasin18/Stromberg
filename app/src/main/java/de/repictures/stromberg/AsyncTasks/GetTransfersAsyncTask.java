@@ -27,16 +27,25 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
     private TransfersActivity transfersActivity;
     private String TAG = "GetFinancialAsyncTask";
     private Cryptor cryptor = new Cryptor();
+    private Internet internetHelper = new Internet();
 
     public GetTransfersAsyncTask(TransfersActivity transfersActivity){
         this.transfersActivity = transfersActivity;
     }
 
     @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(transfersActivity)){
+            cancel(true);
+            onPostExecute(null);
+        }
+    }
+
+    @Override
     protected String[][] doInBackground(String... accountKeys) {
         String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0];
 
-        String rawResultStr = new Internet().doGetString(baseUrl);
+        String rawResultStr = internetHelper.doGetString(baseUrl);
         if(rawResultStr.endsWith("ĵ")){
             return null;
         } else if (rawResultStr.length() > 0){

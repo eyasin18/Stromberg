@@ -13,6 +13,7 @@
     <string name="sp_accountslist" translatable="false">SHARED_PREFERENCES_accountslist</string>
     <string name="sp_device_token" translatable="false">SHARED_PREFERENCES_device_token</string>
     <string name="sp_encrypted_private_key_hex" translatable="false">SHARED_PREFERENCES_sp_encrypted_private_key_hex</string>
+    <string name="sp_group" translatable="false">SHARED_PREFERENCES_group</string>
     <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
     <string name="error">Error</string>
     <string name="current_account">Current account</string>
@@ -30,7 +31,7 @@
     <string name="optionee">Optionee</string>
     <string name="title_activity_transfer_dialog_fragment">New transfer</string>
     <string name="amount">Amount</string>
-    <string name="currency" translatable="false">EUR</string>
+    <string name="currency" translatable="false">S</string>
     <string name="execute_later">Execute later</string>
     <string name="execute_at">Execute at</string>
     <string name="purpose">Purpose</string>
@@ -123,6 +124,14 @@
     <string name="loged_in_on_other_device">You are loged in on an other device</string>
     <string name="not_enough_money">Not enough money</string>
     <string name="not_enough_money_message">You don\'t have enough money to buy these items</string>
+    <string name="customer_can_buy_product_by_himself">Customer can buy the product by himself</string>
+    <string name="barcode_not_available">There is already a Product with this Code</string>
+    <string name="send_product_success">Product was added successfully to your assortment</string>
+    <string name="send_product_loading">Sending Product...</string>
+    <string name="title_add_product">Add Product</string>
+    <string name="error_barcode_wrong_length">This is not a valid product code</string>
+    <string name="error_product_name_empty">You have to give your product a name</string>
+    <string name="error_price_empty">Your product has to have a price</string>
 
 
 </resources>

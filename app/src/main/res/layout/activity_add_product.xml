@@ -4,61 +4,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/features_add_product_coordinator_layout"
     tools:context="de.repictures.stromberg.Features.AddProductActivity">
 
-    <RelativeLayout
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/features_add_product_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_send_white_48dp" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:layout_below="@+id/barcode"
-            android:layout_alignLeft="@+id/barcode"
-            android:layout_alignStart="@+id/barcode"
-            android:hint="Name"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/barcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:inputType="number"
-            android:hint="Barcode" />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/features_add_product_code_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="16dp">
 
-        <EditText
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/name"
-            android:layout_alignRight="@+id/name"
-            android:layout_below="@+id/name"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:hint="Preis" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/features_add_product_code_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:ems="10"
+                    android:hint="Barcode"
+                    android:inputType="number" />
 
-        <EditText
-            android:id="@+id/company_accountnumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/price"
-            android:layout_alignStart="@+id/price"
-            android:layout_below="@+id/price"
-            android:ems="10"
-            android:inputType="number"
-            android:hint="Kontonummer" />
+            </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/company_accountnumber"
-            android:layout_centerHorizontal="true"
-            android:text="Los!" />
-    </RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/features_add_product_name_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/features_add_product_code_input_layout"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/features_add_product_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Produktname"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/features_add_product_price_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/features_add_product_name_input_layout"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/features_add_price_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Preis"
+                    android:inputType="numberDecimal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/features_add_product_price_input_layout"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:id="@+id/features_add_product_check_box_relative_layout">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:id="@+id/features_add_price_self_buy_check_box"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/features_add_price_self_buy_check_box"
+                    android:text="@string/customer_can_buy_product_by_himself"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:padding="16dp"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -17,15 +17,23 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
     private TransferDialogActivity transferDialogActivity;
     private String TAG = "TransferAsyncTask";
     private Cryptor cryptor = new Cryptor();
+    private Internet internetHelper = new Internet();
 
     public TransferAsyncTask(TransferDialogActivity transferDialogActivity){
         this.transferDialogActivity = transferDialogActivity;
     }
 
     @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(transferDialogActivity)){
+            cancel(true);
+            onPostExecute("-1");
+        }
+    }
+
+    @Override
     protected String doInBackground(String... transferArray) {
         try {
-            Internet internetHelper = new Internet();
             String getUrlStr = LoginActivity.SERVERURL + "/transfer?receiveraccountnumber=" + URLEncoder.encode(transferArray[1], "UTF-8")
                     + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8") + "&webstring=" + transferArray[2];
             String getUrlRespStr = internetHelper.doGetString(getUrlStr);

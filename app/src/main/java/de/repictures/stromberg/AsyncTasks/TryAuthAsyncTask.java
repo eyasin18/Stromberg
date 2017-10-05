@@ -28,14 +28,22 @@ public class TryAuthAsyncTask extends AsyncTask<String, Void, Boolean> {
     private String authCode;
     private String encryptedPrivateKeyHex = "";
     private String TAG = "TryAuthAsyncTask";
+    private Internet internetHelper = new Internet();
 
     public TryAuthAsyncTask(AuthScanActivity authScanActivity) {
         this.authScanActivity = authScanActivity;
     }
 
     @Override
+    protected void onPreExecute() {
+        if (!internetHelper.isNetworkAvailable(authScanActivity)){
+            cancel(true);
+            onPostExecute(false);
+        }
+    }
+
+    @Override
     protected Boolean doInBackground(String... strings) {
-        Internet internetHelper = new Internet();
         String accountnumber = strings[0].substring(0, authScanActivity.getResources().getInteger(R.integer.accountnumberlength));
         authCode = strings[0].substring(authScanActivity.getResources().getInteger(R.integer.accountnumberlength));
         String[] authParts = {authCode.substring(0, authScanActivity.getResources().getInteger(R.integer.auth_key_length)/2), authCode.substring(authScanActivity.getResources().getInteger(R.integer.auth_key_length)/2)};

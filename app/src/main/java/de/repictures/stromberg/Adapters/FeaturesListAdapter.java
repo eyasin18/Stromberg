@@ -16,7 +16,6 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
 
     private static final String TAG = "TransferListAdapter";
     private CompanyActivity companyActivity;
-    private String[] features = {"Add Product", "Add QR-Code"};
 
     public FeaturesListAdapter(CompanyActivity companyActivity) {
         this.companyActivity = companyActivity;
@@ -32,28 +31,36 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
     public void onBindViewHolder(FeaturesListViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: executed");
         holder.setClickListener(this);
-        holder.feature.setText(features[position]);
+        holder.feature.setText(companyActivity.featuresNames.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return features.length;
+        return companyActivity.featuresList.size();
     }
 
     @Override
     public void onClick(View v, int position, boolean isLongClick) {
         Intent i;
-        switch (position){
+        String featureCodeStr = companyActivity.featuresList.get(position);
+        switch (Integer.parseInt(featureCodeStr)){
             case 0:
                 i = new Intent(companyActivity, AddProductActivity.class);
+                companyActivity.startActivity(i);
                 break;
             case 1:
                 i = new Intent(companyActivity, AddAuthKeyActivity.class);
+                companyActivity.startActivity(i);
+                break;
+            case 2:
+                //Feature setzen
+                break;
+            case 3:
+                //Account erstellen
                 break;
             default:
                 i = null;
                 break;
         }
-        companyActivity.startActivity(i);
     }
 }

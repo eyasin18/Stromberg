@@ -14,10 +14,19 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "BuyItemsAsyncTask";
     private ScanProductActivity scanProductActivity;
+    private Internet internet = new Internet();
 
     public BuyItemsAsyncTask(ScanProductActivity scanProductActivity){
 
         this.scanProductActivity = scanProductActivity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        if (!internet.isNetworkAvailable(scanProductActivity)){
+            cancel(true);
+            onPostExecute("0");
+        }
     }
 
     @Override
@@ -27,7 +36,6 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
                     + "&accountnumber=" + params[1]
                     + "&companynumber=" + params[2]
                     + "&shoppinglist=" + URLEncoder.encode(params[3], "UTF-8");
-            Internet internet = new Internet();
             return internet.doGetString(getUrl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
