@@ -27,9 +27,12 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.UnsupportedEncodingException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
+import de.repictures.stromberg.Helper.Cryptor;
 import io.fabric.sdk.android.Fabric;
 
 //LoginScreen. Startactivity der App.
@@ -194,5 +197,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .setMessage(R.string.no_camera_permission)
                 .setPositiveButton(R.string.ok, listener)
                 .show();
+    }
+
+    public void updatePrivateKey() {
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String newPrivateKeyStr = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex_2), null);
+        if (newPrivateKeyStr == null){
+            Cryptor cryptor = new Cryptor();
+            try {
+                String encryptedPrivateKeyHex = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex), null);
+                byte[] encryptedPrivateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
+                byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
+                byte[] privateKey = cryptor.decryptSymetricToByte(encryptedPrivateKey, hashedPassword);
+                byte[] passwordBytes = PIN.getBytes("ISO-8859-1");
+                byte[] passwordKey = new byte[32];
+                for (int i = 0; i < passwordKey.length; i++){
+                    passwordKey[i] = passwordBytes[i % passwordBytes.length];
+                }
+                byte[] newPrivateKey = cryptor.encryptSymetricFromByte(privateKey, passwordKey);
+                newPrivateKeyStr = cryptor.bytesToHex(newPrivateKey);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getResources().getString(R.string.sp_encrypted_private_key_hex_2), newPrivateKeyStr);
+            editor.apply();
+        }
     }
 }

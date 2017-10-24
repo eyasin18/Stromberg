@@ -130,6 +130,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                 editor.putString(activity.getResources().getString(R.string.sp_group), response[4]);
                 editor.apply();
                 Log.d(TAG, "onPostExecute: " + response[2]);
+                ((LoginActivity) activity).updatePrivateKey();
                 Intent i = new Intent(activity, MainActivity.class);
                 activity.startActivity(i);
                 activity.finish();

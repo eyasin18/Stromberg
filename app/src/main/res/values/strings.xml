@@ -13,6 +13,7 @@
     <string name="sp_accountslist" translatable="false">SHARED_PREFERENCES_accountslist</string>
     <string name="sp_device_token" translatable="false">SHARED_PREFERENCES_device_token</string>
     <string name="sp_encrypted_private_key_hex" translatable="false">SHARED_PREFERENCES_sp_encrypted_private_key_hex</string>
+    <string name="sp_encrypted_private_key_hex_2" translatable="false">SHARED_PREFERENCES_sp_encrypted_private_key_hex_2</string>
     <string name="sp_group" translatable="false">SHARED_PREFERENCES_group</string>
     <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
     <string name="error">Error</string>
