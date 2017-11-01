@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TransferAsyncTask;
 import de.repictures.stromberg.Fragments.LoadingDialogFragment;
@@ -33,14 +33,14 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
     private boolean sendButtonClicked = false;
 
-    @Bind(R.id.transfer_fragment_owner_input_layout) TextInputLayout ownerInputLayout;
-    @Bind(R.id.transfer_fragment_accountnumber_input_layout) TextInputLayout accountInputLayout;
-    @Bind(R.id.transfer_fragment_owner_auto_complete_text) AutoCompleteTextView ownerAutoComplete;
-    @Bind(R.id.transfer_fragment_accountnumber_auto_complete_text) TextInputEditText accountnumberEditText;
-    @Bind(R.id.transfer_fragment_amount_edit_text) TextInputEditText amountEditText;
-    @Bind(R.id.transfer_fragment_amount_layout) TextInputLayout amountInputLayout;
-    @Bind(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
-    @Bind(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.transfer_fragment_owner_input_layout) TextInputLayout ownerInputLayout;
+    @BindView(R.id.transfer_fragment_accountnumber_input_layout) TextInputLayout accountInputLayout;
+    @BindView(R.id.transfer_fragment_owner_auto_complete_text) AutoCompleteTextView ownerAutoComplete;
+    @BindView(R.id.transfer_fragment_accountnumber_auto_complete_text) TextInputEditText accountnumberEditText;
+    @BindView(R.id.transfer_fragment_amount_edit_text) TextInputEditText amountEditText;
+    @BindView(R.id.transfer_fragment_amount_layout) TextInputLayout amountInputLayout;
+    @BindView(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
+    @BindView(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
 
     LoadingDialogFragment loadingDialogFragment;
 

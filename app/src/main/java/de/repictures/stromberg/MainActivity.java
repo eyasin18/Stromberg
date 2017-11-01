@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
 
@@ -23,15 +23,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final String TAG = "MainActivity";
     String accountKey, webstring;
 
-    @Bind(R.id.financial_status_account_number) TextView accountNumberText;
-    @Bind(R.id.financial_status_balance) TextView accountBalanceText;
-    @Bind(R.id.financial_status_account_owner) TextView accountOwnerText;
-    @Bind(R.id.financial_status_content) RelativeLayout financialStatusContent;
-    @Bind(R.id.financial_status_progress_bar) ProgressBar financialStatusProgressBar;
-    @Bind(R.id.main_transfer) RelativeLayout transferLayout;
-    @Bind(R.id.main_inbox) RelativeLayout inboxLayout;
-    @Bind(R.id.main_domain) RelativeLayout domainLayout;
-    @Bind(R.id.main_scan) RelativeLayout scanLayout;
+    @BindView(R.id.financial_status_account_number) TextView accountNumberText;
+    @BindView(R.id.financial_status_balance) TextView accountBalanceText;
+    @BindView(R.id.financial_status_account_owner) TextView accountOwnerText;
+    @BindView(R.id.financial_status_content) RelativeLayout financialStatusContent;
+    @BindView(R.id.financial_status_progress_bar) ProgressBar financialStatusProgressBar;
+    @BindView(R.id.main_transfer) RelativeLayout transferLayout;
+    @BindView(R.id.main_inbox) RelativeLayout inboxLayout;
+    @BindView(R.id.main_domain) RelativeLayout domainLayout;
+    @BindView(R.id.main_scan) RelativeLayout scanLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

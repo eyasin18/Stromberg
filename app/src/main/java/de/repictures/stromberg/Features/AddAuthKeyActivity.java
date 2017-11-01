@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
@@ -16,11 +16,11 @@ import de.repictures.stromberg.R;
 import de.repictures.stromberg.uiHelper.QRCode;
 
 public class AddAuthKeyActivity extends AppCompatActivity {
-    @Bind(R.id.authkey_edit) EditText authKeyEdit;
-    @Bind(R.id.accountnumber_edit) EditText accountnumberedit;
-    @Bind(R.id.send_button) Button sendButton;
-    @Bind(R.id.qrPreview) ImageView qrPreview;
-    @Bind(R.id.getButton) Button getButton;
+    @BindView(R.id.authkey_edit) EditText authKeyEdit;
+    @BindView(R.id.accountnumber_edit) EditText accountnumberedit;
+    @BindView(R.id.send_button) Button sendButton;
+    @BindView(R.id.qrPreview) ImageView qrPreview;
+    @BindView(R.id.getButton) Button getButton;
 
     private QRCode qrCodeBuilder;
 

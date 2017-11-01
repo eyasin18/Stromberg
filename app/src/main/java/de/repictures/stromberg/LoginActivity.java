@@ -29,7 +29,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
 import de.repictures.stromberg.Helper.Cryptor;
@@ -54,15 +54,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAnalytics mFirebaseAnalytics;
 
     //Views aus der XML werden Javaobjekten zugeordnet.
-    @Bind(R.id.login_background) ImageView loginBackground;
-    @Bind(R.id.login_login_button) Button loginButton;
-    @Bind(R.id.login_password_edit_layout) TextInputLayout passwordEditLayout;
-    @Bind(R.id.features_add_product_name_input_layout) TextInputLayout accountnumberEditLayout;
-    @Bind(R.id.login_password_edit) TextInputEditText passwordEdit;
-    @Bind(R.id.login_account_number_edit) TextInputEditText accountnumberEdit;
-    @Bind(R.id.login_authenticate) TextView authenticateText;
-    @Bind(R.id.login_progress_bar) ProgressBar loginProgressBar;
-    @Bind(R.id.activity_login) RelativeLayout loginLayout;
+    @BindView(R.id.login_background) ImageView loginBackground;
+    @BindView(R.id.login_login_button) Button loginButton;
+    @BindView(R.id.login_password_edit_layout) TextInputLayout passwordEditLayout;
+    @BindView(R.id.features_add_product_name_input_layout) TextInputLayout accountnumberEditLayout;
+    @BindView(R.id.login_password_edit) TextInputEditText passwordEdit;
+    @BindView(R.id.login_account_number_edit) TextInputEditText accountnumberEdit;
+    @BindView(R.id.login_authenticate) TextView authenticateText;
+    @BindView(R.id.login_progress_bar) ProgressBar loginProgressBar;
+    @BindView(R.id.activity_login) RelativeLayout loginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,10 +202,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void updatePrivateKey() {
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String newPrivateKeyStr = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex_2), null);
-        if (newPrivateKeyStr == null){
+        String encryptedPrivateKeyHex = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex), null);
+        if (newPrivateKeyStr == null && encryptedPrivateKeyHex != null){
             Cryptor cryptor = new Cryptor();
             try {
-                String encryptedPrivateKeyHex = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex), null);
                 byte[] encryptedPrivateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
                 byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
                 byte[] privateKey = cryptor.decryptSymetricToByte(encryptedPrivateKey, hashedPassword);

@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.PostProductAsyncTask;
 import de.repictures.stromberg.LoginActivity;
@@ -23,16 +23,16 @@ import de.repictures.stromberg.R;
 public class AddProductActivity extends AppCompatActivity {
 
     private static final String TAG = "AddProductActivity";
-    @Bind(R.id.features_add_product_code_edit_text) TextInputEditText barcodeEditText;
-    @Bind(R.id.features_add_product_code_input_layout) TextInputLayout barcodeInputLayout;
-    @Bind(R.id.features_add_product_name_edit_text) TextInputEditText nameEditText;
-    @Bind(R.id.features_add_product_name_input_layout) TextInputLayout nameInputLayout;
-    @Bind(R.id.features_add_price_name_edit_text) TextInputEditText priceEditText;
-    @Bind(R.id.features_add_product_price_input_layout) TextInputLayout priceInputLayout;
-    @Bind(R.id.features_add_product_floating_action_button) FloatingActionButton sendButton;
-    @Bind(R.id.features_add_product_coordinator_layout) CoordinatorLayout coordinatorLayout;
-    @Bind(R.id.features_add_product_check_box_relative_layout) RelativeLayout checkBoxRelativeLayout;
-    @Bind(R.id.features_add_price_self_buy_check_box) CheckBox selfBuyCheckBox;
+    @BindView(R.id.features_add_product_code_edit_text) TextInputEditText barcodeEditText;
+    @BindView(R.id.features_add_product_code_input_layout) TextInputLayout barcodeInputLayout;
+    @BindView(R.id.features_add_product_name_edit_text) TextInputEditText nameEditText;
+    @BindView(R.id.features_add_product_name_input_layout) TextInputLayout nameInputLayout;
+    @BindView(R.id.features_add_price_name_edit_text) TextInputEditText priceEditText;
+    @BindView(R.id.features_add_product_price_input_layout) TextInputLayout priceInputLayout;
+    @BindView(R.id.features_add_product_floating_action_button) FloatingActionButton sendButton;
+    @BindView(R.id.features_add_product_coordinator_layout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.features_add_product_check_box_relative_layout) RelativeLayout checkBoxRelativeLayout;
+    @BindView(R.id.features_add_price_self_buy_check_box) CheckBox selfBuyCheckBox;
 
     Snackbar sendingSnackbar;
 

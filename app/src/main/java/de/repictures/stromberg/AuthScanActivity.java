@@ -32,7 +32,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TryAuthAsyncTask;
 
@@ -41,11 +41,11 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
     private static final int PERMISSION_REQUEST_CAMERA = 42;
     private static final String TAG = "AuthScanActivity";
 
-    @Bind(R.id.auth_scan_camera_view) SurfaceView cameraView;
-    @Bind(R.id.activity_auth_scan_layout) CoordinatorLayout scanLayout;
-    @Bind(R.id.auth_scan_card) CardView authScanCard;
-    @Bind(R.id.auth_scan_progressbar) ProgressBar authScanProgressBar;
-    @Bind(R.id.auth_scan_title) TextView authScanTitle;
+    @BindView(R.id.auth_scan_camera_view) SurfaceView cameraView;
+    @BindView(R.id.activity_auth_scan_layout) CoordinatorLayout scanLayout;
+    @BindView(R.id.auth_scan_card) CardView authScanCard;
+    @BindView(R.id.auth_scan_progressbar) ProgressBar authScanProgressBar;
+    @BindView(R.id.auth_scan_title) TextView authScanTitle;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource mCameraSource;

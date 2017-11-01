@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.ShoppingCartListAdapter;
 import de.repictures.stromberg.AsyncTasks.BuyItemsAsyncTask;
@@ -54,15 +54,15 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
 
     private SlideUp slideUp;
 
-    @Bind(R.id.camera_view) SurfaceView cameraView;
-    @Bind(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
-    @Bind(R.id.shopping_list_slide_down_view) View slideView;
-    @Bind(R.id.activity_scan_fab) FloatingActionButton floatingActionButton;
-    @Bind(R.id.shopping_list_recycler_view) RecyclerView shoppingRecycler;
-    @Bind(R.id.shopping_list_slide_down_arrow) ImageView slideDownArrow;
-    @Bind(R.id.scan_product_progress_bar) ProgressBar scanProgressBar;
-    @Bind(R.id.shopping_list_checkout_button) Button checkoutButton;
-    @Bind(R.id.shopping_list_checkout_progress_bar) ProgressBar checkoutProgressBar;
+    @BindView(R.id.camera_view) SurfaceView cameraView;
+    @BindView(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
+    @BindView(R.id.shopping_list_slide_down_view) View slideView;
+    @BindView(R.id.activity_scan_fab) FloatingActionButton floatingActionButton;
+    @BindView(R.id.shopping_list_recycler_view) RecyclerView shoppingRecycler;
+    @BindView(R.id.shopping_list_slide_down_arrow) ImageView slideDownArrow;
+    @BindView(R.id.scan_product_progress_bar) ProgressBar scanProgressBar;
+    @BindView(R.id.shopping_list_checkout_button) Button checkoutButton;
+    @BindView(R.id.shopping_list_checkout_progress_bar) ProgressBar checkoutProgressBar;
 
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;

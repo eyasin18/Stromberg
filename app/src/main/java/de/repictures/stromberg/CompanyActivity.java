@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.FeaturesListAdapter;
 
@@ -22,7 +22,7 @@ public class CompanyActivity extends AppCompatActivity {
     public List<String> featuresList = new ArrayList<>();
     public List<String> featuresNames = new ArrayList<>();
 
-    @Bind(R.id.features_recycler) RecyclerView featuresRecycler;
+    @BindView(R.id.features_recycler) RecyclerView featuresRecycler;
     RecyclerView.Adapter featuresAdapter;
 
     @Override

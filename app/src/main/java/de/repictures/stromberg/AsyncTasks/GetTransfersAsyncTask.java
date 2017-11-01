@@ -43,7 +43,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
 
     @Override
     protected String[][] doInBackground(String... accountKeys) {
-        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0];
+        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0] + "&start=0";
 
         String rawResultStr = internetHelper.doGetString(baseUrl);
         if(rawResultStr.endsWith("ĵ")){

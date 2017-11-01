@@ -17,7 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.TransferListAdapter;
 import de.repictures.stromberg.AsyncTasks.GetTransfersAsyncTask;
@@ -26,9 +26,9 @@ import de.repictures.stromberg.Features.TransferDialogActivity;
 public class TransfersActivity extends AppCompatActivity {
 
     private static final String TAG = "TransferActivity";
-    @Bind(R.id.transfer_recycler) RecyclerView transferRecycler;
-    @Bind(R.id.transfer_refresh) SwipeRefreshLayout refreshLayout;
-    @Bind(R.id.transfer_layout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.transfer_recycler) RecyclerView transferRecycler;
+    @BindView(R.id.transfer_refresh) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.transfer_layout) CoordinatorLayout coordinatorLayout;
     SwipeRefreshLayout.OnRefreshListener refreshListener;
     RecyclerView.Adapter transferAdapter;
     String[][] transfers = new String[0][0];
