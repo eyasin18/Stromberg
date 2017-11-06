@@ -16,6 +16,8 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.security.PrivateKey;
 
+import javax.mail.internet.MimeMultipart;
+
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
@@ -28,6 +30,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
     private String TAG = "GetFinancialAsyncTask";
     private Cryptor cryptor = new Cryptor();
     private Internet internetHelper = new Internet();
+    private boolean itemLeft = false;
 
     public GetTransfersAsyncTask(TransfersActivity transfersActivity){
         this.transfersActivity = transfersActivity;
@@ -42,10 +45,15 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
     }
 
     @Override
-    protected String[][] doInBackground(String... accountKeys) {
-        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + accountKeys[0] + "&start=0";
+    protected String[][] doInBackground(String... params) {
+        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + params[0] + "&start=" + params[1];
 
-        String rawResultStr = internetHelper.doGetString(baseUrl);
+        MimeMultipart multi = internetHelper.doGetMultipart(baseUrl, "multipart/x-mixed-replace;boundary=End");
+        String itemLeftStr = internetHelper.parseTextBodyPart(multi, 1);
+        Log.d(TAG, "doInBackground: " + itemLeftStr);
+        itemLeft = Boolean.parseBoolean(itemLeftStr);
+
+        String rawResultStr = internetHelper.parseTextBodyPart(multi, 0);
         if(rawResultStr.endsWith("ĵ")){
             return null;
         } else if (rawResultStr.length() > 0){
@@ -66,7 +74,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
             }
             return transfersArray;
         } else {
-            return null;
+            return new String[0][0];
         }
     }
 
@@ -75,7 +83,7 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
         if (transfersArray == null){
             transfersActivity.updateRecycler();
         } else {
-            transfersActivity.updateRecycler(transfersArray);
+            transfersActivity.updateRecycler(transfersArray, itemLeft);
         }
     }
 
@@ -91,9 +99,8 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
             for (int i = 0; i < passwordKey.length; i++){
                 passwordKey[i] = passwordBytes[i % passwordBytes.length];
             }
-            String privateKeyHex = cryptor.decryptSymetricToString(encryptedPrivateKey, passwordKey);
-            Log.d(TAG, "Private Key String: " + privateKeyHex);
-            PrivateKey privateKey = cryptor.stringToPrivateKey(privateKeyHex);
+            byte[] privateKeyByte = cryptor.decryptSymetricToByte(encryptedPrivateKey, passwordKey);
+            PrivateKey privateKey = cryptor.byteToPrivateKey(privateKeyByte);
             byte[] encryptedString = cryptor.hexToBytes(encryptedStringHex);
             Log.d(TAG, "Encrypted Purpose Length: " + encryptedString.length);
             byte[] decryptedString = cryptor.decryptAsymetric(encryptedString, privateKey);
@@ -117,8 +124,8 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
             for (int i = 0; i < passwordKey.length; i++){
                 passwordKey[i] = passwordBytes[i % passwordBytes.length];
             }
-            String privateKeyHex = cryptor.decryptSymetricToString(encryptedPrivateKey, passwordKey);
-            PrivateKey privateKey = cryptor.stringToPrivateKey(privateKeyHex);
+            byte[] privateKeyByte = cryptor.decryptSymetricToByte(encryptedPrivateKey, passwordKey);
+            PrivateKey privateKey = cryptor.byteToPrivateKey(privateKeyByte);
 
             byte[] encryptedAesKey = cryptor.hexToBytes(encryptedAesKeyHex);
             byte[] aesKey = cryptor.decryptAsymetric(encryptedAesKey, privateKey);

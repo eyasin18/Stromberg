@@ -33,6 +33,10 @@ public class TransfersActivity extends AppCompatActivity {
     RecyclerView.Adapter transferAdapter;
     String[][] transfers = new String[0][0];
 
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+    private boolean isLoading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +56,23 @@ public class TransfersActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         transferRecycler.setHasFixedSize(true);
-        transferRecycler.setLayoutManager(new LinearLayoutManager(this));
-        transferAdapter = new TransferListAdapter(TransfersActivity.this, transfers);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        transferRecycler.setLayoutManager(linearLayoutManager);
+        transferAdapter = new TransferListAdapter(TransfersActivity.this, transfers, false);
         transferRecycler.setAdapter(transferAdapter);
+        transferRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && lastVisibleItem > 0) {
+                    isLoading = true;
+                    Log.d(TAG, "onScrolled: lastVisibleItem: " + lastVisibleItem);
+                    loadMoreItems();
+                }
+            }
+        });
 
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -63,7 +81,9 @@ public class TransfersActivity extends AppCompatActivity {
                 String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
                 GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
                 refreshLayout.setRefreshing(true);
-                asyncTask.execute(savedAccountnumber);
+                transfers = new String[0][0];
+                transferAdapter.notifyItemRangeRemoved(0, linearLayoutManager.getItemCount());
+                asyncTask.execute(savedAccountnumber, String.valueOf(0));
             }
         };
         refreshLayout.setOnRefreshListener(refreshListener);
@@ -85,20 +105,44 @@ public class TransfersActivity extends AppCompatActivity {
     }
 
     @UiThread
-    public void updateRecycler(String[][] transfers){
+    public void updateRecycler(String[][] transfers, boolean itemsLeft){
         Log.d(TAG, "updateRecycler: with input: " + transfers);
-        this.transfers = new String[0][0];
-        this.transfers = transfers;
-        transferAdapter = new TransferListAdapter(TransfersActivity.this, transfers);
+        this.transfers = concat(this.transfers, transfers);
+        transferAdapter = new TransferListAdapter(TransfersActivity.this, this.transfers, itemsLeft);
         transferRecycler.swapAdapter(transferAdapter, false);
         refreshLayout.setRefreshing(false);
+        isLoading = !itemsLeft;
     }
 
     @UiThread
     public void updateRecycler(){
         Log.d(TAG, "updateRecycler: without input");
         transfers = new String[0][0];
-        transferAdapter.notifyDataSetChanged();
+        transferAdapter = new TransferListAdapter(TransfersActivity.this, transfers, false);
+        transferRecycler.swapAdapter(transferAdapter, false);
         refreshLayout.setRefreshing(false);
+        isLoading = false;
+    }
+
+    private void loadMoreItems() {
+        Log.d(TAG, "loadMoreItems: triggered");
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
+        GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
+        asyncTask.execute(savedAccountnumber, String.valueOf(totalItemCount - 1));
+    }
+
+    private String[][] concat(String[][] A, String[][] B) {
+        int aLen = A.length;
+        int bLen = B.length;
+        int length;
+        if (A.length > 0 && B.length > 0) length = A[0].length > B[0].length ? A[0].length : B[0].length;
+        else if (B.length > 0 && A.length < 1) length = B[0].length;
+        else if (A.length > 0 && B.length < 1) length = A[0].length;
+        else length = 0;
+        String[][] C= new String[aLen+bLen][length];
+        System.arraycopy(A, 0, C, 0, aLen);
+        System.arraycopy(B, 0, C, aLen, bLen);
+        return C;
     }
 }

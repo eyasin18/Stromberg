@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.java.net/content/groups/public/" }
     }
 
     dependencies {
@@ -37,6 +38,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
+    }
 }
 
 dependencies {
@@ -59,8 +63,12 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:11.4.2'
     testCompile 'junit:junit:4.12'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
     compile "com.github.mancj:SlideUp-Android:2.2.7.1"
+    //TODO: Below Android 19?
+    compile 'com.sun.mail:android-mail:1.6.0'
+    compile 'com.sun.mail:android-activation:1.6.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

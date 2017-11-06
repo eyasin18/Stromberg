@@ -28,6 +28,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
+import java.security.PrivateKey;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -206,9 +207,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (newPrivateKeyStr == null && encryptedPrivateKeyHex != null){
             Cryptor cryptor = new Cryptor();
             try {
-                byte[] encryptedPrivateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
-                byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
-                byte[] privateKey = cryptor.decryptSymetricToByte(encryptedPrivateKey, hashedPassword);
+                byte[] privateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
+                /*byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
+                Log.d(TAG, cryptor.hashToString(LoginActivity.PIN));
+                PrivateKey privateKeyd = cryptor.stringToPrivateKey(encryptedPrivateKeyHex);
+                byte[] privateKey = cryptor.decryptSymetricToByte(encryptedPrivateKey, hashedPassword);*/
                 byte[] passwordBytes = PIN.getBytes("ISO-8859-1");
                 byte[] passwordKey = new byte[32];
                 for (int i = 0; i < passwordKey.length; i++){
@@ -216,6 +219,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 byte[] newPrivateKey = cryptor.encryptSymetricFromByte(privateKey, passwordKey);
                 newPrivateKeyStr = cryptor.bytesToHex(newPrivateKey);
+                Log.d(TAG, newPrivateKeyStr);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

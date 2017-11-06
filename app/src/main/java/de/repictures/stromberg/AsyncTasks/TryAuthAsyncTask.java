@@ -77,6 +77,7 @@ public class TryAuthAsyncTask extends AsyncTask<String, Void, Boolean> {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(authScanActivity.getResources().getString(R.string.sp_authcode), authCode);
             editor.putString(authScanActivity.getResources().getString(R.string.sp_encrypted_private_key_hex_2), encryptedPrivateKeyHex);
+            //editor.remove(authScanActivity.getResources().getString(R.string.sp_encrypted_private_key_hex_2));
             editor.apply();
         }
         authScanActivity.getAuthResult(result, authCode);

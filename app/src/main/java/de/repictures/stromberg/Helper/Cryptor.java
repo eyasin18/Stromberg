@@ -165,6 +165,19 @@ public class Cryptor {
         }
     }
 
+    public PrivateKey byteToPrivateKey(byte[] keyBytes) {
+        try {
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory fact = KeyFactory.getInstance("RSA");
+            PrivateKey privateKey = fact.generatePrivate(keySpec);
+            Arrays.fill(keyBytes, (byte) 0);
+            return privateKey;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public PublicKey stringToPublicKey(String keyString) {
         try {
