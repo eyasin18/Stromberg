@@ -133,6 +133,11 @@
     <string name="error_barcode_wrong_length">This is not a valid product code</string>
     <string name="error_product_name_empty">You have to give your product a name</string>
     <string name="error_price_empty">Your product has to have a price</string>
+    <string name="title_order_list">Orders</string>
+    <string name="title_order_detail">Order Detail</string>
+    <string name="edit_auth_code">Edit authentification code</string>
+    <string name="company_number">Company number</string>
+    <string name="no_company_found">There was no company with this account number found</string>
 
 
 </resources>

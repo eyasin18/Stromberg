@@ -9,8 +9,10 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.TryAuthAsyncTask;
+import de.repictures.stromberg.Fragments.EditAuthCodeDialogFragment;
 
 public class AuthScanActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
 
@@ -46,11 +49,12 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
     @BindView(R.id.auth_scan_card) CardView authScanCard;
     @BindView(R.id.auth_scan_progressbar) ProgressBar authScanProgressBar;
     @BindView(R.id.auth_scan_title) TextView authScanTitle;
+    @BindView(R.id.auth_scan_fab) FloatingActionButton authFab;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource mCameraSource;
     private boolean animated = false;
-    private ArrayList<String> sortedBarcodeValues = new ArrayList<>();
+    public ArrayList<String> sortedBarcodeValues = new ArrayList<>();
     private int sortedBarcodesSize = 0;
 
     @Override
@@ -65,6 +69,15 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         } else {
             requestCameraPermission();
         }
+
+        authFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditAuthCodeDialogFragment fragment = new EditAuthCodeDialogFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                fragment.show(fm, "EditAuthCode");
+            }
+        });
     }
 
     @Override
@@ -164,43 +177,44 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         SparseArray<Barcode> allBarcodes = detections.getDetectedItems();
         for (int i = 0; i < allBarcodes.size(); i++){
             Barcode barcode = allBarcodes.valueAt(i);
-            if (barcode.displayValue.length() == getResources().getInteger(R.integer.accountnumberlength)+ getResources().getInteger(R.integer.auth_key_length) && !sortedBarcodeValues.contains(barcode.displayValue)){
-                sortedBarcodeValues.add(barcode.displayValue);
-                Log.d(TAG, "receiveDetections: Barcode " + barcode.displayValue + " added");
-            }
+            addBarcode(barcode.displayValue);
         }
         if (sortedBarcodeValues.size() > sortedBarcodesSize){
-            if (!animated){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -authScanCard.getHeight());
-                        translateAnimation.setDuration(250);
-                        translateAnimation.setFillAfter(true);
-                        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
-                        authScanCard.setY(cameraView.getHeight());
-                        authScanCard.setVisibility(View.VISIBLE);
-                        authScanCard.startAnimation(translateAnimation);
-                        animated = true;
-                        Log.d(TAG, "run: animated");
-                    }
-                });
-            }
-            authScanProgressBar.setVisibility(View.VISIBLE);
-            authScanTitle.setText(getResources().getString(R.string.authenticate_progress));
-            for (int i = 0; i < sortedBarcodeValues.size(); i++){
-                Log.d(TAG, "receiveDetections: " + sortedBarcodeValues.get(i));
-                TryAuthAsyncTask asyncTask = new TryAuthAsyncTask(AuthScanActivity.this);
-                asyncTask.execute(sortedBarcodeValues.get(i));
-            }
-            Log.d(TAG, "receiveDetections: " + sortedBarcodesSize);
-            sortedBarcodesSize = sortedBarcodeValues.size();
+            sendAuthRequest();
         }
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void sendAuthRequest(){
+        if (!animated){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    animated = true;
+                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, -authScanCard.getHeight());
+                    translateAnimation.setDuration(250);
+                    translateAnimation.setFillAfter(true);
+                    translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
+                    authScanCard.setY(cameraView.getHeight());
+                    authScanCard.setVisibility(View.VISIBLE);
+                    authScanCard.startAnimation(translateAnimation);
+                    Log.d(TAG, "run: animated");
+                }
+            });
+        }
+        authScanProgressBar.setVisibility(View.VISIBLE);
+        authScanTitle.setText(getResources().getString(R.string.authenticate_progress));
+        for (int i = 0; i < sortedBarcodeValues.size(); i++){
+            Log.d(TAG, "receiveDetections: " + sortedBarcodeValues.get(i));
+            TryAuthAsyncTask asyncTask = new TryAuthAsyncTask(AuthScanActivity.this);
+            asyncTask.execute(sortedBarcodeValues.get(i));
+        }
+        Log.d(TAG, "receiveDetections: " + sortedBarcodesSize);
+        sortedBarcodesSize = sortedBarcodeValues.size();
     }
 
     private void requestCameraPermission() {
@@ -240,6 +254,13 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         } else {
             authScanProgressBar.setVisibility(View.INVISIBLE);
             authScanTitle.setText(getResources().getString(R.string.no_such_authkey));
+        }
+    }
+
+    public void addBarcode(String code){
+        if (code.length() == getResources().getInteger(R.integer.accountnumberlength) + getResources().getInteger(R.integer.auth_key_length) && !sortedBarcodeValues.contains(code)){
+            sortedBarcodeValues.add(code);
+            Log.d(TAG, "receiveDetections: Barcode " + code + " added");
         }
     }
 }

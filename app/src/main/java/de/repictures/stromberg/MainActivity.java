@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
+import de.repictures.stromberg.Fragments.CompanyLoginDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -77,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_inbox:
                 break;
             case R.id.main_domain:
-                i = new Intent(MainActivity.this, CompanyActivity.class);
-                startActivity(i);
+                CompanyLoginDialogFragment fragment = new CompanyLoginDialogFragment();
+                fragment.show(getSupportFragmentManager(), "CompanyLoginDialogFragment");
                 break;
             case R.id.main_scan:
                 i = new Intent(MainActivity.this, ScanProductActivity.class);

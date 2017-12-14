@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground" android:id="@+id/orders_list_relative_layout">
+
+    <TextView
+        android:paddingTop="12dp"
+        android:id="@+id/order_list_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Mon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/transfer_date_color"
+        android:layout_toLeftOf="@+id/order_list_company_name"
+        android:layout_toStartOf="@+id/order_list_company_name" />
+
+    <TextView
+        android:textSize="10sp"
+        android:textColor="@color/transfer_date_color"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="12dp"
+        android:id="@+id/order_list_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00 Uhr"
+        android:layout_below="@+id/order_list_day"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:textSize="9sp"
+        android:paddingTop="12dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:id="@+id/order_list_amount_cents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="99"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:textSize="14sp"
+        android:paddingTop="12dp"
+        android:id="@+id/order_list_amount_euros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-999,"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/order_list_amount_cents"
+        android:layout_toStartOf="@+id/order_list_amount_cents" />
+
+    <TextView
+        android:id="@+id/order_list_company_name"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:maxLines="1"
+        android:text="TextView"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/order_list_time"
+        android:layout_toRightOf="@+id/order_list_time"
+        android:layout_toEndOf="@+id/order_list_time"
+        android:layout_toLeftOf="@id/order_list_amount_euros"
+        android:layout_toStartOf="@id/order_list_amount_euros"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/order_list_company_name"
+        android:background="@color/light_grey"/>
+</RelativeLayout>

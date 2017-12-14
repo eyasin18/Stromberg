@@ -8,6 +8,7 @@
     <string-array name="featuresNames" translatable="false">
         <item>Produkt hinzufügen</item>
         <item>QR-Code hinzufügen</item>
+        <item>Kaufaufträge</item>
         <item>Rechte zuweisen</item>
         <item>Account erstellen</item>
     </string-array>

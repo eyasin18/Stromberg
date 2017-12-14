@@ -5,6 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -87,24 +90,70 @@ public class Internet {
         }
     }
 
+    public MimeMultipart doPostMultipart(String urlStr, String contentType){
+        try {
+            Log.d(TAG, "doPostString: " + urlStr);
+            URL postUrl = new URL(urlStr);
+
+            HttpURLConnection httpURLConnection = (HttpURLConnection) postUrl.openConnection();
+            httpURLConnection.setUseCaches(false);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+
+            Log.d(TAG, "doPostString: " + httpURLConnection.getResponseCode());
+            InputStream postInputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+            ByteArrayDataSource dataSource = new ByteArrayDataSource(postInputStream, contentType);
+            return new MimeMultipart(dataSource);
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public String parseTextBodyPart(MimeMultipart multipart, int position){
         try {
             int count = multipart.getCount();
             Log.d(TAG, "parseTextBodyPart: Multipart content count: " + count);
-                BodyPart bodyPart = multipart.getBodyPart(position);
-                if (bodyPart.isMimeType("text/plain")){
-                    Log.d(TAG, "parseTextBodyPart: bodypart no. " + position + ": " + String.valueOf(bodyPart.getContent()));
-                    return URLDecoder.decode(String.valueOf(bodyPart.getContent()), "UTF-8").trim();
-                } else {
-                    Log.d(TAG, "parseTextBodyPart: BodyPart is not text/plain");
-                    return null;
-                }
-
+            BodyPart bodyPart = multipart.getBodyPart(position);
+            if (bodyPart.isMimeType("text/plain")){
+                Log.d(TAG, "parseTextBodyPart: bodypart no. " + position + ": " + String.valueOf(bodyPart.getContent()));
+                return URLDecoder.decode(String.valueOf(bodyPart.getContent()), "UTF-8").trim();
+            } else {
+                Log.d(TAG, "parseTextBodyPart: BodyPart is not text/plain");
+                return null;
+            }
         } catch (MessagingException | IOException e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    public JSONObject parseJsonBodyPart(MimeMultipart multipart, int position){
+        try {
+            int count = multipart.getCount();
+            Log.d(TAG, "parseTextBodyPart: Multipart content count: " + count);
+            BodyPart bodyPart = multipart.getBodyPart(position);
+            if (bodyPart.isMimeType("text/plain")){
+                String jsonString = String.valueOf(bodyPart.getContent());
+                Log.d(TAG, "parseTextBodyPart: bodypart no. " + position + ": " + jsonString);
+                return new JSONObject(jsonString);
+            } else if (bodyPart.isMimeType("application/json")){
+                String jsonString = String.valueOf(bodyPart.getContent());
+                Log.d(TAG, "parseTextBodyPart: bodypart no. " + position + ": " + jsonString);
+                return new JSONObject(jsonString);
+            }
+            else {
+                Log.d(TAG, "parseTextBodyPart: BodyPart is not application/json");
+                return null;
+            }
+        } catch (MessagingException | IOException | JSONException e){
+            Log.e(TAG, "parseJsonBodyPart: ", e);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

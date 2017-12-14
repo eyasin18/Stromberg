@@ -24,6 +24,7 @@ import de.repictures.stromberg.R;
 
 public class FingerhutFirebaseMessagingService extends FirebaseMessagingService {
 
+    public static String ORDERS_UPDATE_BROADCAST_ACTION = "de.repictures.stromberg.ORDERS_UPDATE";
     private static String TAG = "FFbMessagingService";
     private NotificationManager mNotificationManager;
     private String notificationChannelId = "fingerhut_notfication_channel";
@@ -67,6 +68,13 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
                 break;
             case "1":
                 Log.d(TAG, "onMessageReceived: Message from Company Shopping Requests Update: " + remoteMessage.getData().get("updateKey"));
+                Intent broadcast = new Intent();
+                String[] dataNames = {"amounts", "buyerAccountnumber", "dateTime", "isSelfBuys", "number", "prices", "productCodes"};
+                for (String dataName : dataNames) {
+                    broadcast.putExtra(dataName, remoteMessage.getData().get(dataName));
+                }
+                broadcast.setAction(ORDERS_UPDATE_BROADCAST_ACTION);
+                sendBroadcast(broadcast);
                 break;
             default:
                 break;
@@ -85,7 +93,7 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
         mChannel.setDescription(description);
         mChannel.enableLights(true);
         // Sets the notification light color for notifications posted to this
-        // channel, if the device supports this feature.
+        // channel, if the device supports this product.
         mChannel.setLightColor(Color.GREEN);
         mChannel.enableVibration(true);
         mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});

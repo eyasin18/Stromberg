@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/company_login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:layout_centerHorizontal="true"
+        style="@style/TextAppearance.AppCompat.Title"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/company_login_password_edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/company_login_accountnumber_text"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:id="@+id/company_login_password_edit"
+            android:maxLength="4"
+            android:layout_alignParentTop="true"
+            android:hint="@string/pin"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/company_login_accountnumber_text_label"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
+        android:layout_below="@+id/company_login_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/company_number"
+        android:textSize="12sp"
+        android:gravity="bottom"/>
+
+    <TextView
+        android:id="@+id/company_login_accountnumber_text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
+        android:paddingTop="6dp"
+        android:layout_below="@+id/company_login_accountnumber_text_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/error"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/company_login_login_button"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/company_login_password_edit_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:theme="@style/LoginButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/login"
+        android:textColor="#ffffff"
+        android:padding="4dp"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/company_login_login_button"
+        android:layout_alignLeft="@+id/company_login_login_button"
+        android:layout_alignStart="@+id/company_login_login_button"
+        android:id="@+id/company_login_progress_bar"
+        android:layout_alignBottom="@+id/company_login_login_button"
+        android:layout_alignRight="@+id/company_login_login_button"
+        android:layout_alignEnd="@+id/company_login_login_button"
+        android:padding="10dp"
+        android:elevation="2dp"
+        android:visibility="invisible"
+        style="@style/LoginProgressBar"/>
+
+    <TextView
+        android:padding="4dp"
+        android:text="@string/cancel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_alignTop="@+id/company_login_login_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:id="@+id/company_login_cancel"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        style="@style/TextAppearance.AppCompat.Subhead" />
+</RelativeLayout>

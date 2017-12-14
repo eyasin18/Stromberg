@@ -116,4 +116,8 @@
     <string name="error_price_empty">Du musst deinem Produkt einen Preis geben</string>
     <string name="error_product_name_empty">Du musst deinem Produkt einen Namen geben</string>
     <string name="title_add_product">Produkt hinzufügen</string>
+    <string name="title_order_list">Bestellungen</string>
+    <string name="title_order_detail">Bestellungsdetails</string>
+    <string name="edit_auth_code">Authentifizierungscode bearbeiten</string>
+    <string name="company_number">Unternehmensnummer</string>
 </resources>

@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
     public static String COMPANY_NUMBER = "0002";
+    public static String WEBSTRING = "";
     public static String DEVICE_TOKEN = "";
 
     public boolean loginButtonClicked = false;
