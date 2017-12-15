@@ -18,9 +18,10 @@ import de.repictures.stromberg.R;
 
 public class OrderDetailFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
     private OrderDetailListAdapter mAdapter;
+    public boolean valuesChanged = false;
     public ArrayList<String> productCodesList;
+    public ArrayList<String> productNamesList;
     public ArrayList<Integer> amountsList;
     public ArrayList<Boolean> isSelfBuysList;
     public ArrayList<Double> pricesList;
@@ -30,7 +31,8 @@ public class OrderDetailFragment extends Fragment {
             ARG_IS_SELF_BUYS_ARRAY_ID = "is_self_buys_array_id",
             ARG_NUMBER_ID = "number_id",
             ARG_PRICES_ARRAY_ID = "prices_array_id",
-            ARG_PRODUCT_CODES_ID = "product_codes_id";
+            ARG_PRODUCT_CODES_ID = "product_codes_id",
+            ARG_PRODUCT_NAMES_ID = "product_names_id";
 
     public OrderDetailFragment() {
     }
@@ -50,6 +52,8 @@ public class OrderDetailFragment extends Fragment {
         }
         String[] productCodesArray = getArguments().getStringArray(ARG_PRODUCT_CODES_ID);
         this.productCodesList = new ArrayList<>(Arrays.asList(productCodesArray));
+        String[] productNamesArray = getArguments().getStringArray(ARG_PRODUCT_NAMES_ID);
+        this.productNamesList = new ArrayList<>(Arrays.asList(productNamesArray));
         int[] amountsArray = getArguments().getIntArray(ARG_AMOUNTS_ARRAY_ID);
         this.amountsList = new ArrayList<Integer>() {{ for (int i : amountsArray) add(i); }};
         boolean[] isSelfBuysArray = getArguments().getBooleanArray(ARG_IS_SELF_BUYS_ARRAY_ID);
@@ -64,7 +68,7 @@ public class OrderDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.order_detail, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.order_detail);
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.order_detail);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -74,8 +78,7 @@ public class OrderDetailFragment extends Fragment {
         return rootView;
     }
 
-    public void updateItem(int position) {
-        productCodesList.set(position, "blub");
+    public void updateAdapter() {
         mAdapter.notifyDataSetChanged();
     }
 }

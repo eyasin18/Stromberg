@@ -2,7 +2,13 @@ package de.repictures.stromberg.Adapters;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +50,7 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<OrderDetailList
     public void onBindViewHolder(OrderDetailListViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: executed");
         holder.setClickListener(this);
-        holder.product.setText(orderDetailFragment.productCodesList.get(position));
+        holder.product.setText(orderDetailFragment.productNamesList.get(position));
         holder.amount.setText(String.valueOf(orderDetailFragment.amountsList.get(position)));
     }
 
@@ -58,11 +64,12 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<OrderDetailList
         switch (v.getId()){
             case R.id.order_detail_list_product_layout:
                 EditOrderItemDialogFragment editOrderItemDialogFragment = new EditOrderItemDialogFragment();
+                editOrderItemDialogFragment.setOrderDetailFragment(orderDetailFragment);
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 editOrderItemDialogFragment.setArguments(args);
                 FragmentManager fm = orderDetailFragment.getFragmentManager();
-                editOrderItemDialogFragment.show(fm, "ShowTransferDetailDialogFragment");
+                editOrderItemDialogFragment.show(fm, "ShowEditOrderItemDialogFragment");
                 break;
             case R.id.order_detail_list_product_delete:
                 orderDetailFragment.productCodesList.remove(position);

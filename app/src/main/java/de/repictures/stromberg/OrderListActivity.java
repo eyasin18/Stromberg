@@ -77,6 +77,7 @@ public class OrderListActivity extends AppCompatActivity {
     private List<Integer> numbers = new ArrayList<>();
     private List<double[]> prices = new ArrayList<>();
     private List<String[]> productCodes = new ArrayList<>();
+    private List<String[]> productNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,7 @@ public class OrderListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.order_list);
         assert recyclerView != null;
-        mAdapter = new OrdersListAdapter(this, mTwoPane, amountsList, buyerAccountnumbers, dateTimes, isSelfBuys, numbers, prices, productCodes);
+        mAdapter = new OrdersListAdapter(this, mTwoPane, amountsList, buyerAccountnumbers, dateTimes, isSelfBuys, numbers, prices, productCodes, productNames);
         recyclerView.setAdapter(mAdapter);
 
         refreshLayout.setRefreshing(true);
@@ -170,7 +171,7 @@ public class OrderListActivity extends AppCompatActivity {
                                List<boolean[]> isSelfBuys,
                                List<Integer> numbers,
                                List<double[]> prices,
-                               List<String[]> productCodes) {
+                               List<String[]> productCodes, List<String[]> productNames) {
 
         this.amountsList.clear();
         this.amountsList.addAll(amountsList);
@@ -186,6 +187,8 @@ public class OrderListActivity extends AppCompatActivity {
         this.prices.addAll(prices);
         this.productCodes.clear();
         this.productCodes.addAll(productCodes);
+        this.productNames.clear();
+        this.productNames.addAll(productNames);
         mAdapter.notifyDataSetChanged();
         refreshLayout.setRefreshing(false);
     }
@@ -205,6 +208,7 @@ public class OrderListActivity extends AppCompatActivity {
         String[] pricesStr = intent.getStringExtra("prices").split("ò");
         prices.add(0, stringToDoubleConverter.convert(double[].class, pricesStr));
         productCodes.add(0, intent.getStringExtra("productCodes").split("ò"));
+        productNames.add(0, intent.getStringExtra("productNames").split("ò"));
 
         mAdapter.notifyItemInserted(0);
     }

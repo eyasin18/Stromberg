@@ -98,8 +98,10 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
         barcodeDetector.setProcessor(this);
+
         mCameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setRequestedPreviewSize(height/ 2, width / 2)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setAutoFocusEnabled(true)
                 .build();
     }
@@ -111,14 +113,13 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 try {
                     if (ActivityCompat.checkSelfPermission(AuthScanActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(AuthScanActivity.this, Manifest.permission.CAMERA)){
-
-                        } else {
+                        if (!ActivityCompat.shouldShowRequestPermissionRationale(AuthScanActivity.this, Manifest.permission.CAMERA)) {
                             ActivityCompat.requestPermissions(AuthScanActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
                         }
                     }
                     mCameraSource.start(cameraView.getHolder());
                 } catch (IOException e) {
+                    Log.e(TAG, "surfaceCreated: ", e);
                     e.printStackTrace();
                 }
             }

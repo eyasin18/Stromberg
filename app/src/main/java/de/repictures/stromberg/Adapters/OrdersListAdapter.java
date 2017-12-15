@@ -29,6 +29,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
     private final List<Integer> numbers;
     private final List<double[]> prices;
     private final List<String[]> productCodes;
+    private List<String[]> productNames;
     private final OrderListActivity mParentActivity;
 
     public OrdersListAdapter(OrderListActivity orderListActivity,
@@ -39,7 +40,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
                              List<boolean[]> isSelfBuys,
                              List<Integer> numbers,
                              List<double[]> prices,
-                             List<String[]> productCodes) {
+                             List<String[]> productCodes, List<String[]> productNames) {
 
         this.mParentActivity = orderListActivity;
         this.mTwoPane = mTwoPane;
@@ -50,6 +51,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
         this.numbers = numbers;
         this.prices = prices;
         this.productCodes = productCodes;
+        this.productNames = productNames;
     }
 
     @Override
@@ -119,6 +121,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
             arguments.putInt(OrderDetailFragment.ARG_NUMBER_ID, numbers.get(position));
             arguments.putDoubleArray(OrderDetailFragment.ARG_PRICES_ARRAY_ID, prices.get(position));
             arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_CODES_ID, productCodes.get(position));
+            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, productNames.get(position));
 
             OrderDetailFragment fragment = new OrderDetailFragment();
             fragment.setArguments(arguments);
@@ -134,6 +137,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
             intent.putExtra(OrderDetailFragment.ARG_NUMBER_ID, numbers.get(position));
             intent.putExtra(OrderDetailFragment.ARG_PRICES_ARRAY_ID, prices.get(position));
             intent.putExtra(OrderDetailFragment.ARG_PRODUCT_CODES_ID, productCodes.get(position));
+            intent.putExtra(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, productNames.get(position));
 
             context.startActivity(intent);
         }

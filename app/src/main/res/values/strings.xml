@@ -138,6 +138,10 @@
     <string name="edit_auth_code">Edit authentification code</string>
     <string name="company_number">Company number</string>
     <string name="no_company_found">There was no company with this account number found</string>
+    <string name="price">Price</string>
+    <string name="product_code">Barcode</string>
+    <string name="change">Change</string>
+    <string name="update_item">Update item</string>
 
 
 </resources>

@@ -22,7 +22,7 @@
     <string name="cancel">Abbrechen</string>
     <string name="optionee">Begünstigter</string>
     <string name="title_activity_transfer_dialog_fragment">Neue Überweisung</string>
-    <string name="amount">Betrag</string>
+    <string name="amount">Anzahl</string>
     <string name="execute_later">Später ausführen</string>
     <string name="execute_at">Ausführen am</string>
     <string name="purpose">Verwendungszweck</string>
@@ -120,4 +120,9 @@
     <string name="title_order_detail">Bestellungsdetails</string>
     <string name="edit_auth_code">Authentifizierungscode bearbeiten</string>
     <string name="company_number">Unternehmensnummer</string>
+    <string name="no_company_found">Es gibt kein Unternehmen mit dieser Kontonummer</string>
+    <string name="price">Preis</string>
+    <string name="product_code">Barcode</string>
+    <string name="change">Ändern</string>
+    <string name="update_item">Item überarbeiten</string>
 </resources>

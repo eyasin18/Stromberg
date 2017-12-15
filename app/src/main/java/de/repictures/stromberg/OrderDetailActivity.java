@@ -57,6 +57,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID, getIntent().getStringExtra(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID));
             arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_CODES_ID, getIntent().getStringArrayExtra(OrderDetailFragment.ARG_PRODUCT_CODES_ID));
+            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, getIntent().getStringArrayExtra(OrderDetailFragment.ARG_PRODUCT_NAMES_ID));
             arguments.putDoubleArray(OrderDetailFragment.ARG_PRICES_ARRAY_ID, getIntent().getDoubleArrayExtra(OrderDetailFragment.ARG_PRICES_ARRAY_ID));
             arguments.putInt(OrderDetailFragment.ARG_NUMBER_ID, getIntent().getIntExtra(OrderDetailFragment.ARG_NUMBER_ID, 0));
             arguments.putBooleanArray(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID, getIntent().getBooleanArrayExtra(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID));

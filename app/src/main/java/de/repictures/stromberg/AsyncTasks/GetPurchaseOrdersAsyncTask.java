@@ -45,7 +45,8 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<String, Void, MimeMult
                 List<Integer> numbers = GeneralUtils.parseJsonIntArray(jsonObject, "numbers");
                 List<double[]> prices = GeneralUtils.parseNestedJsonDoubleArray(jsonObject, "prices");
                 List<String[]> productCodes = GeneralUtils.parseNestedJsonStringArray(jsonObject, "productCodes");
-                orderListActivity.refreshAdapter(amountsList, buyerAccountnumbers, dateTimes, isSelfBuys, numbers, prices, productCodes);
+                List<String[]> productNames = GeneralUtils.parseNestedJsonStringArray(jsonObject, "productNames");
+                orderListActivity.refreshAdapter(amountsList, buyerAccountnumbers, dateTimes, isSelfBuys, numbers, prices, productCodes, productNames);
                 break;
         }
     }
