@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -280,7 +281,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     }
 
     public void receiveResult(String[][] products){
-        showScanProgressBar(false);
         for (final String[] product : products){
             if (productsList.size() > 0) Log.d(TAG, "receiveResult: \n" + product[2] + "\n" + productsList.get(0)[2]);
             if (productsList.size() > 0 && !product[2].equals(productsList.get(0)[2])){
@@ -302,6 +302,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             }
         }
         shoppingAdapter.notifyDataSetChanged();
+        showScanProgressBar(false);
         if (shoppingAdapter.getItemCount() > 0){
             checkoutButton.setEnabled(true);
         }
@@ -434,7 +435,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                floatingActionButton.setImageDrawable(show ? null : getResources().getDrawable(R.drawable.ic_cart_outline_white_48dp));
+                floatingActionButton.setImageDrawable(show ? null : getFloatingActionButtonIcon());
                 scanProgressBar.setVisibility(show && !slideUp.isVisible() ? View.VISIBLE : View.INVISIBLE);
             }
         });
@@ -451,5 +452,45 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
 
     public void enableCheckoutButton(boolean enabled){
         checkoutButton.setEnabled(enabled);
+    }
+
+    private Drawable getFloatingActionButtonIcon(){
+        int iconId;
+        switch (shoppingAdapter.getItemCount()){
+            case 0:
+                iconId = R.drawable.ic_cart_0;
+                break;
+            case 1:
+                iconId = R.drawable.ic_cart_1;
+                break;
+            case 2:
+                iconId = R.drawable.ic_cart_2;
+                break;
+            case 3:
+                iconId = R.drawable.ic_cart_3;
+                break;
+            case 4:
+                iconId = R.drawable.ic_cart_4;
+                break;
+            case 5:
+                iconId = R.drawable.ic_cart_5;
+                break;
+            case 6:
+                iconId = R.drawable.ic_cart_6;
+                break;
+            case 7:
+                iconId = R.drawable.ic_cart_7;
+                break;
+            case 8:
+                iconId = R.drawable.ic_cart_8;
+                break;
+            case 9:
+                iconId = R.drawable.ic_cart_9;
+                break;
+            default:
+                iconId = R.drawable.ic_cart_9_plus;
+                break;
+        }
+        return getResources().getDrawable(iconId);
     }
 }
