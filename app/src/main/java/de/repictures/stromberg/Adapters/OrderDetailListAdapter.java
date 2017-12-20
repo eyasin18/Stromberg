@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,10 @@ import de.repictures.stromberg.Fragments.OrderDetailFragment;
 import de.repictures.stromberg.R;
 import de.repictures.stromberg.TransfersActivity;
 
-public class OrderDetailListAdapter extends RecyclerView.Adapter<OrderDetailListViewHolder> implements OrderDetailListViewHolder.ClickListener {
+public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OrderDetailListViewHolder.ClickListener {
+
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_FINISH = 1;
 
     private static final String TAG = "TransferListAdapter";
     private Activity activity;
@@ -40,23 +44,54 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<OrderDetailList
         this.orderDetailFragment = orderDetailFragment;
     }
 
-    @Override
-    public OrderDetailListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_list, parent, false);
-        return new OrderDetailListViewHolder(v);
+    private class FinishButtonViewHolder extends RecyclerView.ViewHolder {
+        Button finishButon;
+
+        FinishButtonViewHolder(View view) {
+            super(view);
+            finishButon = (Button) view.findViewById(R.id.order_detail_list_finish_button);
+        }
     }
 
     @Override
-    public void onBindViewHolder(OrderDetailListViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: executed");
-        holder.setClickListener(this);
-        holder.product.setText(orderDetailFragment.productNamesList.get(position));
-        holder.amount.setText(String.valueOf(orderDetailFragment.amountsList.get(position)));
+    public int getItemViewType(int position) {
+        return (position >= 0) && (position < orderDetailFragment.productCodesList.size()) ? VIEW_TYPE_ITEM : VIEW_TYPE_FINISH;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_ITEM) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_list, parent, false);
+            return new OrderDetailListViewHolder(v);
+        } else if (viewType == VIEW_TYPE_FINISH){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_list, parent, false);
+            return new FinishButtonViewHolder(v);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof OrderDetailListViewHolder) {
+            OrderDetailListViewHolder itemHolder = (OrderDetailListViewHolder) holder;
+            Log.d(TAG, "onBindViewHolder: executed");
+            itemHolder.setClickListener(this);
+            itemHolder.product.setText(orderDetailFragment.productNamesList.get(position));
+            itemHolder.amount.setText(String.valueOf(orderDetailFragment.amountsList.get(position)));
+        } else if (holder instanceof FinishButtonViewHolder){
+            FinishButtonViewHolder finishHolder = (FinishButtonViewHolder) holder;
+            finishHolder.finishButon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    orderDetailFragment.showConfirmationDialog();
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return orderDetailFragment.productCodesList.size();
+        return orderDetailFragment.productCodesList.size() + 1;
     }
 
     @Override

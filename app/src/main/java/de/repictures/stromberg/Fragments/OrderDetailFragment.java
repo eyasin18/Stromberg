@@ -81,4 +81,12 @@ public class OrderDetailFragment extends Fragment {
     public void updateAdapter() {
         mAdapter.notifyDataSetChanged();
     }
+
+    public void showConfirmationDialog(){
+
+    }
+
+    public void finishOrder(){
+
+    }
 }
