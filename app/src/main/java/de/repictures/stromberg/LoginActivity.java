@@ -1,6 +1,5 @@
 package de.repictures.stromberg;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +27,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
-import java.security.PrivateKey;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static String ACCOUNTNUMBER = "";
     public static String COMPANY_NUMBER = "0002";
     public static String WEBSTRING = "";
+    public static List<Integer> FEATURES = new ArrayList<>();
     public static String DEVICE_TOKEN = "";
 
     public boolean loginButtonClicked = false;

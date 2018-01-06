@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.R;
 import de.repictures.stromberg.ScanProductActivity;
 

@@ -17,10 +17,7 @@ import android.widget.TextView;
 import de.repictures.stromberg.AsyncTasks.CompanyLoginAsyncTask;
 import de.repictures.stromberg.CompanyActivity;
 import de.repictures.stromberg.LoginActivity;
-import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.R;
-
-import static android.support.v4.app.NavUtils.navigateUpTo;
 
 public class CompanyLoginDialogFragment extends DialogFragment implements View.OnClickListener {
 

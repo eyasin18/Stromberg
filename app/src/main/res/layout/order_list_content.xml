@@ -15,13 +15,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="@color/transfer_date_color"
+        android:textColor="@color/grey"
         android:layout_toLeftOf="@+id/order_list_company_name"
         android:layout_toStartOf="@+id/order_list_company_name" />
 
     <TextView
         android:textSize="10sp"
-        android:textColor="@color/transfer_date_color"
+        android:textColor="@color/grey"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingBottom="12dp"
@@ -42,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="99"
+        android:textColor="@color/grey"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -53,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-999,"
+        android:textColor="@color/grey"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/order_list_amount_cents"
         android:layout_toStartOf="@+id/order_list_amount_cents" />
@@ -66,6 +68,7 @@
         android:paddingRight="16dp"
         android:maxLines="1"
         android:text="TextView"
+        android:textColor="@color/grey"
         android:gravity="center_vertical"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/order_list_time"

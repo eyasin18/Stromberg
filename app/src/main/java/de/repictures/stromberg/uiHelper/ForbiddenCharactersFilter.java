@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.text.InputFilter;
 import android.text.Spanned;
 
-import java.util.Arrays;
-
 import de.repictures.stromberg.R;
 
 public class ForbiddenCharactersFilter implements InputFilter {

@@ -38,7 +38,7 @@
     <string name="purpose">Purpose</string>
     <string name="oclock" />
     <string name="error_owner_empty">There must be an optionee</string>
-    <string name="transfer_success">Transfer was successfull</string>
+    <string name="transfer_success">Transfer was successful</string>
     <string name="transfer_receiver_not_exist">The given receiver does not exist</string>
     <string name="transfer_no_money">You don\'t have enough money</string>
     <string name="error_account_empty" translatable="false">You have to give an accountnumber</string>
@@ -98,13 +98,13 @@
     <string name="wrong_auth">You are not athentificated for this account</string>
     <string name="internet_problems">Network error: check your internet connection</string>
     <string name="no_such_authkey">This is not a valid authentification key</string>
-    <string name="authenticate_progress">Authentificate...</string>
+    <string name="authenticate_progress">Authentificate…</string>
     <string name="OK">OK</string>
     <string name="show_transfer_detail_dialog_title">Transfer from %1$2s at %2$2s</string>
     <string name="transfer_type">Type</string>
     <string name="transfer_sender">Sender</string>
     <string name="transfer_receiver">Receiver</string>
-    <string name="send_transfer_loading">Sending transfer...</string>
+    <string name="send_transfer_loading">Sending transfer…</string>
     <string name="notification_channel_name">Fingerhut</string>
     <string name="notification_channel_description">All messages postet from Fingerhut will be displayed here</string>
     <string name="new_transfer_notification_title">New transfer</string>
@@ -128,7 +128,7 @@
     <string name="customer_can_buy_product_by_himself">Customer can buy the product by himself</string>
     <string name="barcode_not_available">There is already a Product with this Code</string>
     <string name="send_product_success">Product was added successfully to your assortment</string>
-    <string name="send_product_loading">Sending Product...</string>
+    <string name="send_product_loading">Sending Product…</string>
     <string name="title_add_product">Add Product</string>
     <string name="error_barcode_wrong_length">This is not a valid product code</string>
     <string name="error_product_name_empty">You have to give your product a name</string>
@@ -142,6 +142,15 @@
     <string name="product_code">Barcode</string>
     <string name="change">Change</string>
     <string name="update_item">Update item</string>
+    <string name="title">Title</string>
+    <string name="complete_purchase_order">Complete purchase order</string>
+    <string name="confirmation_completed">Comfirmation completed</string>
+    <string name="login_again">Login again</string>
+    <string name="downloading_products">Downloading products…</string>
+    <string name="price_cannot_be_raised">Price cannot be raised</string>
+    <string name="add_purchase_order">Add purchase order</string>
+    <string name="enter_accountnumber_of_buyer">Enter the account number of the buyer</string>
+    <string name="old_app_version">Your app is not up to date! Please update!</string>
 
 
 </resources>

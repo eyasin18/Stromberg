@@ -69,7 +69,7 @@
     <string name="wrong_auth">Du bist für diesen Account nicht authentifiziert</string>
     <string name="internet_problems">Netzwerkfehler: Überprüfe deine Internetverbindung</string>
     <string name="no_such_authkey">Dies ist kein gültiger Authentifikationsschlüssel</string>
-    <string name="authenticate_progress">Authentifiziere...</string>
+    <string name="authenticate_progress">Authentifiziere…</string>
     <string name="OK">OK</string>
     <string name="no_camera_permission">Diese App hat keinen Zugriff auf die Kamera. Sie wird sich nun selbst zerstören!</string>
     <string name="ocr_error">\"Fehler beim lesen des Texts: %1$s\"</string>
@@ -88,7 +88,7 @@
     <string name="transfer_type">Art</string>
     <string name="transfer_receiver">Empfänger</string>
     <string name="transfer_sender">Auftraggeber</string>
-    <string name="send_transfer_loading">Überweisung wird gesendet...</string>
+    <string name="send_transfer_loading">Überweisung wird gesendet…</string>
     <string name="new_transfer_notification_body">Es ist eine neue Überweisung auf das Konto mit der Kontonummer %1$2s eingegangen</string>
     <string name="new_transfer_notification_title">Neue Überweisung</string>
     <string name="notification_channel_description">Alle Benachrichtigungen von Fingerhut werden hier angezeigt</string>
@@ -110,7 +110,7 @@
     <string name="session_invalid">Session abgelaufen</string>
     <string name="barcode_not_available">Es gibt bereits ein Produkt mit diesem Produktcode</string>
     <string name="customer_can_buy_product_by_himself">Kunde kann sich das Produkt selbst kaufen</string>
-    <string name="send_product_loading">Produkt wird gesendet...</string>
+    <string name="send_product_loading">Produkt wird gesendet…</string>
     <string name="send_product_success">Produkt wurde gespeichert</string>
     <string name="error_barcode_wrong_length">Dies ist kein gültiger Barcode</string>
     <string name="error_price_empty">Du musst deinem Produkt einen Preis geben</string>
@@ -125,4 +125,13 @@
     <string name="product_code">Barcode</string>
     <string name="change">Ändern</string>
     <string name="update_item">Item überarbeiten</string>
+    <string name="title">Titel</string>
+    <string name="complete_purchase_order">Kaufauftrag abschließen</string>
+    <string name="confirmation_completed">Kaufauftrag abgeschlossen</string>
+    <string name="login_again">Neu Anmelden</string>
+    <string name="downloading_products">Produkte werden heruntergeladen…</string>
+    <string name="add_purchase_order">Kaufauftrag hinzufügen</string>
+    <string name="enter_accountnumber_of_buyer">Kontonummer des Käufer eingeben</string>
+    <string name="price_cannot_be_raised">Preis kann nicht erhöht werden</string>
+    <string name="old_app_version">Diese App ist nicht aktuell! Bitte aktualisiere sie im PlayStore.</string>
 </resources>

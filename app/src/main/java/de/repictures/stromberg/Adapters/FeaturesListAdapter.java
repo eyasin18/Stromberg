@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import de.repictures.stromberg.Features.AddAuthKeyActivity;
 import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.CompanyActivity;
+import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
 import de.repictures.stromberg.R;
 
@@ -37,14 +38,14 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
 
     @Override
     public int getItemCount() {
-        return companyActivity.featuresList.size();
+        return companyActivity.featuresNames.size();
     }
 
     @Override
     public void onClick(View v, int position, boolean isLongClick) {
         Intent i;
-        String featureCodeStr = companyActivity.featuresList.get(position);
-        switch (Integer.parseInt(featureCodeStr)){
+        int featureCode = LoginActivity.FEATURES.get(position);
+        switch (featureCode){
             case 0:
                 i = new Intent(companyActivity, AddProductActivity.class);
                 companyActivity.startActivity(i);

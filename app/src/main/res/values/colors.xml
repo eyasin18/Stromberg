@@ -10,6 +10,7 @@
     <color name="balance_minus">#F44336</color>
     <color name="transfer_date_color">#2196F3</color>
     <color name="light_grey">#B6B6B6</color>
+    <color name="grey">#9E9E9E</color>
     <color name="dialog_background_color">#fafafa</color>
     <color name="dialog_background_scrim">#99323232</color>
 

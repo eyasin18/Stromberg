@@ -5,7 +5,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import de.repictures.stromberg.POJOs.Product;
 
 public class GeneralUtils {
 
@@ -130,4 +133,38 @@ public class GeneralUtils {
         }
     }
 
+    public static List<Boolean> parseJsonBooleanArray(JSONObject jsonObject, String name){
+        ArrayList<Boolean> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray(name);
+            int len = jsonArray.length();
+            for (int i=0;i<len;i++){
+                list.add(jsonArray.getBoolean(i));
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String arrayToString(ArrayList list){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Object object : list){
+            stringBuilder.append(String.valueOf(object)).append("ò");
+        }
+        return stringBuilder.toString();
+    }
+
+    public static Product[] appendProduct(Product[] productArray, Product newProduct) {
+        ArrayList<Product> products = new ArrayList<>(Arrays.asList(productArray));
+        products.add(newProduct);
+        return products.toArray(new Product[0]);
+    }
+
+    public static int[] appendInt(int[] a, int e) {
+        a  = Arrays.copyOf(a, a.length + 1);
+        a[a.length - 1] = e;
+        return a;
+    }
 }

@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.repictures.stromberg.Fragments.EditAccountnumberDialogFragment">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_accountnumber_accounnumber_layout"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="24dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/edit_accountnumber_accounnumber_edit"
+            android:maxLength="4"
+            android:layout_alignParentTop="true"
+            android:hint="@string/account_number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/edit_accountnumber_finish_button"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/edit_accountnumber_accounnumber_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:theme="@style/LoginButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/finish"
+        android:textColor="#ffffff"
+        android:padding="4dp"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/edit_accountnumber_finish_button"
+        android:layout_alignLeft="@+id/edit_accountnumber_finish_button"
+        android:layout_alignStart="@+id/edit_accountnumber_finish_button"
+        android:id="@+id/edit_accountnumber_progress_bar"
+        android:layout_alignBottom="@+id/edit_accountnumber_finish_button"
+        android:layout_alignRight="@+id/edit_accountnumber_finish_button"
+        android:layout_alignEnd="@+id/edit_accountnumber_finish_button"
+        android:padding="10dp"
+        android:elevation="2dp"
+        android:visibility="invisible"
+        style="@style/LoginProgressBar"/>
+
+    <TextView
+        android:padding="4dp"
+        android:text="@string/cancel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_alignTop="@+id/edit_accountnumber_finish_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:id="@+id/edit_accountnumber_cancel_button"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        style="@style/TextAppearance.AppCompat.Subhead" />
+
+</RelativeLayout>

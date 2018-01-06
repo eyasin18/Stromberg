@@ -5,40 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.ArrayConverter;
-import org.apache.commons.beanutils.converters.BooleanConverter;
-import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.beanutils.converters.IntegerConverter;
-import org.apache.commons.beanutils.converters.StringConverter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.repictures.stromberg.Adapters.OrdersListAdapter;
 import de.repictures.stromberg.AsyncTasks.GetPurchaseOrdersAsyncTask;
 import de.repictures.stromberg.Firebase.FingerhutFirebaseMessagingService;
-import de.repictures.stromberg.Fragments.OrderDetailFragment;
-import de.repictures.stromberg.dummy.DummyContent;
-
-import java.util.ArrayList;
-import java.util.List;
+import de.repictures.stromberg.POJOs.Product;
+import de.repictures.stromberg.POJOs.PurchaseOrder;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
@@ -70,14 +57,7 @@ public class OrderListActivity extends AppCompatActivity {
         }
     };
 
-    private List<int[]> amountsList = new ArrayList<>();
-    private List<String> buyerAccountnumbers = new ArrayList<>();
-    private List<String> dateTimes = new ArrayList<>();
-    private List<boolean[]> isSelfBuys = new ArrayList<>();
-    private List<Integer> numbers = new ArrayList<>();
-    private List<double[]> prices = new ArrayList<>();
-    private List<String[]> productCodes = new ArrayList<>();
-    private List<String[]> productNames = new ArrayList<>();
+    private List<PurchaseOrder> purchaseOrders = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +77,6 @@ public class OrderListActivity extends AppCompatActivity {
                 asyncTask.execute();
             }
         });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -122,7 +93,7 @@ public class OrderListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.order_list);
         assert recyclerView != null;
-        mAdapter = new OrdersListAdapter(this, mTwoPane, amountsList, buyerAccountnumbers, dateTimes, isSelfBuys, numbers, prices, productCodes, productNames);
+        mAdapter = new OrdersListAdapter(this, mTwoPane, purchaseOrders);
         recyclerView.setAdapter(mAdapter);
 
         refreshLayout.setRefreshing(true);
@@ -165,51 +136,68 @@ public class OrderListActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void refreshAdapter(List<int[]> amountsList,
-                               List<String> buyerAccountnumbers,
-                               List<String> dateTimes,
-                               List<boolean[]> isSelfBuys,
-                               List<Integer> numbers,
-                               List<double[]> prices,
-                               List<String[]> productCodes, List<String[]> productNames) {
-
-        this.amountsList.clear();
-        this.amountsList.addAll(amountsList);
-        this.buyerAccountnumbers.clear();
-        this.buyerAccountnumbers.addAll(buyerAccountnumbers);
-        this.dateTimes.clear();
-        this.dateTimes.addAll(dateTimes);
-        this.isSelfBuys.clear();
-        this.isSelfBuys.addAll(isSelfBuys);
-        this.numbers.clear();
-        this.numbers.addAll(numbers);
-        this.prices.clear();
-        this.prices.addAll(prices);
-        this.productCodes.clear();
-        this.productCodes.addAll(productCodes);
-        this.productNames.clear();
-        this.productNames.addAll(productNames);
+    public void refreshAdapter(List<PurchaseOrder> purchaseOrders) {
+        this.purchaseOrders.clear();
+        this.purchaseOrders.addAll(purchaseOrders);
         mAdapter.notifyDataSetChanged();
         refreshLayout.setRefreshing(false);
     }
 
     private void refreshAdapter(Intent intent) {
         ArrayConverter stringToIntConverter = new ArrayConverter(int[].class, new IntegerConverter());
-        ArrayConverter stringToDoubleConverter = new ArrayConverter(double[].class, new DoubleConverter());
-        ArrayConverter stringToBooleanConverter = new ArrayConverter(Boolean[].class, new BooleanConverter());
+
+        PurchaseOrder newPurchaseOrder = new PurchaseOrder();
 
         String[] amountsStr = intent.getStringExtra("amounts").split("ò");
-        amountsList.add(0, stringToIntConverter.convert(int[].class, amountsStr));
-        buyerAccountnumbers.add(0, intent.getStringExtra("buyerAccountnumber"));
-        dateTimes.add(0, intent.getStringExtra("dateTime"));
+        if (amountsStr.length > 0 && amountsStr[0].length() > 0) newPurchaseOrder.setAmounts(stringToIntConverter.convert(int[].class, amountsStr));
+        else newPurchaseOrder.setAmounts(new int[0]);
+        newPurchaseOrder.setBuyerAccountnumber(intent.getStringExtra("buyerAccountnumber"));
+        newPurchaseOrder.setDateTime(intent.getStringExtra("dateTime"));
+        newPurchaseOrder.setCompleted(Boolean.parseBoolean(intent.getStringExtra("completed")));
+        newPurchaseOrder.setMadeByUser(Boolean.parseBoolean(intent.getStringExtra("madeByUser")));
         String[] isSelfBuysStr = intent.getStringExtra("isSelfBuys").split("ò");
-        isSelfBuys.add(0, stringToBooleanConverter.convert(boolean[].class, isSelfBuysStr));
-        numbers.add(0, Integer.parseInt(intent.getStringExtra("number")));
         String[] pricesStr = intent.getStringExtra("prices").split("ò");
-        prices.add(0, stringToDoubleConverter.convert(double[].class, pricesStr));
-        productCodes.add(0, intent.getStringExtra("productCodes").split("ò"));
-        productNames.add(0, intent.getStringExtra("productNames").split("ò"));
+        String[] productCodesStr = intent.getStringExtra("productCodes").split("ò");
+        String[] productNamesStr = intent.getStringExtra("productNames").split("ò");
+        Product[] products;
+        if (isSelfBuysStr.length > 0 && isSelfBuysStr[0].length() > 0
+                && pricesStr.length > 0 && pricesStr[0].length() > 0
+                && productCodesStr.length > 0 && productCodesStr[0].length() > 0
+                && productNamesStr.length > 0 && productNamesStr[0].length() > 0){
+            products = new Product[isSelfBuysStr.length];
+            for (int i = 0; i < isSelfBuysStr.length; i++){
+                Product product = new Product();
+                product.setSelfBuy(Boolean.parseBoolean(isSelfBuysStr[i]));
+                product.setPrice(Double.parseDouble(pricesStr[i]));
+                product.setCode(productCodesStr[i]);
+                product.setName(productNamesStr[i]);
+                products[i] = product;
+            }
+        } else {
+            products = new Product[0];
+        }
+        newPurchaseOrder.setProducts(products);
 
-        mAdapter.notifyItemInserted(0);
+        purchaseOrders.add(0, newPurchaseOrder);
+        mAdapter.notifyItemInserted(1);
+    }
+
+    public void insertPurchaseOrder(PurchaseOrder purchaseOrder){
+        /*purchaseOrders.add(1, purchaseOrder);
+        mAdapter.notifyItemInserted(1);*/
+        /*if (mTwoPane) {
+            Bundle arguments = new Bundle();
+
+            OrderDetailFragment fragment = new OrderDetailFragment();
+            fragment.purchaseOrder = purchaseOrders.get(0);
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.order_detail_container, fragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
+            intent.putExtra("purchaseOrder", purchaseOrders.get(0));
+            startActivity(intent);
+        }*/
     }
 }

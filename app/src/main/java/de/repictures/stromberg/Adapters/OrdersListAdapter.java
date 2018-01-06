@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,116 +16,136 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import de.repictures.stromberg.Fragments.EditAccountnumberDialogFragment;
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
 import de.repictures.stromberg.OrderDetailActivity;
 import de.repictures.stromberg.OrderListActivity;
+import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
-public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder> implements OrdersListViewHolder.ClickListener {
+public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OrdersListViewHolder.ClickListener {
+
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_ADD_ORDER = 1;
 
     private final boolean mTwoPane;
-    private final List<int[]> amountsList;
-    private final List<String> buyerAccountnumbers;
-    private final List<String> dateTimes;
-    private final List<boolean[]> isSelfBuys;
-    private final List<Integer> numbers;
-    private final List<double[]> prices;
-    private final List<String[]> productCodes;
-    private List<String[]> productNames;
+    private List<PurchaseOrder> purchaseOrders;
     private final OrderListActivity mParentActivity;
 
     public OrdersListAdapter(OrderListActivity orderListActivity,
                              boolean mTwoPane,
-                             List<int[]> amountsList,
-                             List<String> buyerAccountnumbers,
-                             List<String> dateTimes,
-                             List<boolean[]> isSelfBuys,
-                             List<Integer> numbers,
-                             List<double[]> prices,
-                             List<String[]> productCodes, List<String[]> productNames) {
+                             List<PurchaseOrder> purchaseOrders) {
 
         this.mParentActivity = orderListActivity;
         this.mTwoPane = mTwoPane;
-        this.amountsList = amountsList;
-        this.buyerAccountnumbers = buyerAccountnumbers;
-        this.dateTimes = dateTimes;
-        this.isSelfBuys = isSelfBuys;
-        this.numbers = numbers;
-        this.prices = prices;
-        this.productCodes = productCodes;
-        this.productNames = productNames;
+        this.purchaseOrders = purchaseOrders;
     }
 
     @Override
-    public OrdersListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_list_content, parent, false);
-        return new OrdersListViewHolder(view);
+    public int getItemViewType(int position) {
+        return position > 0 ? VIEW_TYPE_ITEM : VIEW_TYPE_ADD_ORDER;
     }
 
     @Override
-    public void onBindViewHolder(final OrdersListViewHolder holder, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.GERMANY);
-        Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(sdf.parse(dateTimes.get(position)));
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_ITEM) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.order_list_content, parent, false);
+            return new OrdersListViewHolder(view);
+        } else if (viewType == VIEW_TYPE_ADD_ORDER){
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.order_list_content_add_order, parent, false);
+            return new AddPurchaseOrderViewHolder(view);
         }
-        holder.day.setText(mParentActivity.getResources().getStringArray(R.array.weekdays_short)[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-        holder.time.setText(time);
+        return null;
+    }
 
-        double priceSum = 0.0;
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(holder.getAdapterPosition()) == VIEW_TYPE_ITEM) {
+            OrdersListViewHolder itemHolder = (OrdersListViewHolder) holder;
+            int arrayPosition = position - 1;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.GERMANY);
+            Calendar calendar = Calendar.getInstance();
+            try {
+                calendar.setTime(sdf.parse(purchaseOrders.get(arrayPosition).getDateTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            itemHolder.day.setText(mParentActivity.getResources().getStringArray(R.array.weekdays_short)[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+            itemHolder.time.setText(time);
 
-        for (int i = 0; i < prices.get(position).length; i++) {
-            double price = prices.get(position)[i];
-            int amount = amountsList.get(position)[i];
-            priceSum += (price * amount);
+            double priceSum = 0.0;
+
+            for (int i = 0; i < purchaseOrders.get(arrayPosition).getAmounts().length; i++) {
+                double price = purchaseOrders.get(arrayPosition).getProducts()[i].getPrice();
+                int amount = purchaseOrders.get(arrayPosition).getAmounts()[i];
+                priceSum += (price * amount);
+            }
+            String amountWholeStr;
+            if (priceSum < 0.0) {
+                amountWholeStr = "-";
+                if (!purchaseOrders.get(arrayPosition).isCompleted())
+                    itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
+                if (!purchaseOrders.get(arrayPosition).isCompleted())
+                    itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
+            } else {
+                amountWholeStr = "+";
+                if (!purchaseOrders.get(arrayPosition).isCompleted())
+                    itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
+                if (!purchaseOrders.get(arrayPosition).isCompleted())
+                    itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
+            }
+            double priceSumFrac = priceSum % 1;
+            long priceSumWhole = (long) Math.abs(priceSum - priceSumFrac);
+            long priceSumFraction = Math.abs(Math.round((priceSumFrac) * 100));
+            amountWholeStr += String.valueOf(priceSumWhole);
+            String amountFractionStr = String.format(Locale.getDefault(), "%02d", priceSumFraction);
+            itemHolder.cents.setText(amountFractionStr);
+            itemHolder.euros.setText(amountWholeStr);
+
+            itemHolder.customer.setText(purchaseOrders.get(arrayPosition).getBuyerAccountnumber());
+
+            if (!purchaseOrders.get(arrayPosition).isCompleted()) {
+                itemHolder.day.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
+                itemHolder.time.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
+                itemHolder.customer.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
+            } else {
+                itemHolder.day.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
+                itemHolder.time.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
+                itemHolder.customer.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
+            }
+
+            itemHolder.setClickListener(this);
+        } else if (getItemViewType(holder.getAdapterPosition()) == VIEW_TYPE_ADD_ORDER){
+            AddPurchaseOrderViewHolder addHolder = (AddPurchaseOrderViewHolder) holder;
+            addHolder.addItemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("fuck off", "onClick: clicked");
+                    EditAccountnumberDialogFragment dialogFragment = new EditAccountnumberDialogFragment();
+                    dialogFragment.setOrderListActivity(mParentActivity);
+                    dialogFragment.show(mParentActivity.getSupportFragmentManager(), "blub");
+                }
+            });
         }
-        String amountWholeStr;
-        if (priceSum <= 0.0) {
-            amountWholeStr = "-";
-            holder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
-            holder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
-        } else {
-            amountWholeStr = "+";
-            holder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
-            holder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
-        }
-        double priceSumFrac = priceSum % 1;
-        long priceSumWhole = (long) Math.abs(priceSum - priceSumFrac);
-        long priceSumFraction = Math.abs(Math.round((priceSumFrac) * 100));
-        amountWholeStr += String.valueOf(priceSumWhole);
-        String amountFractionStr = String.format(Locale.getDefault(), "%02d", priceSumFraction);
-        holder.cents.setText(amountFractionStr);
-        holder.euros.setText(amountWholeStr);
-
-        holder.customer.setText(buyerAccountnumbers.get(position));
-
-        holder.setClickListener(this);
     }
 
     @Override
     public int getItemCount() {
-        return buyerAccountnumbers.size();
+        return purchaseOrders.size() + 1;
     }
 
     @Override
     public void onClick(View view, int position, boolean isLongClick) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID, buyerAccountnumbers.get(position));
-            arguments.putIntArray(OrderDetailFragment.ARG_AMOUNTS_ARRAY_ID, amountsList.get(position));
-            arguments.putBooleanArray(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID, isSelfBuys.get(position));
-            arguments.putInt(OrderDetailFragment.ARG_NUMBER_ID, numbers.get(position));
-            arguments.putDoubleArray(OrderDetailFragment.ARG_PRICES_ARRAY_ID, prices.get(position));
-            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_CODES_ID, productCodes.get(position));
-            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, productNames.get(position));
 
             OrderDetailFragment fragment = new OrderDetailFragment();
+            fragment.purchaseOrder = purchaseOrders.get(position -1);
             fragment.setArguments(arguments);
             mParentActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.order_detail_container, fragment)
@@ -131,15 +153,18 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListViewHolder
         } else {
             Context context = view.getContext();
             Intent intent = new Intent(context, OrderDetailActivity.class);
-            intent.putExtra(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID, buyerAccountnumbers.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_AMOUNTS_ARRAY_ID, amountsList.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID, isSelfBuys.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_NUMBER_ID, numbers.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_PRICES_ARRAY_ID, prices.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_PRODUCT_CODES_ID, productCodes.get(position));
-            intent.putExtra(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, productNames.get(position));
-
+            intent.putExtra("purchaseOrder", purchaseOrders.get(position -1));
             context.startActivity(intent);
+        }
+    }
+
+    private class AddPurchaseOrderViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout addItemLayout;
+
+        AddPurchaseOrderViewHolder(View view) {
+            super(view);
+            addItemLayout = (RelativeLayout) view.findViewById(R.id.order_list_content_add_order_layout);
+            addItemLayout.setClickable(true);
         }
     }
 }

@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,21 +17,33 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.util.Map;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+
 public class Internet {
 
+    public static int GET = 1;
+    public static int POST = 2;
+
     private final String TAG = "Internet";
+    private int responseCode;
 
     public String doGetString(String urlStr){
         try {
             String resp = "";
             URL url = new URL(urlStr);
-            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder total = new StringBuilder();
@@ -41,6 +52,7 @@ public class Internet {
                 total.append(line);
             }
             resp += total;
+            responseCode = urlConnection.getResponseCode();
             in.close();
             Log.d(TAG, "doGetString: " + URLDecoder.decode(resp, "UTF-8"));
             return URLDecoder.decode(resp, "UTF-8");
@@ -69,6 +81,8 @@ public class Internet {
             while ((postLine = postBufferedReader.readLine()) != null) {
                 postTotal.append(postLine);
             }
+            responseCode = httpURLConnection.getResponseCode();
+            postInputStream.close();
             Log.d(TAG, "doPostString: " + URLDecoder.decode(postTotal.toString(), "UTF-8"));
             return URLDecoder.decode(postTotal.toString(), "UTF-8");
         } catch (IOException e){
@@ -107,6 +121,89 @@ public class Internet {
             return new MimeMultipart(dataSource);
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Deprecated
+    public String doMultipartRequest(int methodCode, String url, Map<String, String> content){
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            for (Map.Entry<String, String> contentEntry : content.entrySet()){
+                entityBuilder.addTextBody(contentEntry.getKey(), contentEntry.getValue());
+            }
+            HttpEntity entity = entityBuilder.build();
+
+            HttpResponse response;
+            switch (methodCode){
+                case 1:
+                    HttpGetWithEntity httpGet = new HttpGetWithEntity(url);
+                    httpGet.setEntity(entity);
+                    response = client.execute(httpGet);
+                    break;
+                case 2:
+                    HttpPost httpPost = new HttpPost(url);
+                    httpPost.setEntity(entity);
+                    response = client.execute(httpPost);
+                    break;
+                default:
+                    Log.d(TAG, "doMultipartRequest: there is no such network method");
+                    return null;
+            }
+
+            BufferedReader responseStreamReader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((line = responseStreamReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            Log.d(TAG, "doInBackground: " + stringBuilder.toString());
+            return stringBuilder.toString();
+        } catch (IOException e){
+            Log.e(TAG, "doMultipartRequest: ", e);
+            return null;
+        }
+    }
+
+    public String doMultipartRequest(int methodCode, String url, HttpEntity entity){
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+
+            HttpResponse response;
+            switch (methodCode){
+                case 1:
+                    HttpGetWithEntity httpGet = new HttpGetWithEntity(url);
+                    httpGet.setEntity(entity);
+                    response = client.execute(httpGet);
+                    break;
+                case 2:
+                    HttpPost httpPost = new HttpPost(url);
+                    httpPost.setEntity(entity);
+                    response = client.execute(httpPost);
+                    break;
+                default:
+                    Log.d(TAG, "doMultipartRequest: there is no such network method");
+                    return null;
+            }
+
+            BufferedReader responseStreamReader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((line = responseStreamReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            Log.d(TAG, "doInBackground: " + stringBuilder.toString());
+            return stringBuilder.toString();
+        } catch (IOException e){
+            Log.e(TAG, "doMultipartRequest: ", e);
             return null;
         }
     }
@@ -159,5 +256,22 @@ public class Internet {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
+    }
+
+    public int getResponseCode(){
+        return responseCode;
+    }
+
+    private class HttpGetWithEntity extends HttpPost {
+        public final static String METHOD_NAME = "GET";
+
+        public HttpGetWithEntity(String url) {
+            super(url);
+        }
+
+        @Override
+        public String getMethod() {
+            return METHOD_NAME;
+        }
     }
 }

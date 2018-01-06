@@ -16,7 +16,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import de.repictures.stromberg.Fragments.ShowTransferDetailDialogFragment;
-import de.repictures.stromberg.Helper.OnLoadMoreListener;
 import de.repictures.stromberg.R;
 import de.repictures.stromberg.TransfersActivity;
 

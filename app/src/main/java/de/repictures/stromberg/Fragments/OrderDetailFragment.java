@@ -1,78 +1,71 @@
 package de.repictures.stromberg.Fragments;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.repictures.stromberg.Adapters.OrderDetailListAdapter;
+import de.repictures.stromberg.AsyncTasks.CompletePurchaseOrderAsyncTask;
+import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
 public class OrderDetailFragment extends Fragment {
 
     private OrderDetailListAdapter mAdapter;
-    public boolean valuesChanged = false;
-    public ArrayList<String> productCodesList;
-    public ArrayList<String> productNamesList;
-    public ArrayList<Integer> amountsList;
-    public ArrayList<Boolean> isSelfBuysList;
-    public ArrayList<Double> pricesList;
+    private RecyclerView mRecyclerView;
+    private LoadingDialogFragment loadingDialogFragment;
+    private View rootView;
 
-    public static final String ARG_ACCOUNTNUMBER_ID = "accountnumber_id",
-            ARG_AMOUNTS_ARRAY_ID = "amounts_array_id",
-            ARG_IS_SELF_BUYS_ARRAY_ID = "is_self_buys_array_id",
-            ARG_NUMBER_ID = "number_id",
-            ARG_PRICES_ARRAY_ID = "prices_array_id",
-            ARG_PRODUCT_CODES_ID = "product_codes_id",
-            ARG_PRODUCT_NAMES_ID = "product_names_id";
+    public PurchaseOrder purchaseOrder;
+    public boolean valuesChanged = false;
+
+    public static final String ARG_ACCOUNTNUMBER_ID = "accountnumber_id";
+    private String TAG = "OrderDetailFragment";
 
     public OrderDetailFragment() {
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ACCOUNTNUMBER_ID)) {
-            String accountnumber = getArguments().getString(ARG_ACCOUNTNUMBER_ID);
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(accountnumber);
-            }
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(purchaseOrder.getBuyerAccountnumber());
         }
-        String[] productCodesArray = getArguments().getStringArray(ARG_PRODUCT_CODES_ID);
-        this.productCodesList = new ArrayList<>(Arrays.asList(productCodesArray));
-        String[] productNamesArray = getArguments().getStringArray(ARG_PRODUCT_NAMES_ID);
-        this.productNamesList = new ArrayList<>(Arrays.asList(productNamesArray));
-        int[] amountsArray = getArguments().getIntArray(ARG_AMOUNTS_ARRAY_ID);
-        this.amountsList = new ArrayList<Integer>() {{ for (int i : amountsArray) add(i); }};
-        boolean[] isSelfBuysArray = getArguments().getBooleanArray(ARG_IS_SELF_BUYS_ARRAY_ID);
-        this.isSelfBuysList = new ArrayList<Boolean>() {{ for (boolean i : isSelfBuysArray) add(i); }};
-        double[] pricesArray = getArguments().getDoubleArray(ARG_PRICES_ARRAY_ID);
-        this.pricesList = new ArrayList<Double>() {{ for (double i : pricesArray) add(i); }};
 
+        loadingDialogFragment = new LoadingDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.complete_purchase_order);
+        loadingDialogFragment.setArguments(args);
+        loadingDialogFragment.setCancelable(false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.order_detail, container, false);
+        rootView = inflater.inflate(R.layout.order_detail, container, false);
 
-        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.order_detail);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.order_detail);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new OrderDetailListAdapter(getActivity(), OrderDetailFragment.this);
+        mAdapter = new OrderDetailListAdapter(getActivity(), OrderDetailFragment.this, Arrays.asList(purchaseOrder.getProducts()));
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
@@ -83,10 +76,65 @@ public class OrderDetailFragment extends Fragment {
     }
 
     public void showConfirmationDialog(){
-
+        ConfirmationLoginDialogFragment confirmationLoginDialogFragment = new ConfirmationLoginDialogFragment();
+        confirmationLoginDialogFragment.setOrderDetailFragment(OrderDetailFragment.this);
+        Bundle args = new Bundle();
+        args.putString(ARG_ACCOUNTNUMBER_ID, purchaseOrder.getBuyerAccountnumber());
+        confirmationLoginDialogFragment.setArguments(args);
+        FragmentManager fm = getFragmentManager();
+        confirmationLoginDialogFragment.show(fm, "ShowConfirmationLoginDialogFragment");
     }
 
     public void finishOrder(){
+        FragmentManager fm = getFragmentManager();
+        loadingDialogFragment.show(fm, "showLoadingDialogFragment");
+        CompletePurchaseOrderAsyncTask asyncTask = new CompletePurchaseOrderAsyncTask(OrderDetailFragment.this);
+        asyncTask.execute();
+    }
 
+    public void handleFinishResponse(int responseCode){
+        Log.d(TAG, "handleFinishResponse: " + responseCode);
+        loadingDialogFragment.dismiss();
+        switch (responseCode){
+            case -1: //Koi Inderned
+                Snackbar.make(rootView, R.string.internet_problems, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+            case 0: //Daten nicht richtig übertragen
+                Snackbar.make(rootView, R.string.server_error, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+            case 1: //Alles gut
+                purchaseOrder.setCompleted(true);
+            insertAdapterItem();
+                Snackbar.make(rootView, R.string.confirmation_completed, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+            case 2: //Webstring nicht aktuell
+                Snackbar.make(rootView, R.string.session_invalid, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.login_again, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(getActivity(), LoginActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
+                            }
+                        })
+                        .show();
+                break;
+        }
+    }
+
+    public int getPurchaseOrderNumber(){
+        return purchaseOrder.getNumber();
+    }
+
+    public String getAccountnumber(){
+        return purchaseOrder.getBuyerAccountnumber();
+    }
+
+    public void insertAdapterItem() {
+        mAdapter = new OrderDetailListAdapter(getActivity(), OrderDetailFragment.this, Arrays.asList(purchaseOrder.getProducts()));
+        mRecyclerView.setAdapter(mAdapter);
     }
 }

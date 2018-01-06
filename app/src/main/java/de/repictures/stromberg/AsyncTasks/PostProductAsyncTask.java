@@ -1,16 +1,8 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import de.repictures.stromberg.Features.AddProductActivity;

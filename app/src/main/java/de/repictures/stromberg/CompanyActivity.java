@@ -1,29 +1,31 @@
 package de.repictures.stromberg;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.FeaturesListAdapter;
+import de.repictures.stromberg.AsyncTasks.GetSellingProductsAsyncTask;
+import de.repictures.stromberg.Fragments.LoadingDialogFragment;
+import de.repictures.stromberg.POJOs.Product;
 
 public class CompanyActivity extends AppCompatActivity {
 
-    public List<String> featuresList = new ArrayList<>();
+    public static Product[] SELLING_PRODUCTS;
+
     public List<String> featuresNames = new ArrayList<>();
 
     @BindView(R.id.features_recycler) RecyclerView featuresRecycler;
     RecyclerView.Adapter featuresAdapter;
+    private String TAG = "CompanyActivity";
+    private LoadingDialogFragment loadingDialogFragment = new LoadingDialogFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +36,8 @@ public class CompanyActivity extends AppCompatActivity {
 
         String[] allFeaturesNames = getResources().getStringArray(R.array.featuresNames);
 
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        featuresList = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_featureslist), new HashSet<String>()));
-
-        for (int i = 0; i < featuresList.size(); i++){
-            featuresNames.add(allFeaturesNames[Integer.parseInt(featuresList.get(i))]);
+        for (int i = 0; i < LoginActivity.FEATURES.size(); i++){
+            featuresNames.add(allFeaturesNames[LoginActivity.FEATURES.get(i)]);
         }
 
         featuresRecycler.setHasFixedSize(true);
@@ -46,5 +45,24 @@ public class CompanyActivity extends AppCompatActivity {
         featuresAdapter = new FeaturesListAdapter(CompanyActivity.this);
         featuresRecycler.setAdapter(featuresAdapter);
 
+        if (LoginActivity.FEATURES.contains(0) || LoginActivity.FEATURES.contains(3)) {
+            Bundle args = new Bundle();
+            args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.downloading_products);
+            loadingDialogFragment.setArguments(args);
+            loadingDialogFragment.show(getSupportFragmentManager(), "showLoadingDialogFragment");
+            GetSellingProductsAsyncTask asyncTask = new GetSellingProductsAsyncTask(CompanyActivity.this);
+            asyncTask.execute();
+        }
+    }
+
+    public void processResponse(int responseCode) {
+        Log.d(TAG, "processResponse: " + responseCode);
+        loadingDialogFragment.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SELLING_PRODUCTS = null;
     }
 }

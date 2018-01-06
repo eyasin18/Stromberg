@@ -5,21 +5,12 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -30,8 +21,8 @@ import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.entity.mime.content.FileBody;
 import cz.msebera.android.httpclient.entity.mime.content.StringBody;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
-import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.Helper.Cryptor;
+import de.repictures.stromberg.LoginActivity;
 
 public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
 

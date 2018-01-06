@@ -2,15 +2,13 @@ package de.repictures.stromberg;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
+import de.repictures.stromberg.POJOs.PurchaseOrder;
 
 /**
  * An activity representing a single Order detail screen. This
@@ -26,15 +24,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -55,14 +44,8 @@ public class OrderDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID, getIntent().getStringExtra(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID));
-            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_CODES_ID, getIntent().getStringArrayExtra(OrderDetailFragment.ARG_PRODUCT_CODES_ID));
-            arguments.putStringArray(OrderDetailFragment.ARG_PRODUCT_NAMES_ID, getIntent().getStringArrayExtra(OrderDetailFragment.ARG_PRODUCT_NAMES_ID));
-            arguments.putDoubleArray(OrderDetailFragment.ARG_PRICES_ARRAY_ID, getIntent().getDoubleArrayExtra(OrderDetailFragment.ARG_PRICES_ARRAY_ID));
-            arguments.putInt(OrderDetailFragment.ARG_NUMBER_ID, getIntent().getIntExtra(OrderDetailFragment.ARG_NUMBER_ID, 0));
-            arguments.putBooleanArray(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID, getIntent().getBooleanArrayExtra(OrderDetailFragment.ARG_IS_SELF_BUYS_ARRAY_ID));
-            arguments.putIntArray(OrderDetailFragment.ARG_AMOUNTS_ARRAY_ID, getIntent().getIntArrayExtra(OrderDetailFragment.ARG_AMOUNTS_ARRAY_ID));
             OrderDetailFragment fragment = new OrderDetailFragment();
+            fragment.purchaseOrder = (PurchaseOrder) getIntent().getSerializableExtra("purchaseOrder");
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.order_detail_container, fragment)

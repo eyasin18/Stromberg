@@ -9,13 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import de.repictures.stromberg.CompanyActivity;
+import de.repictures.stromberg.AsyncTasks.ConfirmPasswordAsyncTask;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.R;
 
@@ -26,10 +27,14 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
     TextInputEditText passwordEditText;
     Button loginButton;
     ProgressBar loginProgressBar;
+    String accountnumber;
+    private String TAG = "ConfirmDialog";
+    private OrderDetailFragment orderDetailFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        accountnumber = getArguments().getString(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID);
     }
 
     @NonNull
@@ -49,7 +54,7 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
         loginProgressBar = (ProgressBar) parent.findViewById(R.id.company_login_progress_bar);
         cancelTextView = (TextView) parent.findViewById(R.id.company_login_cancel);
 
-        accountnumberTextView.setText(LoginActivity.COMPANY_NUMBER);
+        accountnumberTextView.setText(accountnumber);
         loginProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
         loginButton.setOnClickListener(this);
         cancelTextView.setOnClickListener(this);
@@ -66,6 +71,8 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 loginProgressBar.setVisibility(View.VISIBLE);
                 passwordInputLayout.setErrorEnabled(false);
                 passwordInputLayout.setError("");
+                ConfirmPasswordAsyncTask confirmPasswordAsyncTask = new ConfirmPasswordAsyncTask(ConfirmationLoginDialogFragment.this);
+                confirmPasswordAsyncTask.execute(accountnumber, passwordEditText.getText().toString());
                 break;
             case R.id.company_login_cancel:
                 ConfirmationLoginDialogFragment.this.dismiss();
@@ -92,8 +99,8 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 break;
             case 1:
                 //Login erfolgreich
-                i = new Intent(getActivity(), CompanyActivity.class);
-                getActivity().startActivity(i);
+                Log.d(TAG, "progressResponse: success");
+                orderDetailFragment.finishOrder();
                 dismiss();
                 break;
             case 2:
@@ -109,5 +116,9 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 passwordInputLayout.setError(getActivity().getResources().getString(R.string.password_wrong));
                 break;
         }
+    }
+
+    public void setOrderDetailFragment(OrderDetailFragment orderDetailFragment) {
+        this.orderDetailFragment = orderDetailFragment;
     }
 }

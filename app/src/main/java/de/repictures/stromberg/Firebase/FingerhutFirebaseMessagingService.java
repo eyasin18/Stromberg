@@ -69,7 +69,7 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
             case "1":
                 Log.d(TAG, "onMessageReceived: Message from Company Shopping Requests Update: " + remoteMessage.getData().get("updateKey"));
                 Intent broadcast = new Intent();
-                String[] dataNames = {"amounts", "buyerAccountnumber", "dateTime", "isSelfBuys", "number", "prices", "productCodes"};
+                String[] dataNames = {"amounts", "buyerAccountnumber", "dateTime", "isSelfBuys", "number", "prices", "productCodes", "productNames", "completed", "madeByUser"};
                 for (String dataName : dataNames) {
                     broadcast.putExtra(dataName, remoteMessage.getData().get(dataName));
                 }

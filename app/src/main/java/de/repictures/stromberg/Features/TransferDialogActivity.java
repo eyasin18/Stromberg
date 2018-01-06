@@ -32,6 +32,7 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     private static final String TAG = "TransferDialogActivity";
 
     private boolean sendButtonClicked = false;
+    private LoadingDialogFragment loadingDialogFragment;
 
     @BindView(R.id.transfer_fragment_owner_input_layout) TextInputLayout ownerInputLayout;
     @BindView(R.id.transfer_fragment_accountnumber_input_layout) TextInputLayout accountInputLayout;
@@ -41,8 +42,6 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     @BindView(R.id.transfer_fragment_amount_layout) TextInputLayout amountInputLayout;
     @BindView(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
     @BindView(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
-
-    LoadingDialogFragment loadingDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +114,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
             sendButtonClicked = true;
 
             FragmentManager fm = getSupportFragmentManager();
+            Bundle args = new Bundle();
+            args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.send_transfer_loading);
+            loadingDialogFragment.setArguments(args);
             loadingDialogFragment.show(fm, "loadingDialogFragment");
 
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);

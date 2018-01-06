@@ -1,7 +1,6 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -33,9 +32,11 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         try {
             String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + URLEncoder.encode(params[0], "UTF-8")
+                    + "&authaccountnumber=" + params[1]
                     + "&accountnumber=" + params[1]
                     + "&companynumber=" + params[2]
-                    + "&shoppinglist=" + URLEncoder.encode(params[3], "UTF-8");
+                    + "&shoppinglist=" + URLEncoder.encode(params[3], "UTF-8")
+                    + "&madbyuser=true";
             return internet.doGetString(getUrl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -44,7 +45,8 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String resp) {
-        scanProductActivity.buyItemResult(Integer.parseInt(resp));
+    protected void onPostExecute(String responseStr) {
+        String[] response = responseStr.split("ò");
+        scanProductActivity.buyItemResult(Integer.parseInt(response[0]));
     }
 }
