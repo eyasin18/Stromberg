@@ -76,7 +76,7 @@ public class GetQRAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
             byte[] encryptedImage = buffer.toByteArray();
             Log.d(TAG, "doInBackground: " + new String(encryptedImage));
-            byte[] imageData = cryptor.decryptSymetricToByte(encryptedImage, cryptor.hashToByte(LoginActivity.PIN));
+            byte[] imageData = cryptor.decryptSymmetricToByte(encryptedImage, cryptor.hashToByte(LoginActivity.PIN));
             return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
         } catch (IOException e) {
             e.printStackTrace();

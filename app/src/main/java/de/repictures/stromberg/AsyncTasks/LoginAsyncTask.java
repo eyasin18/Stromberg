@@ -33,7 +33,6 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     private final Button loginButton;
     private final ProgressBar loginProgressBar;
     private Activity activity;
-    private ConfirmationLoginDialogFragment confirmationLoginDialogFragment;
     private Cryptor cryptor = new Cryptor();
     private Internet internetHelper = new Internet();
 
@@ -43,16 +42,6 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         this.loginButton = loginButton;
         this.loginProgressBar = loginProgressBar;
         this.activity = activity;
-        this.confirmationLoginDialogFragment = null;
-    }
-
-    public LoginAsyncTask(ConfirmationLoginDialogFragment confirmationLoginDialogFragment){
-        this.confirmationLoginDialogFragment = confirmationLoginDialogFragment;
-        passwordEditLayout = null;
-        accountnumberEditLayout = null;
-        loginButton = null;
-        loginProgressBar = null;
-        activity = null;
     }
 
     @Override
@@ -79,7 +68,8 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String hashedSaltetPassword = cryptor.hashToString(cryptor.hashToString(keys[1]) + doGetResponse[1]);
+        String hashedPassword = cryptor.hashToString(keys[1]);
+        String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[1]);
         Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
         try {
             keys[4] = URLEncoder.encode(keys[4], "UTF-8");
@@ -88,13 +78,13 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
         String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
-                + "&token=" + keys[4] + "&password=" + hashedSaltetPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
+                + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
         return internetHelper.doPostString(postUrlStr) + "ò" + keys[0];
     }
 
     @Override
     protected void onPostExecute(String responseStr) {
-        if (confirmationLoginDialogFragment == null) {
+        if (activity != null) {
             Log.d(TAG, "onPostExecute: " + responseStr);
             loginButton.setText(activity.getResources().getString(R.string.login));
             loginProgressBar.setVisibility(View.INVISIBLE);
@@ -172,9 +162,6 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     ((LoginActivity) activity).loginButtonClicked = false;
                     break;
             }
-        } else {
-            String[] response = responseStr.split("ò");
-            confirmationLoginDialogFragment.progressResponse(Integer.parseInt(response[0]));
         }
     }
 }

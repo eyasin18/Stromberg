@@ -46,6 +46,6 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
 
     @Override
     protected void onPostExecute(String response) {
-        addProductActivity.processResult(Integer.parseInt(response));
+        if (addProductActivity != null) addProductActivity.processResult(Integer.parseInt(response));
     }
 }

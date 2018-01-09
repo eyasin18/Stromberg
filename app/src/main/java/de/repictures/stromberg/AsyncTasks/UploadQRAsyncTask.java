@@ -53,12 +53,12 @@ public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             transferArray[0].compress(Bitmap.CompressFormat.PNG, 100, bao);
             byte[] rawImage = bao.toByteArray();
-            byte[] imageData = cryptor.encryptSymetricFromByte(rawImage, hashedPassword);
+            byte[] imageData = cryptor.encryptSymmetricFromByte(rawImage, hashedPassword);
             FileBody fileBody = new FileBody(getImage(imageData, "bild"), ContentType.APPLICATION_OCTET_STREAM);
 
             StringBody bytelengthBody = new StringBody(String.valueOf(imageData.length), ContentType.TEXT_PLAIN);
 
-            byte[] encrypedAuthCode = cryptor.encryptSymetricFromString(authcode, hashedPassword);
+            byte[] encrypedAuthCode = cryptor.encryptSymmetricFromString(authcode, hashedPassword);
             String encryptedAuthCodeHey = cryptor.bytesToHex(encrypedAuthCode);
             StringBody authCodeBody = new StringBody(encryptedAuthCodeHey, ContentType.TEXT_PLAIN);
 

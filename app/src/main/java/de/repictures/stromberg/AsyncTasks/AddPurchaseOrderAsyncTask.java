@@ -36,7 +36,9 @@ public class AddPurchaseOrderAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String responseStr) {
-        String[] response = responseStr.split("ò");
-        editAccountnumberDialogFragment.processAddPurchaseOrderResponse(Integer.parseInt(response[0]), Integer.parseInt(response[1]));
+        if (responseStr != null && responseStr.length() > 0 && editAccountnumberDialogFragment != null){
+            String[] response = responseStr.split("ò");
+            editAccountnumberDialogFragment.processAddPurchaseOrderResponse(Integer.parseInt(response[0]), Integer.parseInt(response[1]));
+        }
     }
 }

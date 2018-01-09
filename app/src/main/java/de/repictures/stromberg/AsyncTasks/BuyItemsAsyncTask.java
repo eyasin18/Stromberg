@@ -47,6 +47,6 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String responseStr) {
         String[] response = responseStr.split("ò");
-        scanProductActivity.buyItemResult(Integer.parseInt(response[0]));
+        if (scanProductActivity != null) scanProductActivity.buyItemResult(Integer.parseInt(response[0]));
     }
 }

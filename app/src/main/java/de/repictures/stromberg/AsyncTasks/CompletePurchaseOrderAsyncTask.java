@@ -58,6 +58,6 @@ public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, Stri
 
     @Override
     protected void onPostExecute(String response) {
-        fragment.handleFinishResponse(Integer.parseInt(response));
+        if (fragment != null) fragment.handleFinishResponse(Integer.parseInt(response));
     }
 }

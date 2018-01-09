@@ -52,7 +52,7 @@ public class ShowTransferDetailDialogFragment extends DialogFragment {
         TextView purposeBody = (TextView) parent.findViewById(R.id.transfer_detail_purpose_body);
         TextView typeBody = (TextView) parent.findViewById(R.id.transfer_detail_type_body);
 
-        if (isSender) personTitle.setText(getActivity().getResources().getString(R.string.transfer_sender));
+        if (!isSender) personTitle.setText(getActivity().getResources().getString(R.string.transfer_sender));
         else personTitle.setText(getActivity().getResources().getString(R.string.transfer_receiver));
 
         personBody.setText(person);

@@ -1,5 +1,6 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -33,32 +34,35 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
         String doGetString = internetHelper.doGetString(baseUrl);
         Log.d(TAG, "doInBackground: " + baseUrl);
         String[] response = doGetString.split("ò");
-        response[2] = getDecryptedPerson(response[2]);
+        if (response.length > 2) response[2] = getDecryptedPerson(response[2]);
         return response;
     }
 
     @Override
     protected void onPostExecute(String[] response) {
-        switch (Integer.parseInt(response[0])){
-            case -1:
-                //Keine Internetverbindung
-                mainActivity.setFinancialStatus("0000", "Max Mustermann", 0.0f);
-            case 0:
-                //Account mit dieser Accountnumber wurde nicht gefunden
-                break;
-            case 1:
-                mainActivity.setFinancialStatus(response[1], response[2], Float.parseFloat(response[3]));
-                break;
-            case 2:
-                //Webstring falsch
-                //TODO: Return to login
-                break;
-        }
+        if (mainActivity != null)
+            switch (Integer.parseInt(response[0])){
+                case -1:
+                    //Keine Internetverbindung
+                    mainActivity.setFinancialStatus("0000", "Max Mustermann", 0.0f);
+                case 0:
+                    //Account mit dieser Accountnumber wurde nicht gefunden
+                    break;
+                case 1:
+                    mainActivity.setFinancialStatus(response[1], response[2], Float.parseFloat(response[3]));
+                    break;
+                case 2:
+                    //Webstring falsch
+                    Intent i = new Intent(mainActivity, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mainActivity.startActivity(i);
+                    break;
+            }
     }
 
     private String getDecryptedPerson(String encryptedStringHex) {
         byte[] encryptedPassword = cryptor.hashToByte(LoginActivity.PIN);
         byte[] encryptedName = cryptor.hexToBytes(encryptedStringHex);
-        return cryptor.decryptSymetricToString(encryptedName, encryptedPassword);
+        return cryptor.decryptSymmetricToString(encryptedName, encryptedPassword);
     }
 }

@@ -50,11 +50,11 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
             byte[] senderAesKey = cryptor.generateRandomAesKey();
             byte[] receiverAesKey = cryptor.generateRandomAesKey();
 
-            byte[] encryptedSenderPurpose = cryptor.encryptSymetricFromString(transferArray[4], senderAesKey);
-            byte[] encryptedReceiverPurpose = cryptor.encryptSymetricFromString(transferArray[4], receiverAesKey);
+            byte[] encryptedSenderPurpose = cryptor.encryptSymmetricFromString(transferArray[4], senderAesKey);
+            byte[] encryptedReceiverPurpose = cryptor.encryptSymmetricFromString(transferArray[4], receiverAesKey);
 
-            byte[] encryptedSenderAesKey = cryptor.encryptAsymetric(senderAesKey, senderPublicKey);
-            byte[] encryptedReceiverAesKey = cryptor.encryptAsymetric(receiverAesKey, receiverPublicKey);
+            byte[] encryptedSenderAesKey = cryptor.encryptAsymmetric(senderAesKey, senderPublicKey);
+            byte[] encryptedReceiverAesKey = cryptor.encryptAsymmetric(receiverAesKey, receiverPublicKey);
 
             String postUrlStr = LoginActivity.SERVERURL + "/transfer"
                     + "?senderpurpose=" + cryptor.bytesToHex(encryptedSenderPurpose)
@@ -75,7 +75,7 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        transferDialogActivity.postResult(Integer.parseInt(s));
+        if (transferDialogActivity != null) transferDialogActivity.postResult(Integer.parseInt(s));
     }
 }
 

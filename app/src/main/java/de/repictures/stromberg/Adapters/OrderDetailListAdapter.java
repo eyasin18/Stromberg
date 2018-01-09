@@ -79,7 +79,7 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else if (getItemViewType(holder.getAdapterPosition()) == VIEW_TYPE_FINISH){
             FinishButtonViewHolder finishHolder = (FinishButtonViewHolder) holder;
-            if (orderDetailFragment.purchaseOrder.isCompleted()) finishHolder.finishButon.setEnabled(false);
+            if (orderDetailFragment.purchaseOrder.isCompleted() || products.size() < 1) finishHolder.finishButon.setEnabled(false);
             finishHolder.finishButon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -21,7 +21,7 @@ repositories {
 }
 
 configurations {
-    all {
+    release {
         exclude module: 'commons-logging'
     }
 }

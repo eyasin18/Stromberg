@@ -72,9 +72,9 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
 
     @Override
     protected void onPostExecute(String[][] transfersArray) {
-        if (transfersArray == null){
+        if (transfersActivity != null && transfersArray == null){
             transfersActivity.updateRecycler();
-        } else {
+        } else if (transfersActivity != null){
             transfersActivity.updateRecycler(transfersArray, itemLeft);
         }
     }
@@ -91,11 +91,11 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
             for (int i = 0; i < passwordKey.length; i++){
                 passwordKey[i] = passwordBytes[i % passwordBytes.length];
             }
-            byte[] privateKeyByte = cryptor.decryptSymetricToByte(encryptedPrivateKey, passwordKey);
+            byte[] privateKeyByte = cryptor.decryptSymmetricToByte(encryptedPrivateKey, passwordKey);
             PrivateKey privateKey = cryptor.byteToPrivateKey(privateKeyByte);
             byte[] encryptedString = cryptor.hexToBytes(encryptedStringHex);
             Log.d(TAG, "Encrypted Purpose Length: " + encryptedString.length);
-            byte[] decryptedString = cryptor.decryptAsymetric(encryptedString, privateKey);
+            byte[] decryptedString = cryptor.decryptAsymmetric(encryptedString, privateKey);
             Log.d(TAG, "Decrypted Purpose Length: " + decryptedString.length);
             return new String(decryptedString, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
@@ -116,13 +116,13 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
             for (int i = 0; i < passwordKey.length; i++){
                 passwordKey[i] = passwordBytes[i % passwordBytes.length];
             }
-            byte[] privateKeyByte = cryptor.decryptSymetricToByte(encryptedPrivateKey, passwordKey);
+            byte[] privateKeyByte = cryptor.decryptSymmetricToByte(encryptedPrivateKey, passwordKey);
             PrivateKey privateKey = cryptor.byteToPrivateKey(privateKeyByte);
 
             byte[] encryptedAesKey = cryptor.hexToBytes(encryptedAesKeyHex);
-            byte[] aesKey = cryptor.decryptAsymetric(encryptedAesKey, privateKey);
+            byte[] aesKey = cryptor.decryptAsymmetric(encryptedAesKey, privateKey);
             byte[] encryptedString = cryptor.hexToBytes(encryptedStringHex);
-            byte[] decryptedString = cryptor.decryptSymetricToByte(encryptedString, aesKey);
+            byte[] decryptedString = cryptor.decryptSymmetricToByte(encryptedString, aesKey);
             return new String(decryptedString, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

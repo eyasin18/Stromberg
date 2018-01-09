@@ -89,7 +89,7 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
 
     public void processAddPurchaseOrderResponse(int responseCode, int number) {
         progressBar.setVisibility(View.GONE);
-        finishButton.setText(getActivity().getResources().getString(R.string.finish));
+        if (finishButton != null) finishButton.setText(getActivity().getResources().getString(R.string.finish));
         Log.d(TAG, "processAddPurchaseOrderResponse: " + responseCode);
         switch (responseCode){
             case -1:

@@ -70,6 +70,6 @@ public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product
     @Override
     protected void onPostExecute(Product[] products) {
         CompanyActivity.SELLING_PRODUCTS = products;
-        companyActivity.processResponse(responseCode);
+        if (companyActivity != null) companyActivity.processResponse(responseCode);
     }
 }

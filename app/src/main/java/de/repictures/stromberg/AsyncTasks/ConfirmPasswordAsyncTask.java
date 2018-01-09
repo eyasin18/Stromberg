@@ -54,7 +54,8 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        Log.d(TAG, "onPostExecute: " + result);
         int responseCode = Integer.parseInt(result);
-        confirmationLoginDialogFragment.progressResponse(responseCode);
+        if (confirmationLoginDialogFragment != null) confirmationLoginDialogFragment.progressResponse(responseCode);
     }
 }

@@ -43,6 +43,6 @@ public class CompanyLoginAsyncTask extends AsyncTask<String, Void, Integer>{
 
     @Override
     protected void onPostExecute(Integer response) {
-        companyLoginDialogFragment.progressResponse(response);
+        if (companyLoginDialogFragment != null) companyLoginDialogFragment.progressResponse(response);
     }
 }

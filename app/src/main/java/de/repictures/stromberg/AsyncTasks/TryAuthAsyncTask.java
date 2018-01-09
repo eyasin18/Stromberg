@@ -72,6 +72,6 @@ public class TryAuthAsyncTask extends AsyncTask<String, Void, Boolean> {
             //editor.remove(authScanActivity.getResources().getString(R.string.sp_encrypted_private_key_hex_2));
             editor.apply();
         }
-        authScanActivity.getAuthResult(result, authCode);
+        if (authScanActivity != null) authScanActivity.getAuthResult(result, authCode);
     }
 }

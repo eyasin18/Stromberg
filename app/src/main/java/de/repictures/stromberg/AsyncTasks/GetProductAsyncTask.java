@@ -32,10 +32,10 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
 
     @Override
     protected void onPostExecute(String s) {
-        if (s.length() == 1 && s.charAt(0) == '0'){
+        if (scanProductActivity != null && s.length() == 1 && s.charAt(0) == '0'){
             //Produkt gibts nicht
             scanProductActivity.receiveResult();
-        } else {
+        } else if (scanProductActivity != null){
             String[] responsesRaw = s.split("ň");
             String[][] products = new String[responsesRaw.length][4];
             for (int i = 0; i < products.length; i++) {

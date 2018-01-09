@@ -213,13 +213,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 /*byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
                 Log.d(TAG, cryptor.hashToString(LoginActivity.PIN));
                 PrivateKey privateKeyd = cryptor.stringToPrivateKey(encryptedPrivateKeyHex);
-                byte[] privateKey = cryptor.decryptSymetricToByte(encryptedPrivateKey, hashedPassword);*/
+                byte[] privateKey = cryptor.decryptSymmetricToByte(encryptedPrivateKey, hashedPassword);*/
                 byte[] passwordBytes = PIN.getBytes("ISO-8859-1");
                 byte[] passwordKey = new byte[32];
                 for (int i = 0; i < passwordKey.length; i++){
                     passwordKey[i] = passwordBytes[i % passwordBytes.length];
                 }
-                byte[] newPrivateKey = cryptor.encryptSymetricFromByte(privateKey, passwordKey);
+                byte[] newPrivateKey = cryptor.encryptSymmetricFromByte(privateKey, passwordKey);
                 newPrivateKeyStr = cryptor.bytesToHex(newPrivateKey);
                 Log.d(TAG, newPrivateKeyStr);
             } catch (UnsupportedEncodingException e) {

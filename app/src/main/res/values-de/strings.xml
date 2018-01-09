@@ -22,7 +22,7 @@
     <string name="cancel">Abbrechen</string>
     <string name="optionee">Begünstigter</string>
     <string name="title_activity_transfer_dialog_fragment">Neue Überweisung</string>
-    <string name="amount">Anzahl</string>
+    <string name="amount">Betrag</string>
     <string name="execute_later">Später ausführen</string>
     <string name="execute_at">Ausführen am</string>
     <string name="purpose">Verwendungszweck</string>
