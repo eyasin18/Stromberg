@@ -20,12 +20,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-configurations {
-    release {
-        exclude module: 'commons-logging'
-    }
-}
-
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -42,6 +36,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            configurations {
+                all {
+                    exclude module: 'commons-logging'
+                }
+            }
         }
     }
     packagingOptions {
