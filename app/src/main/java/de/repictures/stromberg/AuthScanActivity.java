@@ -191,6 +191,7 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
     }
 
     public void sendAuthRequest(){
+        authFab.hide();
         if (!animated){
             runOnUiThread(new Runnable() {
                 @Override
@@ -255,6 +256,7 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         } else {
             authScanProgressBar.setVisibility(View.INVISIBLE);
             authScanTitle.setText(getResources().getString(R.string.no_such_authkey));
+            authFab.show();
         }
     }
 
