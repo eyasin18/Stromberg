@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import de.repictures.stromberg.Fragments.ConfirmationLoginDialogFragment;
 import de.repictures.stromberg.Helper.Cryptor;
@@ -34,12 +35,12 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String getUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + LoginActivity.WEBSTRING;
         String serverTimeStamp = internetHelper.doGetString(getUrlStr);
-        String decodedServerTimeStamp;
+        String encodedServerTimeStamp;
         if (internetHelper.getResponseCode() == 206){
             return "2";
         }
         try {
-            decodedServerTimeStamp = URLDecoder.decode(serverTimeStamp, "UTF-8");
+            encodedServerTimeStamp = URLEncoder.encode(serverTimeStamp, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return "-2";
@@ -48,7 +49,7 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
         String hashedPassword = cryptor.hashToString(params[1]);
         String hashedSaltetPassword = cryptor.hashToString(hashedPassword + serverTimeStamp);
         String postUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + LoginActivity.WEBSTRING
-                + "&password=" + hashedSaltetPassword + "&servertimestamp=" + decodedServerTimeStamp;
+                + "&password=" + hashedSaltetPassword + "&servertimestamp=" + encodedServerTimeStamp;
         return internetHelper.doPostString(postUrlStr);
     }
 
