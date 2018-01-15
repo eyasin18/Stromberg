@@ -136,4 +136,9 @@
     <string name="old_app_version">Diese App ist nicht aktuell! Bitte aktualisiere sie im PlayStore.</string>
     <string name="error_account_empty">Du musst eine Kontonummer angeben</string>
     <string name="vat">Mehrwertsteuer</string>
+    <string name="select_language">Sprache auswählen</string>
+    <string name="title_activity_edit_account">Konto bearbeiten</string>
+    <string name="delete_transfers">Überweisungen löschen</string>
+    <string name="name">Name</string>
+    <string name="error_sender_empty">Du musst einen Namen angeben</string>
 </resources>

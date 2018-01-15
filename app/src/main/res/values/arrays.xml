@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="languages">
+        <item>Swabian</item>
+        <item>German</item>
+        <item>English</item>
+    </string-array>
     <string-array name="forbidden_characters" translatable="false" >
         <item>ò</item>
         <item>ň</item>

@@ -137,6 +137,11 @@
     <string name="enter_accountnumber_of_buyer">Enter the account number of the buyer</string>
     <string name="old_app_version">Your app is not up to date! Please update!</string>
     <string name="vat">Value added tax</string>
+    <string name="select_language">Select language</string>
+    <string name="title_activity_edit_account">Edit Account</string>
+    <string name="delete_transfers">Delete transfers</string>
+    <string name="name">Name</string>
+    <string name="error_sender_empty">You have to give your name</string>
 
 
 </resources>
