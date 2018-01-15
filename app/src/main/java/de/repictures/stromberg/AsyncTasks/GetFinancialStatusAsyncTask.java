@@ -33,9 +33,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
         String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + parameters[0];
         String doGetString = internetHelper.doGetString(baseUrl);
         Log.d(TAG, "doInBackground: " + baseUrl);
-        String[] response = doGetString.split("ò");
-        if (response.length > 2) response[2] = getDecryptedPerson(response[2]);
-        return response;
+        return doGetString.split("ò");
     }
 
     @Override

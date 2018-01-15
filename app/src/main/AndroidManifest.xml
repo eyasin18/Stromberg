@@ -19,6 +19,7 @@
 
         <activity
             android:name=".LoginActivity"
+            android:configChanges="locale|orientation"
             android:theme="@style/LoginTheme"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
@@ -89,8 +90,9 @@
             android:parentActivityName=".CompanyActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="de.repictures.stromberg.ORDERS_UPDATE"/>
+                <action android:name="de.repictures.stromberg.ORDERS_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.CompanyActivity" />
@@ -103,6 +105,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.OrderListActivity" />
+        </activity>
+        <activity
+            android:name=".Features.EditAccountActivity"
+            android:label="@string/title_activity_edit_account"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
         </activity>
     </application>
 

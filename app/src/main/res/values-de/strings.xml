@@ -34,7 +34,7 @@
     <string name="server_error">Serverfehler</string>
     <string name="cancel_transfer">Überweisung verwerfen</string>
     <string name="delete_transfer">Überweisung löschen</string>
-    <string name="delete">Verwerfen</string>
+    <string name="delete">Löschen</string>
     <string name="you_will_lose_data">Alle ausgefüllten Felder werden gelöscht</string>
     <array name="weekdays_short">
         <item>So</item>
@@ -134,4 +134,6 @@
     <string name="enter_accountnumber_of_buyer">Kontonummer des Käufer eingeben</string>
     <string name="price_cannot_be_raised">Preis kann nicht erhöht werden</string>
     <string name="old_app_version">Diese App ist nicht aktuell! Bitte aktualisiere sie im PlayStore.</string>
+    <string name="error_account_empty">Du musst eine Kontonummer angeben</string>
+    <string name="vat">Mehrwertsteuer</string>
 </resources>

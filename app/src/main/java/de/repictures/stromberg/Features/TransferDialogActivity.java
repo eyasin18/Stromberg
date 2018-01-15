@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +43,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
     @BindView(R.id.transfer_fragment_amount_layout) TextInputLayout amountInputLayout;
     @BindView(R.id.transfer_fragment_purpose_edit_text) TextInputEditText purposeEditText;
     @BindView(R.id.transfer_fragment_coordinator_layout) public CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.transfer_fragment_sender_input_layout) TextInputLayout senderInputLayout;
+    @BindView(R.id.transfer_fragment_sender_edit_text) TextInputEditText senderEditText;
+    @BindView(R.id.transfer_fragment_transfer_button) Button transferButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,8 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
         //Setup the Loading Dialog
         loadingDialogFragment = new LoadingDialogFragment();
         loadingDialogFragment.setCancelable(false);
+
+        transferButton.setOnClickListener(this);
     }
 
     @Override
@@ -123,7 +129,8 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
             String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
             TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
             asyncTask.execute(LoginActivity.ACCOUNTNUMBER, accountnumberEditText.getText().toString(), webString,
-                        amountEditText.getText().toString(), purposeEditText.getText().toString());
+                        amountEditText.getText().toString(), purposeEditText.getText().toString(),
+                        senderEditText.getText().toString(), ownerAutoComplete.getText().toString());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,6 +143,8 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
         accountInputLayout.setErrorEnabled(false);
         amountInputLayout.setError("");
         amountInputLayout.setErrorEnabled(false);
+        senderInputLayout.setError("");
+        senderInputLayout.setErrorEnabled(false);
         Log.d(TAG, "dataWithoutError: " + ownerAutoComplete.getText().toString().length());
         if(ownerAutoComplete.getText().toString().length() < 1){
             ownerInputLayout.setErrorEnabled(true);
@@ -152,11 +161,36 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
             amountInputLayout.setError(getResources().getString(R.string.error_amount_empty));
             noError = false;
         }
+        if (senderEditText.getText().toString().length() < 1){
+            senderInputLayout.setErrorEnabled(true);
+            senderInputLayout.setError(getResources().getString(R.string.error_sender_empty));
+            noError = false;
+        }
         return noError;
     }
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.transfer_fragment_transfer_button:
+                if(dataWithoutError() && !sendButtonClicked){
+                    sendButtonClicked = true;
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    Bundle args = new Bundle();
+                    args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.send_transfer_loading);
+                    loadingDialogFragment.setArguments(args);
+                    loadingDialogFragment.show(fm, "loadingDialogFragment");
+
+                    SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+                    String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
+                    TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
+                    asyncTask.execute(LoginActivity.ACCOUNTNUMBER, accountnumberEditText.getText().toString(), webString,
+                            amountEditText.getText().toString(), purposeEditText.getText().toString(),
+                            senderEditText.getText().toString(), ownerAutoComplete.getText().toString());
+                }
+                break;
+        }
     }
 
     public void postResult(int result){

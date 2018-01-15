@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.GetFinancialStatusAsyncTask;
 import de.repictures.stromberg.Fragments.CompanyLoginDialogFragment;
+import de.repictures.stromberg.Helper.LocaleHelper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        LocaleHelper.onCreate(MainActivity.this);
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         webstring = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
         accountKey = sharedPref.getString(getResources().getString(R.string.sp_accountkey), "");
@@ -62,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accountBalanceText.setTextColor(getResources().getColor(accountbalance <= 0 ? R.color.balance_minus : R.color.balance_plus));
         accountBalanceText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(round(accountbalance, 2))));
         accountNumberText.setText(accountnumber);
-        accountOwnerText.setText(accountowner);
+        String vatString = getResources().getString(R.string.vat) + ": " + accountowner + "%";
+        accountOwnerText.setText(vatString);
         financialStatusProgressBar.setVisibility(View.GONE);
         financialStatusContent.setVisibility(View.VISIBLE);
     }

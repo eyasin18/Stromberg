@@ -8,17 +8,8 @@
     <string name="order_new">Order new pin</string>
     <string name="accountnumber_error">Accout number not valid</string>
     <string name="password_wrong">Password not valid</string>
-    <string name="sp_accountnumber" translatable="false">SHARED_PREFERENCES_accountnumber</string>
-    <string name="sp_accountkey" translatable="false">SHARED_PREFERENCES_accountkey</string>
-    <string name="sp_accountslist" translatable="false">SHARED_PREFERENCES_accountslist</string>
-    <string name="sp_device_token" translatable="false">SHARED_PREFERENCES_device_token</string>
-    <string name="sp_encrypted_private_key_hex" translatable="false">SHARED_PREFERENCES_sp_encrypted_private_key_hex</string>
-    <string name="sp_encrypted_private_key_hex_2" translatable="false">SHARED_PREFERENCES_sp_encrypted_private_key_hex_2</string>
-    <string name="sp_group" translatable="false">SHARED_PREFERENCES_group</string>
-    <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
     <string name="error">Error</string>
     <string name="current_account">Current account</string>
-    <string name="zero_money" translatable="false">0,00S</string>
     <string name="account_owner">Owner</string>
     <string name="account_balance_format">%1$sS</string>
     <string name="transfer">Transfer</string>
@@ -26,17 +17,15 @@
     <string name="domain">Company</string>
     <string name="deposit">Deposit</string>
     <string name="title_activity_transfers">Transfers</string>
-    <string name="transition_dialog" translatable="false">transition_dialog</string>
     <string name="cancel">Cancel</string>
     <string name="accountnumber_short">Accnr</string>
     <string name="optionee">Optionee</string>
     <string name="title_activity_transfer_dialog_fragment">New transfer</string>
     <string name="amount">Amount</string>
-    <string name="currency" translatable="false">S</string>
     <string name="execute_later">Execute later</string>
     <string name="execute_at">Execute at</string>
     <string name="purpose">Purpose</string>
-    <string name="oclock">" "</string>
+    <string name="oclock" >" "</string>
     <string name="error_owner_empty">There must be an optionee</string>
     <string name="transfer_success">Transfer was successful</string>
     <string name="transfer_receiver_not_exist">The given receiver does not exist</string>
@@ -75,7 +64,6 @@
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
     <string name="title_activity_main">Fingerhut</string>
-    <string name="ocr_header" translatable="false">Click &quot;Detect Text&quot; to detect text</string>
     <string name="read_text">Detect Text</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Use Flash</string>
@@ -90,10 +78,8 @@
     <string name="deny">Deny</string>
     <string name="swipe_to_view">Swipe up to view</string>
     <string name="more_results" formatted="false">%1$d more results</string>
-    <string name="sp_featureslist" translatable="false">SHARED_PREFERENCES_featureslist</string>
     <string name="title_activity_auth_scan">Scan Authentification Code</string>
     <string name="authenticate">Authenticate</string>
-    <string name="sp_authcode" translatable="false">SHARED_PREFERENCES_authcode</string>
     <string name="not_authenticated">You are not authenticated</string>
     <string name="wrong_auth">You are not athentificated for this account</string>
     <string name="internet_problems">Network error: check your internet connection</string>
@@ -109,7 +95,6 @@
     <string name="notification_channel_description">All messages postet from Fingerhut will be displayed here</string>
     <string name="new_transfer_notification_title">New transfer</string>
     <string name="new_transfer_notification_body">Account %1$2s received a new transfer</string>
-    <string name="sp_webstring" translatable="false">SHARED_PREFERENCES_webstring</string>
     <string name="more_results_suffix">s</string>
     <string name="one_more_result">1 more result</string>
     <string name="can_only_be_bought_on_checkout">Can only be bought at the checkout</string>
@@ -151,11 +136,6 @@
     <string name="add_purchase_order">Add purchase order</string>
     <string name="enter_accountnumber_of_buyer">Enter the account number of the buyer</string>
     <string name="old_app_version">Your app is not up to date! Please update!</string>
-    <string name="select_language">Select language</string>
-    <string name="title_activity_edit_account">Edit Account</string>
-    <string name="delete_transfers">Delete transfers</string>
-    <string name="name">Name</string>
-    <string name="error_sender_empty">You have to give your name</string>
     <string name="vat">Value added tax</string>
 
 
