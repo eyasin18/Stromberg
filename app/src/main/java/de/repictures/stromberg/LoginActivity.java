@@ -24,7 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -36,10 +35,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
-import de.repictures.stromberg.Fragments.SelectLanguageDialogFragment;
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.LocaleHelper;
-import io.fabric.sdk.android.Fabric;
 
 //LoginScreen. Startactivity der App.
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -48,11 +45,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final String TAG = "LoginActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 42;
 
-    public static String SERVERURL = "https://2-dot-fingerhut388.appspot.com/";
+    public static String SERVERURL = "https://fingerhut388.appspot.com/";
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
     public static String COMPANY_NUMBER = "0002";
     public static String WEBSTRING = "";
+    public static int VAT = 0;
     public static List<Integer> FEATURES = new ArrayList<>();
     public static String DEVICE_TOKEN = "";
 
@@ -77,7 +75,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: " + FirebaseInstanceId.getInstance().getToken());
-        Fabric.with(this, new Crashlytics());
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_login);
@@ -135,11 +132,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     requestCameraPermission();
                 }
                 break;
-            /*case R.id.login_language_select:
-                SelectLanguageDialogFragment selectLanguageDialogFragment = new SelectLanguageDialogFragment();
-                selectLanguageDialogFragment.setLoginActivity(LoginActivity.this);
-                selectLanguageDialogFragment.show(getSupportFragmentManager(), "blub");
-                break;*/
         }
     }
 

@@ -122,6 +122,11 @@ public class OrderDetailFragment extends Fragment {
                         })
                         .show();
                 break;
+            case 3:
+                //koi Geld
+                Snackbar.make(rootView, R.string.not_enough_money, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
         }
     }
 

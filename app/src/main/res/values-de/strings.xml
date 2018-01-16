@@ -141,4 +141,8 @@
     <string name="delete_transfers">Überweisungen löschen</string>
     <string name="name">Name</string>
     <string name="error_sender_empty">Du musst einen Namen angeben</string>
+    <string name="json_exception">JSON Exception</string>
+    <string name="gross_total">Bruttosumme</string>
+    <string name="total">Summe</string>
+    <string name="net_total">Nettosumme</string>
 </resources>

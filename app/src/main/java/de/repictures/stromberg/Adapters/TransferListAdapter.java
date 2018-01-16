@@ -80,7 +80,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
             itemHolder.transferTime.setText(time);
 
-            double amount = Double.parseDouble(transfers[position][7]);
+            double amount = Double.parseDouble(transfers[position][8]);
             String amountWholeStr;
             if (amount <= 0.0) {
                 amountWholeStr = "-";
@@ -125,6 +125,7 @@ public class TransferListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     args.putString("isSenderStr", transfers[position][6]);
                     args.putString("person", transfers[position][1]);
                     args.putString("type", transfers[position][3]);
+                    args.putString("accountnumber", transfers[position][7]);
                     dialogFragment.setArguments(args);
                     FragmentManager fm = ((TransfersActivity) activity).getSupportFragmentManager();
                     dialogFragment.show(fm, "ShowTransferDetailDialogFragment");

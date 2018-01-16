@@ -1,24 +1,9 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.fabric.io/public' }
         maven { url "https://maven.java.net/content/groups/public/" }
-    }
-
-    dependencies {
-        // These docs use an open ended version so that our plugin
-        // can be updated quickly in response to Android tooling updates
-
-        // We recommend changing it to the latest version from our changelog:
-        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.25.1'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
 
 android {
     compileSdkVersion 27
@@ -27,8 +12,8 @@ android {
         applicationId "de.repictures.stromberg"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 5
-        versionName "0.2.2"
+        versionCode 7
+        versionName "0.2.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

@@ -59,7 +59,10 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (holder.productAmountEditText.getText().toString().length() > 0) productActivity.productAmounts.set(position, Integer.parseInt(holder.productAmountEditText.getText().toString()));
+                if (holder.productAmountEditText.getText().toString().length() > 0){
+                    productActivity.productAmounts.set(position, Integer.parseInt(holder.productAmountEditText.getText().toString()));
+                    productActivity.updateSums();
+                }
             }
 
             @Override
@@ -86,6 +89,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
                 if (productActivity.productsList.size() < 1){
                     productActivity.enableCheckoutButton(false);
                 }
+                productActivity.updateSums();
                 break;
             default:
                 break;

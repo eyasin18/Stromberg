@@ -21,7 +21,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:id="@+id/shopping_list_slide_down_arrow"
             android:paddingTop="32dp"
             android:paddingBottom="32dp"/>
@@ -36,6 +36,86 @@
             android:text="@string/checkout"
             style="@style/Widget.AppCompat.Button.Colored"
             android:enabled="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/shopping_list_checkout_button"
+            android:id="@+id/price_sums_layout">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/gross_total"
+                    android:paddingTop="4dp"
+                    android:paddingLeft="24dp"
+                    android:paddingStart="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/vat"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="24dp"
+                    android:paddingStart="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/net_total"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="24dp"
+                    android:paddingStart="24dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/error"
+                    android:id="@+id/shopping_list_gross_total"
+                    android:paddingTop="4dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/error"
+                    android:id="@+id/shopping_list_vat"
+                    android:paddingTop="2dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@string/error"
+                    android:id="@+id/shopping_list_net_total"
+                    android:paddingTop="2dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -58,7 +138,7 @@
             android:id="@+id/shopping_list_recycler_view"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_above="@id/shopping_list_checkout_button"/>
+            android:layout_above="@id/price_sums_layout"/>
 
     </RelativeLayout>
 

@@ -31,11 +31,11 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + URLEncoder.encode(params[0], "UTF-8")
-                    + "&authaccountnumber=" + params[1]
-                    + "&accountnumber=" + params[1]
-                    + "&companynumber=" + params[2]
-                    + "&shoppinglist=" + URLEncoder.encode(params[3], "UTF-8")
+            String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + LoginActivity.WEBSTRING
+                    + "&authaccountnumber=" + LoginActivity.ACCOUNTNUMBER
+                    + "&accountnumber=" + LoginActivity.ACCOUNTNUMBER
+                    + "&companynumber=" + LoginActivity.COMPANY_NUMBER
+                    + "&shoppinglist=" + URLEncoder.encode(params[0], "UTF-8")
                     + "&madbyuser=true";
             return internet.doGetString(getUrl);
         } catch (UnsupportedEncodingException e) {

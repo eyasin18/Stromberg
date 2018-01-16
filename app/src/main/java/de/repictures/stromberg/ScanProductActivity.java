@@ -2,9 +2,7 @@ package de.repictures.stromberg;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -30,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -38,7 +37,12 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +69,9 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     @BindView(R.id.scan_product_progress_bar) ProgressBar scanProgressBar;
     @BindView(R.id.shopping_list_checkout_button) Button checkoutButton;
     @BindView(R.id.shopping_list_checkout_progress_bar) ProgressBar checkoutProgressBar;
+    @BindView(R.id.shopping_list_gross_total) TextView grossTotalText;
+    @BindView(R.id.shopping_list_vat) TextView vatText;
+    @BindView(R.id.shopping_list_net_total) TextView netTotalText;
 
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;
@@ -72,6 +79,8 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     public ArrayList<String[]> productsList = new ArrayList<>();
     public List<Integer> productAmounts = new ArrayList<>();
     RecyclerView.Adapter shoppingAdapter;
+    float grossTotal = 0.0f;
+    float netTotal = 0.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +138,13 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                 int productIndex = scanResults.indexOf(productsList.get(position)[6]);
                 if (productIndex > -1) scanResults.remove(productIndex);
                 productsList.remove(position);
+                productAmounts.remove(position);
                 shoppingAdapter.notifyItemRemoved(position);
                 shoppingAdapter.notifyItemRangeChanged(position, productsList.size());
                 if (productsList.size() < 1){
                     enableCheckoutButton(false);
                 }
+                updateSums();
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -143,6 +154,8 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         scanProgressBar.bringToFront();
         checkoutProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
         checkoutProgressBar.bringToFront();
+
+        updateSums();
     }
 
     private void createCameraSource() {
@@ -301,6 +314,8 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                         .show();
             } else {
                 productsList.add(product);
+                productAmounts.add(1);
+                updateSums();
             }
         }
         shoppingAdapter.notifyDataSetChanged();
@@ -308,6 +323,23 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         if (shoppingAdapter.getItemCount() > 0){
             checkoutButton.setEnabled(true);
         }
+    }
+
+    public void updateSums() {
+        netTotal = 0.0f;
+        grossTotal = 0.0f;
+        float tax = LoginActivity.VAT;
+        tax = tax/100;
+        for (int i = 0; i < productsList.size(); i++){
+            float productPrice = Float.parseFloat(productsList.get(i)[3]);
+            int count = productAmounts.get(i);
+            grossTotal += (float) (count*productPrice);
+            netTotal += (float) (count*(productPrice*tax + productPrice));
+        }
+        DecimalFormat df = new DecimalFormat("0.00");
+        grossTotalText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(grossTotal)));
+        vatText.setText(String.valueOf(LoginActivity.VAT) + "%");
+        netTotalText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(netTotal)));
     }
 
     public void receiveResult(){
@@ -334,16 +366,10 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                 slideUp.hide();
                 break;
             case R.id.shopping_list_checkout_button:
-                float priceSum = 0.0f;
-                for (int i = 0; i < productsList.size(); i++){
-                    float productPrice = Float.parseFloat(productsList.get(i)[3]);
-                    int count = productAmounts.get(i);
-                    priceSum += (float) (count*productPrice);
-                }
-                Log.d(TAG, "onClick: " + priceSum);
+                Log.d(TAG, "onClick: " + netTotal);
                 AlertDialog.Builder builder = new AlertDialog.Builder(ScanProductActivity.this);
                 builder.setTitle(getResources().getString(R.string.finish_purchase))
-                        .setMessage(String.format(Locale.getDefault(), getResources().getString(R.string.buy_products_in_cart), priceSum))
+                        .setMessage(String.format(Locale.getDefault(), getResources().getString(R.string.buy_products_in_cart), netTotal))
                         .setPositiveButton(R.string.finish, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 sendShoppingList();
@@ -366,26 +392,34 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     private void sendShoppingList() {
         checkoutButton.setText("");
         checkoutProgressBar.setVisibility(View.VISIBLE);
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
-        String companyNumber = productsList.get(0)[2];
 
-        StringBuilder shoppingListBuilder = new StringBuilder();
+        JSONObject object = new JSONObject();
+        JSONArray productCodesArray = new JSONArray();
+        JSONArray pricesArray = new JSONArray();
+        JSONArray isSelfBuyArray = new JSONArray();
+        JSONArray amountsArray = new JSONArray();
+
         for (int i = 0; i < productsList.size(); i++){
             String[] product = productsList.get(i);
 
-            shoppingListBuilder.append(product[6]);
-            shoppingListBuilder.append("ò");
-            shoppingListBuilder.append(product[3]);
-            shoppingListBuilder.append("ò");
-            shoppingListBuilder.append(product[5]);
-            shoppingListBuilder.append("ò");
-            shoppingListBuilder.append(productAmounts.get(i));
-            shoppingListBuilder.append("ň");
+            productCodesArray.put(product[6]);
+            pricesArray.put(product[3]);
+            isSelfBuyArray.put(product[5]);
+            amountsArray.put(productAmounts.get(i));
         }
 
-        BuyItemsAsyncTask asyncTask = new BuyItemsAsyncTask(ScanProductActivity.this);
-        asyncTask.execute(webString, LoginActivity.ACCOUNTNUMBER, companyNumber, shoppingListBuilder.toString());
+        try {
+            object.put("product_codes", productCodesArray);
+            object.put("prices_array", pricesArray);
+            object.put("is_self_buy", isSelfBuyArray);
+            object.put("amounts", amountsArray);
+
+            BuyItemsAsyncTask asyncTask = new BuyItemsAsyncTask(ScanProductActivity.this);
+            asyncTask.execute(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            buyItemResult(-2);
+        }
     }
 
     public void buyItemResult(int responsecode){
@@ -393,6 +427,17 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         checkoutButton.setText(getResources().getString(R.string.checkout));
         AlertDialog.Builder builder;
         switch (responsecode){
+            case -2:
+                builder = new AlertDialog.Builder(ScanProductActivity.this);
+                builder.setTitle(getResources().getString(R.string.json_exception))
+                        .setMessage(getResources().getString(R.string.json_exception))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+                break;
             case -1:
                 builder = new AlertDialog.Builder(ScanProductActivity.this);
                 builder.setTitle(getResources().getString(R.string.session_invalid))
@@ -416,6 +461,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                 if (productsList.size() < 1){
                     enableCheckoutButton(false);
                 }
+                updateSums();
                 break;
             case 2:
                 builder = new AlertDialog.Builder(ScanProductActivity.this);

@@ -31,6 +31,7 @@ public class ShowTransferDetailDialogFragment extends DialogFragment {
         String person = getArguments().getString("person");
         String purpose = getArguments().getString("purpose");
         String type = getArguments().getString("type");
+        String accountnumber = getArguments().getString("accountnumber");
 
         //Build the Dialog
         AlertDialog builder = new AlertDialog.Builder(getActivity())
@@ -51,6 +52,7 @@ public class ShowTransferDetailDialogFragment extends DialogFragment {
         TextView personBody = (TextView) parent.findViewById(R.id.transfer_detail_person_body);
         TextView purposeBody = (TextView) parent.findViewById(R.id.transfer_detail_purpose_body);
         TextView typeBody = (TextView) parent.findViewById(R.id.transfer_detail_type_body);
+        TextView accountnumberBody = (TextView) parent.findViewById(R.id.transfer_detail_accountnumber_body);
 
         if (!isSender) personTitle.setText(getActivity().getResources().getString(R.string.transfer_sender));
         else personTitle.setText(getActivity().getResources().getString(R.string.transfer_receiver));
@@ -58,6 +60,7 @@ public class ShowTransferDetailDialogFragment extends DialogFragment {
         personBody.setText(person);
         purposeBody.setText(purpose);
         typeBody.setText(type);
+        accountnumberBody.setText(accountnumber);
 
         builder.setView(parent);
         return builder;

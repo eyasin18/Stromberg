@@ -157,6 +157,10 @@
     <string name="name">Name</string>
     <string name="error_sender_empty">You have to give your name</string>
     <string name="vat">Value added tax</string>
+    <string name="json_exception">JSON Exception</string>
+    <string name="gross_total">Gross total</string>
+    <string name="total">Total</string>
+    <string name="net_total">Net total</string>
 
 
 </resources>

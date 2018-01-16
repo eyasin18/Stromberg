@@ -36,8 +36,30 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/purpose"
                 android:layout_below="@+id/transfer_detail_person_body"
+                android:text="@string/account_number"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingBottom="4dp"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:id="@+id/transfer_detail_accountnumber_title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error"
+                android:layout_below="@+id/transfer_detail_accountnumber_title"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingBottom="16dp"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/transfer_detail_accountnumber_body"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/purpose"
+                android:layout_below="@+id/transfer_detail_accountnumber_body"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:paddingBottom="4dp"

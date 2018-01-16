@@ -59,12 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //Wenn Finanzstatus erfolgreich eingegangen ist, dann...
-    public void setFinancialStatus(String accountnumber, String accountowner, float accountbalance){
+    public void setFinancialStatus(String accountnumber, String vat, float accountbalance){
         DecimalFormat df = new DecimalFormat("0.00");
         accountBalanceText.setTextColor(getResources().getColor(accountbalance <= 0 ? R.color.balance_minus : R.color.balance_plus));
         accountBalanceText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(round(accountbalance, 2))));
         accountNumberText.setText(accountnumber);
-        String vatString = getResources().getString(R.string.vat) + ": " + accountowner + "%";
+        LoginActivity.VAT = Integer.valueOf(vat);
+        String vatString = getResources().getString(R.string.vat) + ": " + vat + "%";
         accountOwnerText.setText(vatString);
         financialStatusProgressBar.setVisibility(View.GONE);
         financialStatusContent.setVisibility(View.VISIBLE);

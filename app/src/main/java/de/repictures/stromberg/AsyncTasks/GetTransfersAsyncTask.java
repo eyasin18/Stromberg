@@ -1,6 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -58,14 +59,22 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, String[][]>{
 
     @Override
     protected String[][] doInBackground(String... params) {
-        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + params[0] + "&start=" + params[1];
+        String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + params[0] + "&start=" + params[1] + "&code=" + LoginActivity.WEBSTRING;
 
         MimeMultipart multi = internetHelper.doGetMultipart(baseUrl, "multipart/x-mixed-replace;boundary=End");
-        String itemLeftStr = internetHelper.parseTextBodyPart(multi, 1);
+
+        String responseCodeStr = internetHelper.parseTextBodyPart(multi, 0);
+        if (Integer.parseInt(responseCodeStr) == 0){
+            Intent i = new Intent(transfersActivity, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            transfersActivity.startActivity(i);
+        }
+
+        String itemLeftStr = internetHelper.parseTextBodyPart(multi, 2);
         Log.d(TAG, "doInBackground: " + itemLeftStr);
         itemLeft = Boolean.parseBoolean(itemLeftStr);
 
-        String rawResultStr = internetHelper.parseTextBodyPart(multi, 0);
+        String rawResultStr = internetHelper.parseTextBodyPart(multi, 1);
         if(rawResultStr.endsWith("ĵ")){
             return null;
         } else if (rawResultStr.length() > 0){
