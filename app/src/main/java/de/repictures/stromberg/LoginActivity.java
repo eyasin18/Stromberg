@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final String TAG = "LoginActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 42;
 
-    public static String SERVERURL = "https://fingerhut388.appspot.com/";
+    public static String SERVERURL = "https://2-dot-fingerhut388.appspot.com/";
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
     public static String COMPANY_NUMBER = "0002";
