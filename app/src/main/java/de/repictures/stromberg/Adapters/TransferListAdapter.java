@@ -84,11 +84,11 @@ public class TransferListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             String amountWholeStr;
             if (amount <= 0.0) {
                 amountWholeStr = "-";
-                itemHolder.tranferAmountCents.setTextColor(activity.getResources().getColor(R.color.balance_minus));
+                itemHolder.transferAmountCents.setTextColor(activity.getResources().getColor(R.color.balance_minus));
                 itemHolder.transferAmountEuros.setTextColor(activity.getResources().getColor(R.color.balance_minus));
             } else {
                 amountWholeStr = "+";
-                itemHolder.tranferAmountCents.setTextColor(activity.getResources().getColor(R.color.balance_plus));
+                itemHolder.transferAmountCents.setTextColor(activity.getResources().getColor(R.color.balance_plus));
                 itemHolder.transferAmountEuros.setTextColor(activity.getResources().getColor(R.color.balance_plus));
             }
             double amountFrac = amount % 1;
@@ -96,40 +96,36 @@ public class TransferListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             long amountFraction = Math.abs(Math.round((amountFrac) * 100));
             amountWholeStr += String.valueOf(amountWhole);
             String amountFractionStr = String.format(Locale.getDefault(), "%02d", amountFraction);
-            itemHolder.tranferAmountCents.setText(amountFractionStr);
+            itemHolder.transferAmountCents.setText(amountFractionStr);
             itemHolder.transferAmountEuros.setText(amountWholeStr);
 
             itemHolder.transferCompanyName.setText(transfers[position][1]);
             itemHolder.transferType.setText(transfers[position][3]);
-            itemHolder.setClickListener(new TransferListViewHolder.ClickListener() {
-
-                @Override
-                public void onClick(View v, int position, boolean isLongClick) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.getDefault());
-                    Calendar calendar = Calendar.getInstance();
-                    try {
-                        calendar.setTime(sdf.parse(transfers[position][0]));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minute = calendar.get(Calendar.MINUTE);
-                    String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-                    String day = activity.getResources().getStringArray(R.array.weekdays_short)[calendar.get(Calendar.DAY_OF_WEEK) - 1] + '.';
-
-                    ShowTransferDetailDialogFragment dialogFragment = new ShowTransferDetailDialogFragment();
-                    Bundle args = new Bundle();
-                    args.putString("day", day);
-                    args.putString("time", time);
-                    args.putString("purpose", transfers[position][4]);
-                    args.putString("isSenderStr", transfers[position][6]);
-                    args.putString("person", transfers[position][1]);
-                    args.putString("type", transfers[position][3]);
-                    args.putString("accountnumber", transfers[position][7]);
-                    dialogFragment.setArguments(args);
-                    FragmentManager fm = ((TransfersActivity) activity).getSupportFragmentManager();
-                    dialogFragment.show(fm, "ShowTransferDetailDialogFragment");
+            itemHolder.setClickListener((v, position1, isLongClick) -> {
+                SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.getDefault());
+                Calendar calendar1 = Calendar.getInstance();
+                try {
+                    calendar1.setTime(sdf1.parse(transfers[position1][0]));
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                int hour1 = calendar1.get(Calendar.HOUR_OF_DAY);
+                int minute1 = calendar1.get(Calendar.MINUTE);
+                String time1 = String.format(Locale.getDefault(), "%02d:%02d", hour1, minute1);
+                String day = activity.getResources().getStringArray(R.array.weekdays_short)[calendar1.get(Calendar.DAY_OF_WEEK) - 1] + '.';
+
+                ShowTransferDetailDialogFragment dialogFragment = new ShowTransferDetailDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("day", day);
+                args.putString("time", time1);
+                args.putString("purpose", transfers[position1][4]);
+                args.putString("isSenderStr", transfers[position1][6]);
+                args.putString("person", transfers[position1][1]);
+                args.putString("type", transfers[position1][3]);
+                args.putString("accountnumber", transfers[position1][7]);
+                dialogFragment.setArguments(args);
+                FragmentManager fm = ((TransfersActivity) activity).getSupportFragmentManager();
+                dialogFragment.show(fm, "ShowTransferDetailDialogFragment");
             });
         }
     }

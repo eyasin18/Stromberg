@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,6 +25,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -51,12 +54,14 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
     @BindView(R.id.auth_scan_progressbar) ProgressBar authScanProgressBar;
     @BindView(R.id.auth_scan_title) TextView authScanTitle;
     @BindView(R.id.auth_scan_fab) FloatingActionButton authFab;
+    @BindView(R.id.activity_scan_flash_button) ImageButton flashButton;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource mCameraSource;
     private boolean animated = false;
     public ArrayList<String> sortedBarcodeValues = new ArrayList<>();
     private int sortedBarcodesSize = 0;
+    private boolean isFlash = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +77,13 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
             requestCameraPermission();
         }
 
-        authFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditAuthCodeDialogFragment fragment = new EditAuthCodeDialogFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                fragment.show(fm, "EditAuthCode");
-            }
+        authFab.setOnClickListener(view -> {
+            EditAuthCodeDialogFragment fragment = new EditAuthCodeDialogFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            fragment.show(fm, "EditAuthCode");
         });
+
+        flashButton.setOnClickListener(view -> changeFlash());
     }
 
     @Override
@@ -106,6 +110,40 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setAutoFocusEnabled(true)
                 .build();
+    }
+
+    private void changeFlash() {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(mCameraSource);
+                    if (camera != null) {
+                        Camera.Parameters params = camera.getParameters();
+
+                        if(!isFlash){
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                            flashButton.setImageResource(R.drawable.ic_flash_on_white_24dp);
+                            isFlash = true;
+                        } else {
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            flashButton.setImageResource(R.drawable.ic_flash_off_white_24dp);
+                            isFlash = false;
+
+                        }
+                        camera.setParameters(params);
+
+                    }
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            }
+        }
     }
 
     private SurfaceHolder.Callback surfaceHolderCallback() {

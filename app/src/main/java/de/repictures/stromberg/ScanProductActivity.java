@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,11 +22,13 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,18 +64,31 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
 
     private SlideUp slideUp;
 
-    @BindView(R.id.camera_view) SurfaceView cameraView;
-    @BindView(R.id.activity_scan_layout) CoordinatorLayout scanLayout;
-    @BindView(R.id.shopping_list_slide_down_view) View slideView;
-    @BindView(R.id.activity_scan_fab) FloatingActionButton floatingActionButton;
-    @BindView(R.id.shopping_list_recycler_view) RecyclerView shoppingRecycler;
-    @BindView(R.id.shopping_list_slide_down_arrow) ImageView slideDownArrow;
-    @BindView(R.id.scan_product_progress_bar) ProgressBar scanProgressBar;
-    @BindView(R.id.shopping_list_checkout_button) Button checkoutButton;
-    @BindView(R.id.shopping_list_checkout_progress_bar) ProgressBar checkoutProgressBar;
-    @BindView(R.id.shopping_list_gross_total) TextView grossTotalText;
-    @BindView(R.id.shopping_list_vat) TextView vatText;
-    @BindView(R.id.shopping_list_net_total) TextView netTotalText;
+    @BindView(R.id.camera_view)
+    SurfaceView cameraView;
+    @BindView(R.id.activity_scan_layout)
+    CoordinatorLayout scanLayout;
+    @BindView(R.id.shopping_list_slide_down_view)
+    View slideView;
+    @BindView(R.id.activity_scan_fab)
+    FloatingActionButton floatingActionButton;
+    @BindView(R.id.shopping_list_recycler_view)
+    RecyclerView shoppingRecycler;
+    @BindView(R.id.shopping_list_slide_down_arrow)
+    ImageView slideDownArrow;
+    @BindView(R.id.scan_product_progress_bar)
+    ProgressBar scanProgressBar;
+    @BindView(R.id.shopping_list_checkout_button)
+    Button checkoutButton;
+    @BindView(R.id.shopping_list_checkout_progress_bar)
+    ProgressBar checkoutProgressBar;
+    @BindView(R.id.shopping_list_gross_total)
+    TextView grossTotalText;
+    @BindView(R.id.shopping_list_vat)
+    TextView vatText;
+    @BindView(R.id.shopping_list_net_total)
+    TextView netTotalText;
+    @BindView(R.id.activity_scan_flash_button) ImageButton flashButton;
 
     BarcodeDetector barcodeDetector;
     CameraSource mCameraSource;
@@ -81,6 +98,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     RecyclerView.Adapter shoppingAdapter;
     float grossTotal = 0.0f;
     float netTotal = 0.0f;
+    private boolean isFlash = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,16 +117,17 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         slideView.setOnClickListener(this);
         slideDownArrow.setOnClickListener(this);
         checkoutButton.setOnClickListener(this);
+        flashButton.setOnClickListener(this);
 
         slideUp = new SlideUpBuilder(slideView)
                 .withStartState(SlideUp.State.HIDDEN)
                 .withStartGravity(Gravity.BOTTOM)
                 .withGesturesEnabled(false)
-                .withListeners(new SlideUp.Listener.Events(){
+                .withListeners(new SlideUp.Listener.Events() {
 
                     @Override
                     public void onVisibilityChanged(int visibility) {
-                        if (visibility == View.GONE){
+                        if (visibility == View.GONE) {
                             floatingActionButton.show();
                         }
                     }
@@ -171,6 +190,40 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                 .setRequestedPreviewSize(height/ 2, width / 2)
                 .setAutoFocusEnabled(true)
                 .build();
+    }
+
+    private void changeFlash() {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(mCameraSource);
+                    if (camera != null) {
+                        Camera.Parameters params = camera.getParameters();
+
+                        if(!isFlash){
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                            flashButton.setImageResource(R.drawable.ic_flash_on_white_24dp);
+                            isFlash = true;
+                        } else {
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            flashButton.setImageResource(R.drawable.ic_flash_off_white_24dp);
+                            isFlash = false;
+
+                        }
+                        camera.setParameters(params);
+
+                    }
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            }
+        }
     }
 
     private SurfaceHolder.Callback surfaceHolderCallback() {
@@ -382,6 +435,9 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                             }
                         })
                         .show();
+                break;
+            case R.id.activity_scan_flash_button:
+                changeFlash();
                 break;
             default:
                 Log.d(TAG, "onClick: Clicked anywhere else");

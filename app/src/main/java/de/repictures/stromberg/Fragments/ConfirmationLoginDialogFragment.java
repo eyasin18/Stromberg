@@ -28,13 +28,16 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
     Button loginButton;
     ProgressBar loginProgressBar;
     String accountnumber;
+    int accountnumberLabelTextId = R.string.company_number;
     private String TAG = "ConfirmDialog";
     private OrderDetailFragment orderDetailFragment;
+    private TextView accountnumberLabelTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountnumber = getArguments().getString(OrderDetailFragment.ARG_ACCOUNTNUMBER_ID);
+        accountnumberLabelTextId = getArguments().getInt("label_id");
     }
 
     @NonNull
@@ -48,6 +51,7 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
         View parent = layoutInflater.inflate(R.layout.fragment_company_login_dialog, null);
 
         accountnumberTextView = (TextView) parent.findViewById(R.id.company_login_accountnumber_text);
+        accountnumberLabelTextView = (TextView) parent.findViewById(R.id.company_login_accountnumber_text_label);
         passwordInputLayout = (TextInputLayout) parent.findViewById(R.id.company_login_password_edit_layout);
         passwordEditText = (TextInputEditText) parent.findViewById(R.id.company_login_password_edit);
         loginButton = (Button) parent.findViewById(R.id.company_login_login_button);
@@ -55,6 +59,7 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
         cancelTextView = (TextView) parent.findViewById(R.id.company_login_cancel);
 
         accountnumberTextView.setText(accountnumber);
+        accountnumberLabelTextView.setText(getResources().getString(accountnumberLabelTextId));
         loginProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccentYellow), android.graphics.PorterDuff.Mode.SRC_ATOP);
         loginButton.setOnClickListener(this);
         cancelTextView.setOnClickListener(this);

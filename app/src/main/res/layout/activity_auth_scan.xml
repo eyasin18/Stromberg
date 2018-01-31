@@ -26,7 +26,19 @@
             android:textColor="@color/white"
             android:gravity="center_horizontal"
             android:layout_margin="16dp"
+            android:id="@+id/title_text"
             style="@style/TextAppearance.AppCompat.Headline"/>
+
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/camera_flash_button"
+            android:layout_below="@id/title_text"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:id="@+id/activity_scan_flash_button"
+            app:srcCompat="@drawable/ic_flash_on_white_24dp"/>
 
     </RelativeLayout>
 

@@ -86,18 +86,22 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 priceSum += (price * amount);
             }
             String amountWholeStr;
-            if (priceSum < 0.0) {
+            if (priceSum < 0.0 && !purchaseOrders.get(arrayPosition).isCompleted()) {
                 amountWholeStr = "-";
-                if (!purchaseOrders.get(arrayPosition).isCompleted())
-                    itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
-                if (!purchaseOrders.get(arrayPosition).isCompleted())
-                    itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
+                itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
+                itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
+            } else if (!purchaseOrders.get(arrayPosition).isCompleted()){
+                amountWholeStr = "+";
+                itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
+                itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
+            } else if (priceSum < 0.0 && purchaseOrders.get(arrayPosition).isCompleted()){
+                amountWholeStr = "-";
+                itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
+                itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
             } else {
                 amountWholeStr = "+";
-                if (!purchaseOrders.get(arrayPosition).isCompleted())
-                    itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
-                if (!purchaseOrders.get(arrayPosition).isCompleted())
-                    itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
+                itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
+                itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
             }
             double priceSumFrac = priceSum % 1;
             long priceSumWhole = (long) Math.abs(priceSum - priceSumFrac);

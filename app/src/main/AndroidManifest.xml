@@ -116,6 +116,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.CompanyActivity" />
         </activity>
+        <activity
+            android:name=".Features.EmployeesActivity"
+            android:label="@string/title_activity_employees"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.EditEmployeeActivity"
+            android:label="@string/title_activity_edit_employee"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

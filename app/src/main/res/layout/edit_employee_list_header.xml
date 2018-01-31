@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/edit_employee_accountnumber_text_label"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/account_number"
+        android:textSize="12sp"
+        android:gravity="bottom"/>
+
+    <TextView
+        android:id="@+id/edit_employee_accountnumber_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="6dp"
+        android:layout_below="@+id/edit_employee_accountnumber_text_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/error"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_employee_accountnumber_text"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:id="@+id/wage_layout">
+
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:paddingRight="8dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_employee_wage_layout"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_employee_wage_edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:ems="10"
+                    android:selectAllOnFocus="true"
+                    android:hint="@string/gross_wage"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+                    android:nextFocusUp="@id/edit_employee_wage_edit_text"
+                    android:nextFocusLeft="@id/edit_employee_wage_edit_text"
+                    android:paddingBottom="@dimen/activity_horizontal_margin" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/edit_employee_currency"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currency"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/edit_employee_wage_layout"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/edit_employee_netwage_text_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="@string/net_wage"
+                android:textSize="12sp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/edit_employee_netwage_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:layout_below="@+id/edit_employee_netwage_text_label"
+                android:text="@string/error"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/edit_employee_worktime_text_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="@string/work_times"
+        android:textSize="12sp"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@id/wage_layout"/>
+
+</RelativeLayout>

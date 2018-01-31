@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/edit_employee_save_button"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/save"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:theme="@style/LoginButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/edit_employee_save_button"
+        android:layout_alignLeft="@+id/edit_employee_save_button"
+        android:layout_alignStart="@+id/edit_employee_save_button"
+        android:id="@+id/edit_employee_progress_bar"
+        android:layout_alignBottom="@+id/edit_employee_save_button"
+        android:layout_alignRight="@+id/edit_employee_save_button"
+        android:layout_alignEnd="@+id/edit_employee_save_button"
+        android:padding="10dp"
+        android:elevation="2dp"
+        android:visibility="invisible"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/separator" />
+
+</RelativeLayout>

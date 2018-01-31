@@ -1,5 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import de.repictures.stromberg.Fragments.ConfirmationLoginDialogFragment;
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.R;
 
 public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -33,7 +36,10 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String getUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + LoginActivity.WEBSTRING;
+        SharedPreferences sharedPref = confirmationLoginDialogFragment.getActivity().getSharedPreferences(confirmationLoginDialogFragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String accountnumber = sharedPref.getString(confirmationLoginDialogFragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+
+        String getUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + LoginActivity.WEBSTRING;
         String serverTimeStamp = internetHelper.doGetString(getUrlStr);
         String encodedServerTimeStamp;
         if (internetHelper.getResponseCode() == 206){
@@ -48,7 +54,7 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
         Log.d(TAG, "Server Timestamp: " + serverTimeStamp);
         String hashedPassword = cryptor.hashToString(params[1]);
         String hashedSaltetPassword = cryptor.hashToString(hashedPassword + serverTimeStamp);
-        String postUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + LoginActivity.WEBSTRING
+        String postUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + LoginActivity.WEBSTRING
                 + "&password=" + hashedSaltetPassword + "&servertimestamp=" + encodedServerTimeStamp;
         return internetHelper.doPostString(postUrlStr);
     }

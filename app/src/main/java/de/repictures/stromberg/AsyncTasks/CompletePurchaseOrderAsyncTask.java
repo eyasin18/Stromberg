@@ -1,5 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -7,6 +9,7 @@ import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.R;
 
 public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -41,6 +44,9 @@ public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, Stri
             isSelfBuysBuilder.append(fragment.purchaseOrder.getProducts()[i].isSelfBuy()).append("ò");
         }
 
+        SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(fragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String accountnumber = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+
         HttpEntity entity = MultipartEntityBuilder.create()
                 .addTextBody("webstring", LoginActivity.WEBSTRING)
                 .addTextBody("buyeraccountnumber", fragment.purchaseOrder.getBuyerAccountnumber())
@@ -50,7 +56,7 @@ public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, Stri
                 .addTextBody("amounts", amountsBuilder.toString())
                 .addTextBody("prices", pricesBuilder.toString())
                 .addTextBody("isselfbuy", isSelfBuysBuilder.toString())
-                .addTextBody("selleraccountnumber", LoginActivity.ACCOUNTNUMBER)
+                .addTextBody("selleraccountnumber", accountnumber)
                 .build();
 
         return internetHelper.doMultipartRequest(Internet.POST, url, entity).trim();

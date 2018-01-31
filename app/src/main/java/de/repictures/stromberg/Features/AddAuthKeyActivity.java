@@ -1,5 +1,7 @@
 package de.repictures.stromberg.Features;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -44,7 +46,9 @@ public class AddAuthKeyActivity extends AppCompatActivity {
         getButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                qrCodeBuilder.getQRCode(accountnumberedit.getText().toString(), LoginActivity.ACCOUNTNUMBER, qrPreview);
+                SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+                String accountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
+                qrCodeBuilder.getQRCode(accountnumberedit.getText().toString(), accountnumber, qrPreview);
             }
         });
     }

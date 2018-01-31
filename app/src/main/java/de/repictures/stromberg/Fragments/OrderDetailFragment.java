@@ -80,6 +80,7 @@ public class OrderDetailFragment extends Fragment {
         confirmationLoginDialogFragment.setOrderDetailFragment(OrderDetailFragment.this);
         Bundle args = new Bundle();
         args.putString(ARG_ACCOUNTNUMBER_ID, purchaseOrder.getBuyerAccountnumber());
+        args.putInt("label_id", R.string.account_number);
         confirmationLoginDialogFragment.setArguments(args);
         FragmentManager fm = getFragmentManager();
         confirmationLoginDialogFragment.show(fm, "ShowConfirmationLoginDialogFragment");

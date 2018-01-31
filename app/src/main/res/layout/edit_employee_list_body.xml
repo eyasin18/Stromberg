@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:id="@+id/edit_employee_work_times_layout">
+
+    <TextView
+        android:id="@+id/edit_employee_start_time"
+        android:paddingTop="12dp"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="@string/error"
+        android:layout_alignParentTop="true"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"/>
+
+    <TextView
+        android:id="@+id/edit_employee_end_time"
+        style="@style/TextAppearance.AppCompat.Body2"
+        app:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:paddingBottom="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_employee_start_time"
+        android:text="@string/error" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@+id/edit_employee_end_time"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/separator" />
+
+</RelativeLayout>

@@ -35,7 +35,7 @@ public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product
 
     @Override
     protected Product[] doInBackground(String... strings) {
-        String url = LoginActivity.SERVERURL + "/postsellingproducts?companynumber=" + LoginActivity.COMPANY_NUMBER;
+        String url = LoginActivity.SERVERURL + "postsellingproducts?companynumber=" + LoginActivity.COMPANY_NUMBER;
         MimeMultipart multipart = internet.doGetMultipart(url,"multipart/x-mixed-replace;boundary=End");
         String responseCodeStr = internet.parseTextBodyPart(multipart, 0);
         responseCode = Integer.parseInt(responseCodeStr);
@@ -45,8 +45,9 @@ public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product
                 return null;
             case 1:
                 try {
-                    JSONObject productsJsonObject = internet.parseJsonBodyPart(multipart, 1);
-                    JSONArray productsJsonArray = productsJsonObject.getJSONArray("products");
+                    JSONObject jsonObject = internet.parseJsonBodyPart(multipart, 1);
+
+                    JSONArray productsJsonArray = jsonObject.getJSONArray("products");
                     Product[] products = new Product[productsJsonArray.length()];
                     for (int i = 0; i < productsJsonArray.length(); i++){
                         JSONArray product = productsJsonArray.getJSONArray(i);
@@ -56,6 +57,13 @@ public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product
                         products[i].setPrice(product.getDouble(2));
                         products[i].setSelfBuy(product.getBoolean(3));
                     }
+
+                    JSONArray taxJsonArray = jsonObject.getJSONArray("wage_taxes");
+                    int[] taxArray = new int[taxJsonArray.length()];
+                    for (int i = 0; i < taxJsonArray.length(); i++) {
+                        taxArray[i] = taxJsonArray.getInt(i);
+                    }
+                    CompanyActivity.WAGE_TAX_ARRAY = taxArray;
                     return products;
                 } catch (JSONException e) {
                     Log.e(TAG, "doInBackground: ", e);

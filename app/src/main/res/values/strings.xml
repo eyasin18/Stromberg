@@ -161,6 +161,27 @@
     <string name="gross_total">Gross total</string>
     <string name="total">Total</string>
     <string name="net_total">Net total</string>
+    <string name="account_locked_attempts">Account is locked for %d  seconds.</string>
+    <string name="password_wrong_attempts_left">This password is not correct. You have %d attempts left.</string>
+    <string name="account_locked">Your account is locked. Unlock it at the Central Bank.</string>
+    <string name="title_activity_employees">Edit employees</string>
+    <string name="title_activity_edit_employee">Edit employee</string>
+    <string name="gross_wage">Gross wage</string>
+    <string name="net_wage">Net wage</string>
+    <string name="work_times">Work times</string>
+    <string name="add_work_time">Add work time</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="edit_work_time">Edit work time</string>
+    <string name="dismiss_edit">Dismiss edit</string>
+    <string name="changed_data_will_not_be_saved">Your changed data will not be saved</string>
+    <string name="continue_editing">Continue editing</string>
+    <string name="start_time_after_end_time">Your start time is after your end time</string>
+    <string name="permissions">Permissions</string>
+    <string name="fcb_long" translatable="false">Future Central Bank</string>
+    <string name="ministry">Ministry</string>
+    <string name="parliament">Parliament</string>
+    <string name="police">Police</string>
 
 
 </resources>

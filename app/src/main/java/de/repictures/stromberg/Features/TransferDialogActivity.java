@@ -127,8 +127,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
             SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
+            String accountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
             TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
-            asyncTask.execute(LoginActivity.ACCOUNTNUMBER, accountnumberEditText.getText().toString(), webString,
+            asyncTask.execute(accountnumber, accountnumberEditText.getText().toString(), webString,
                         amountEditText.getText().toString(), purposeEditText.getText().toString(),
                         senderEditText.getText().toString(), ownerAutoComplete.getText().toString());
         }
@@ -184,8 +185,9 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
                     SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
                     String webString = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
+                    String accountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
                     TransferAsyncTask asyncTask = new TransferAsyncTask(TransferDialogActivity.this);
-                    asyncTask.execute(LoginActivity.ACCOUNTNUMBER, accountnumberEditText.getText().toString(), webString,
+                    asyncTask.execute(accountnumber, accountnumberEditText.getText().toString(), webString,
                             amountEditText.getText().toString(), purposeEditText.getText().toString(),
                             senderEditText.getText().toString(), ownerAutoComplete.getText().toString());
                 }

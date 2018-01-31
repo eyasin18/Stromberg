@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/edit_employee_permission_layout">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_centerVertical="true"
+        android:checked="true"
+        android:id="@+id/edit_employee_permission_check_box"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/edit_employee_permission_check_box"
+        android:text="@string/error"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:padding="16dp"
+        android:id="@+id/edit_employee_permission_text"/>
+
+</RelativeLayout>

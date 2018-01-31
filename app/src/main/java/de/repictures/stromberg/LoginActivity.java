@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -27,15 +28,17 @@ import android.widget.TextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
-import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.LocaleHelper;
 
 //LoginScreen. Startactivity der App.
@@ -48,7 +51,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static String SERVERURL = "https://fingerhut388.appspot.com/";
     public static String PIN = "";
     public static String ACCOUNTNUMBER = "";
-    public static String COMPANY_NUMBER = "0002";
+    public static String COMPANY_NUMBER = null;
+    public static int COMPANY_SECTOR = 0;
+    public static String COMPANY_NAME = "";
     public static String WEBSTRING = "";
     public static int VAT = 0;
     public static List<Integer> FEATURES = new ArrayList<>();
@@ -58,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private String authCode;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private long failedLogins = 0;
 
     //Views aus der XML werden Javaobjekten zugeordnet.
     @BindView(R.id.login_background) ImageView loginBackground;
@@ -209,36 +215,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .show();
     }
 
-    public void updatePrivateKey() {
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        String newPrivateKeyStr = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex_2), null);
-        String encryptedPrivateKeyHex = sharedPref.getString(getResources().getString(R.string.sp_encrypted_private_key_hex), null);
-        if (newPrivateKeyStr == null && encryptedPrivateKeyHex != null){
-            Cryptor cryptor = new Cryptor();
-            try {
-                byte[] privateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
-                /*byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
-                Log.d(TAG, cryptor.hashToString(LoginActivity.PIN));
-                PrivateKey privateKeyd = cryptor.stringToPrivateKey(encryptedPrivateKeyHex);
-                byte[] privateKey = cryptor.decryptSymmetricToByte(encryptedPrivateKey, hashedPassword);*/
-                byte[] passwordBytes = PIN.getBytes("ISO-8859-1");
-                byte[] passwordKey = new byte[32];
-                for (int i = 0; i < passwordKey.length; i++){
-                    passwordKey[i] = passwordBytes[i % passwordBytes.length];
-                }
-                byte[] newPrivateKey = cryptor.encryptSymmetricFromByte(privateKey, passwordKey);
-                newPrivateKeyStr = cryptor.bytesToHex(newPrivateKey);
-                Log.d(TAG, newPrivateKeyStr);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getResources().getString(R.string.sp_encrypted_private_key_hex_2), newPrivateKeyStr);
-            editor.apply();
-        }
-    }
-
     public void setLanguage(String language) {
         LocaleHelper.setLocale(LoginActivity.this, language);
         Locale locale = new Locale(language);
@@ -250,5 +226,54 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         configuration.locale = locale;
 
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    }
+
+    public void startCountdown(long loginAttempts){
+        this.failedLogins = loginAttempts;
+        if (failedLogins > 3){
+            double waitingTime = Math.pow(2, failedLogins) * 1000;
+            countDown((long) waitingTime);
+        } else {
+            passwordEditLayout.setErrorEnabled(false);
+            passwordEditLayout.setError(String.format(getResources().getString(R.string.password_wrong_attempts_left), 4 - failedLogins));
+        }
+    }
+
+    public void startCountdown(String cooldownTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.getDefault());
+        Calendar cooldownCalendar = new GregorianCalendar();
+        try {
+            cooldownCalendar.setTime(sdf.parse(cooldownTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar currentCalendar = Calendar.getInstance();
+        long waitingTime = cooldownCalendar.getTimeInMillis() - currentCalendar.getTimeInMillis();
+        countDown(waitingTime);
+    }
+
+    private void countDown(long waitingTimeMilliseconds){
+        loginButton.setEnabled(false);
+        passwordEditLayout.setErrorEnabled(true);
+        new CountDownTimer(waitingTimeMilliseconds, 1000) {
+            @Override
+            public void onTick(long currentTime) {
+                passwordEditLayout.setError(String.format(getResources().getString(R.string.account_locked_attempts), Math.round(currentTime/1000)));
+            }
+
+            @Override
+            public void onFinish() {
+                passwordEditLayout.setErrorEnabled(false);
+                passwordEditLayout.setError("");
+                loginButton.setEnabled(true);
+            }
+        }.start();
+    }
+
+    public void showAccountLockedMessage(){
+        accountnumberEditLayout.setErrorEnabled(true);
+        accountnumberEditLayout.setError(getResources().getString(R.string.account_locked));
+        loginButtonClicked = false;
+        loginButton.setEnabled(false);
     }
 }

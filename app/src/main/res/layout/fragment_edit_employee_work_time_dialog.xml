@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_layout"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <Spinner
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_edit_employee_work_time_dialog_day_spinner"
+            android:padding="16dp"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_edit_employee_work_time_dialog_start_hour_spinner"
+                android:padding="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:layout_toRightOf="@id/fragment_edit_employee_work_time_dialog_start_hour_spinner"
+                android:layout_alignTop="@+id/fragment_edit_employee_work_time_dialog_start_hour_spinner"
+                android:layout_alignBottom="@+id/fragment_edit_employee_work_time_dialog_start_hour_spinner"
+                android:gravity="center"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/start_points_text"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_edit_employee_work_time_dialog_start_minute_spinner"
+                android:padding="16dp"
+                android:layout_toRightOf="@id/start_points_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/oclock"
+                android:layout_toRightOf="@id/fragment_edit_employee_work_time_dialog_start_minute_spinner"
+                android:layout_alignTop="@+id/fragment_edit_employee_work_time_dialog_start_minute_spinner"
+                android:layout_alignBottom="@+id/fragment_edit_employee_work_time_dialog_start_minute_spinner"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/start_oclock_text"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start_layout"
+        android:id="@+id/end_layout"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_edit_employee_work_time_dialog_end_hour_spinner"
+                android:padding="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:layout_toRightOf="@id/fragment_edit_employee_work_time_dialog_end_hour_spinner"
+                android:layout_alignTop="@+id/fragment_edit_employee_work_time_dialog_end_hour_spinner"
+                android:layout_alignBottom="@+id/fragment_edit_employee_work_time_dialog_end_hour_spinner"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/end_points_text"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_edit_employee_work_time_dialog_end_minute_spinner"
+                android:padding="16dp"
+                android:layout_toRightOf="@id/end_points_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/oclock"
+                android:layout_toRightOf="@id/fragment_edit_employee_work_time_dialog_end_minute_spinner"
+                android:layout_alignTop="@+id/fragment_edit_employee_work_time_dialog_end_minute_spinner"
+                android:layout_alignBottom="@+id/fragment_edit_employee_work_time_dialog_end_minute_spinner"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:id="@+id/end_oclock_text"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/end_layout"
+        android:text="@string/error"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_red"
+        android:id="@+id/fragment_edit_employee_work_time_dialog_error_message"/>
+
+</RelativeLayout>

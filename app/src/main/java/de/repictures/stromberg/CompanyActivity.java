@@ -19,6 +19,7 @@ import de.repictures.stromberg.POJOs.Product;
 public class CompanyActivity extends AppCompatActivity {
 
     public static Product[] SELLING_PRODUCTS;
+    public static int[] WAGE_TAX_ARRAY;
 
     public List<String> featuresNames = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class CompanyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
         ButterKnife.bind(this);
-        getSupportActionBar().setTitle("Rodi Inc.");
+        getSupportActionBar().setTitle(LoginActivity.COMPANY_NAME);
 
         String[] allFeaturesNames = getResources().getStringArray(R.array.featuresNames);
 
@@ -64,5 +65,6 @@ public class CompanyActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         SELLING_PRODUCTS = null;
+        WAGE_TAX_ARRAY = null;
     }
 }

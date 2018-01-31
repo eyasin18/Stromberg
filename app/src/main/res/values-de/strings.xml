@@ -145,4 +145,24 @@
     <string name="gross_total">Bruttosumme</string>
     <string name="total">Summe</string>
     <string name="net_total">Nettosumme</string>
+    <string name="account_locked_attempts">Konto ist für %d Sekunden gesperrt.</string>
+    <string name="password_wrong_attempts_left">Das Passwort ist falsch. Du hast noch %d Versuche übrig.</string>
+    <string name="account_locked">Dein Konto ist gesperrt. Lasse es von der Zentralbank entsperren.</string>
+    <string name="gross_wage">Bruttolohn</string>
+    <string name="net_wage">Nettolohn</string>
+    <string name="title_activity_employees">Angestellte bearbeiten</string>
+    <string name="title_activity_edit_employee">Angestellten bearbeiten</string>
+    <string name="work_times">Arbeitszeiten</string>
+    <string name="add_work_time">Arbeitszeit hinzufügen</string>
+    <string name="save">Speichern</string>
+    <string name="saved">Gespeichert</string>
+    <string name="edit_work_time">Arbeitszeit bearbeiten</string>
+    <string name="dismiss_edit">Bearbeiten abbrechen</string>
+    <string name="changed_data_will_not_be_saved">Die geänderten Daten werden nicht gespeichert</string>
+    <string name="continue_editing">Bearbeiten fortführen</string>
+    <string name="start_time_after_end_time">Deine Startzeit ist nach deiner Endzeit</string>
+    <string name="permissions">Berechtigungen</string>
+    <string name="ministry">Ministerium</string>
+    <string name="parliament">Parlament</string>
+    <string name="police">Polizei</string>
 </resources>

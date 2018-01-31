@@ -58,7 +58,7 @@
                 android:id="@+id/main_transfer_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/cash"
+                app:srcCompat="@drawable/cash"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/main_transfer_text"/>
 
@@ -87,7 +87,7 @@
                 android:id="@+id/main_inbox_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/email_outline"
+                app:srcCompat="@drawable/email_outline"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/main_inbox_text"
                 android:enabled="false"/>
@@ -115,7 +115,7 @@
                 android:id="@+id/main_domain_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/domain"
+                app:srcCompat="@drawable/domain"
                 android:layout_below="@+id/main_domain_text"
                 android:layout_centerHorizontal="true" />
 
@@ -134,7 +134,7 @@
                 android:id="@+id/main_scan_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_barcode_scan"
+                app:srcCompat="@drawable/ic_barcode_scan"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/main_scan_text"/>
 

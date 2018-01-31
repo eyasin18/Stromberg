@@ -1,6 +1,8 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -8,6 +10,7 @@ import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
+import de.repictures.stromberg.R;
 
 public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[]>{
 
@@ -30,7 +33,10 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
 
     @Override
     protected String[] doInBackground(String... parameters) {
-        String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountnumber=" + LoginActivity.ACCOUNTNUMBER + "&webstring=" + parameters[0];
+        SharedPreferences sharedPref = mainActivity.getSharedPreferences(mainActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String accountnumber = sharedPref.getString(mainActivity.getResources().getString(R.string.sp_accountnumber), "");
+
+        String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountnumber=" + accountnumber + "&webstring=" + parameters[0];
         String doGetString = internetHelper.doGetString(baseUrl);
         Log.d(TAG, "doInBackground: " + baseUrl);
         return doGetString.split("ò");

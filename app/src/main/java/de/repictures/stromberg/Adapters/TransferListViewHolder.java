@@ -10,14 +10,14 @@ import de.repictures.stromberg.R;
 public class TransferListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
     private ClickListener clickListener;
-    public TextView transferDay, transferTime, tranferAmountCents, transferAmountEuros, transferCompanyName, transferType;
+    public TextView transferDay, transferTime, transferAmountCents, transferAmountEuros, transferCompanyName, transferType;
     public RelativeLayout listLayout;
 
     public TransferListViewHolder(View itemView) {
         super(itemView);
         transferDay = (TextView) itemView.findViewById(R.id.tranfer_day);
         transferTime = (TextView) itemView.findViewById(R.id.transfer_time);
-        tranferAmountCents = (TextView) itemView.findViewById(R.id.tranfer_amount_cents);
+        transferAmountCents = (TextView) itemView.findViewById(R.id.tranfer_amount_cents);
         transferAmountEuros = (TextView) itemView.findViewById(R.id.tranfer_amount_euros);
         transferCompanyName = (TextView) itemView.findViewById(R.id.tranfer_company_name);
         transferType = (TextView) itemView.findViewById(R.id.transfer_type);

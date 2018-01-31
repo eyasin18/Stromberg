@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import de.repictures.stromberg.Features.AddAuthKeyActivity;
 import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.CompanyActivity;
+import de.repictures.stromberg.Features.EmployeesActivity;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
 import de.repictures.stromberg.R;
@@ -59,10 +60,11 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
                 companyActivity.startActivity(i);
                 break;
             case 3:
-                //Feature setzen
+                i = new Intent(companyActivity, EmployeesActivity.class);
+                companyActivity.startActivity(i);
                 break;
             case 4:
-                //Account erstellen
+                //Statistiken
                 break;
             default:
                 i = null;

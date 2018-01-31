@@ -1,6 +1,8 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -16,6 +18,7 @@ import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
 import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.POJOs.PurchaseOrder;
+import de.repictures.stromberg.R;
 
 public class GetPurchaseOrdersAsyncTask extends AsyncTask<String, Void, MimeMultipart>{
 
@@ -28,8 +31,11 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<String, Void, MimeMult
 
     @Override
     protected MimeMultipart doInBackground(String... strings) {
+        SharedPreferences sharedPref = orderListActivity.getSharedPreferences(orderListActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String accountnumber = sharedPref.getString(orderListActivity.getResources().getString(R.string.sp_accountnumber), "");
+
         String urlStr = LoginActivity.SERVERURL + "/postpurchaseorders?companynumber=" + LoginActivity.COMPANY_NUMBER
-                                + "&accountnumber=" + LoginActivity.ACCOUNTNUMBER
+                                + "&accountnumber=" + accountnumber
                                 + "&webstring=" + LoginActivity.WEBSTRING;
         return internetHelper.doPostMultipart(urlStr, "multipart/x-mixed-replace;boundary=End");
     }

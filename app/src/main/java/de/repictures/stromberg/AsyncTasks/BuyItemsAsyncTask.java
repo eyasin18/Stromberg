@@ -1,5 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import java.io.UnsupportedEncodingException;
@@ -7,6 +9,7 @@ import java.net.URLEncoder;
 
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.R;
 import de.repictures.stromberg.ScanProductActivity;
 
 public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
@@ -31,12 +34,14 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
+            SharedPreferences sharedPref = scanProductActivity.getSharedPreferences(scanProductActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String accountnumber = sharedPref.getString(scanProductActivity.getResources().getString(R.string.sp_accountnumber), "");
             String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + LoginActivity.WEBSTRING
-                    + "&authaccountnumber=" + LoginActivity.ACCOUNTNUMBER
-                    + "&accountnumber=" + LoginActivity.ACCOUNTNUMBER
+                    + "&authaccountnumber=" + accountnumber
+                    + "&accountnumber=" + accountnumber
                     + "&companynumber=" + LoginActivity.COMPANY_NUMBER
                     + "&shoppinglist=" + URLEncoder.encode(params[0], "UTF-8")
-                    + "&madbyuser=true";
+                    + "&madebyuser=true";
             return internet.doGetString(getUrl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

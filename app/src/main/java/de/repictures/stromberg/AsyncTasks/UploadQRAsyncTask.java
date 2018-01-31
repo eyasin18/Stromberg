@@ -1,6 +1,8 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -23,6 +25,7 @@ import cz.msebera.android.httpclient.entity.mime.content.StringBody;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.R;
 
 public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
 
@@ -46,7 +49,9 @@ public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
             String baseUrl = LoginActivity.SERVERURL + "/saveqr";
             HttpPost httpPost = new HttpPost(baseUrl);
             StringBody accountnumberBody = new StringBody(accountnumber, ContentType.TEXT_PLAIN);
-            StringBody userAccountnumberBody = new StringBody(LoginActivity.ACCOUNTNUMBER, ContentType.TEXT_PLAIN);
+            SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String accountnumber = sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "");
+            StringBody userAccountnumberBody = new StringBody(accountnumber, ContentType.TEXT_PLAIN);
 
             byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
 

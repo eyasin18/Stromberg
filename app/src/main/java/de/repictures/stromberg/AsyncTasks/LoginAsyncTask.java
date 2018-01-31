@@ -106,8 +106,6 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     ((LoginActivity) activity).loginButtonClicked = false;
                     break;
                 case 1: //Passwort falsch
-                    passwordEditLayout.setErrorEnabled(true);
-                    passwordEditLayout.setError(activity.getResources().getString(R.string.password_wrong));
                     if (sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != "") {
                         editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
                         editor.remove(activity.getResources().getString(R.string.sp_accountkey));
@@ -116,16 +114,20 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                         editor.remove(activity.getResources().getString(R.string.sp_group));
                         editor.apply();
                     }
+                    long loginAttempts = Long.valueOf(response[1]);
                     ((LoginActivity) activity).loginButtonClicked = false;
+                    ((LoginActivity) activity).startCountdown(loginAttempts);
                     break;
                 case 2: //Alles gut
-                    editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[5]);
+                    editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[7]);
                     editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
                     editor.putString(activity.getResources().getString(R.string.sp_webstring), response[2]);
                     editor.putStringSet(activity.getResources().getString(R.string.sp_featureslist), new HashSet<>(Arrays.asList(response[3].split("ň"))));
                     editor.apply();
                     LoginActivity.WEBSTRING = response[2];
                     LoginActivity.COMPANY_NUMBER = response[4];
+                    LoginActivity.COMPANY_SECTOR = Integer.valueOf(response[5]);
+                    LoginActivity.COMPANY_NAME = response[6];
                     for(String s : response[3].split("ň")) LoginActivity.FEATURES.add(Integer.valueOf(s));
                     Log.d(TAG, "onPostExecute: " + response[2]);
                     //((LoginActivity) activity).updatePrivateKey();
@@ -146,6 +148,22 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     }
                     ((LoginActivity) activity).loginButtonClicked = false;
                     break;
+                case 4: //Du hasch noch ne CooldownTime
+                    if (sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "") != "") {
+                        editor.remove(activity.getResources().getString(R.string.sp_accountnumber));
+                        editor.remove(activity.getResources().getString(R.string.sp_accountkey));
+                        editor.remove(activity.getResources().getString(R.string.sp_webstring));
+                        editor.remove(activity.getResources().getString(R.string.sp_featureslist));
+                        editor.remove(activity.getResources().getString(R.string.sp_group));
+                        editor.apply();
+                    }
+                    String dateTimeStr = response[1];
+                    ((LoginActivity) activity).loginButtonClicked = false;
+                    ((LoginActivity) activity).startCountdown(dateTimeStr);
+                    break;
+                case 5: //Zur Zentralbank und Konto entsperren lassen
+                    ((LoginActivity) activity).showAccountLockedMessage();
+                    break;
                 case -1:
                     accountnumberEditLayout.setErrorEnabled(true);
                     accountnumberEditLayout.setError(activity.getResources().getString(R.string.internet_problems));
@@ -165,4 +183,3 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         }
     }
 }
-
