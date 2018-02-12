@@ -16,7 +16,7 @@
         android:id="@+id/company_login_password_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/company_login_accountnumber_text"
+        android:layout_below="@+id/company_login_accountnumber_spinner"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -44,20 +44,17 @@
         android:textSize="12sp"
         android:gravity="bottom"/>
 
-    <TextView
-        android:id="@+id/company_login_accountnumber_text"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:paddingLeft="28dp"
-        android:paddingRight="28dp"
-        android:paddingTop="6dp"
-        android:layout_below="@+id/company_login_accountnumber_text_label"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/error"
-        android:textStyle="bold"
-        android:textColor="#000"
-        android:textSize="16sp"/>
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/company_login_accountnumber_spinner"
+            android:layout_below="@+id/company_login_accountnumber_text_label"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:paddingLeft="28dp"
+            android:paddingRight="28dp"
+            android:text="@string/error"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
     <Button
         android:id="@+id/company_login_login_button"

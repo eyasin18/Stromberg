@@ -11,6 +11,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import de.repictures.stromberg.Features.EditEmployeeActivity;
 import de.repictures.stromberg.Helper.Internet;
@@ -72,11 +75,13 @@ public class UpdateEmployeeAsyncTask extends AsyncTask<Account, Void, String>{
 
         SharedPreferences sharedPref = editEmployeeActivity.getSharedPreferences(editEmployeeActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(editEmployeeActivity.getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(editEmployeeActivity.getResources().getString(R.string.sp_webstring), "");
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(editEmployeeActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
-        String url = LoginActivity.SERVERURL + "getemployee?companynumber=" + LoginActivity.COMPANY_NUMBER
+        String url = LoginActivity.SERVERURL + "getemployee?companynumber=" + companyNumbers.get(editEmployeeActivity.companyPosition)
                 + "&body=" + jsonObjectStr
                 + "&editoraccoutnumber=" + accountnumber
-                + "&authstring=" + LoginActivity.WEBSTRING;
+                + "&authstring=" + webstring;
         return internetHelper.doPostString(url);
     }
 

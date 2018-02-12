@@ -2,6 +2,8 @@ package de.repictures.stromberg.Adapters;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import de.repictures.stromberg.Fragments.EditOrderItemDialogFragment;
@@ -25,6 +29,7 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_FINISH = 2;
     private final int VIEW_TYPE_ADD_PRODUCT = 1;
+    private final int VIEW_TYPE_TAX = 3;
 
     private static final String TAG = "TransferListAdapter";
     private Activity activity;
@@ -41,9 +46,10 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public int getItemViewType(int position) {
         if (position == products.size()){
             if (orderDetailFragment.purchaseOrder.isCompleted()) return VIEW_TYPE_FINISH;
-            else return VIEW_TYPE_ADD_PRODUCT;
+            else return VIEW_TYPE_TAX;
         }
-        else if (position == (products.size() + 1)) return VIEW_TYPE_FINISH;
+        else if (position == (products.size() + 1)) return VIEW_TYPE_ADD_PRODUCT;
+        else if (position == (products.size() + 2)) return VIEW_TYPE_FINISH;
         else return VIEW_TYPE_ITEM;
     }
 
@@ -58,6 +64,9 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         } else if (viewType == VIEW_TYPE_ADD_PRODUCT){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_list_add_product, parent, false);
             return new AddProductViewHolder(v);
+        } else if (viewType == VIEW_TYPE_TAX){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_list_tax, parent, false);
+            return new TaxViewHolder(v);
         }
         return null;
     }
@@ -103,13 +112,30 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     editOrderItemDialogFragment.show(fm, "ShowEditOrderItemDialogFragment");
                 }
             });
+        } else if (getItemViewType(holder.getAdapterPosition()) == VIEW_TYPE_TAX){
+            TaxViewHolder taxViewHolder = (TaxViewHolder) holder;
+            DecimalFormat df = new DecimalFormat("0.00");
+            SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            float tax = sharedPref.getInt(activity.getResources().getString(R.string.sp_vat), 100);
+            taxViewHolder.vatTextView.setText(String.format(activity.getResources().getString(R.string.vat_format), String.valueOf(tax)));
+            float netTotal = 0.0f;
+            float grossTotal = 0.0f;
+            tax = tax/100;
+            for (int i = 0; i < orderDetailFragment.purchaseOrder.getProducts().length; i++){
+                double productPrice = orderDetailFragment.purchaseOrder.getProducts()[i].getPrice();
+                int count = orderDetailFragment.purchaseOrder.getAmounts()[i];
+                grossTotal += (float) (count*productPrice);
+                netTotal += (float) (count*(productPrice*tax + productPrice));
+            }
+            taxViewHolder.sumTextView.setText(String.format(activity.getResources().getString(R.string.price_sum), df.format(grossTotal)));
+            taxViewHolder.customerTextView.setText(String.format(activity.getResources().getString(R.string.customer_has_to_pay), df.format(netTotal)));
         }
     }
 
     @Override
     public int getItemCount() {
         if (orderDetailFragment.purchaseOrder.isCompleted()) return products.size() + 1;
-        else return products.size() + 2;
+        else return products.size() + 3;
     }
 
     @Override
@@ -147,6 +173,17 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(view);
             addItemLayout = (RelativeLayout) view.findViewById(R.id.order_detail_list_add_product_layout);
             addItemLayout.setClickable(true);
+        }
+    }
+
+    private class TaxViewHolder extends RecyclerView.ViewHolder {
+        TextView sumTextView, vatTextView, customerTextView;
+
+        TaxViewHolder(View view) {
+            super(view);
+            sumTextView = (TextView) view.findViewById(R.id.order_detail_list_sum);
+            vatTextView = (TextView) view.findViewById(R.id.order_detail_list_vat);
+            customerTextView = (TextView) view.findViewById(R.id.order_detail_list_customer_pays);
         }
     }
 }

@@ -132,6 +132,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Log.d("fuck off", "onClick: clicked");
                     EditAccountnumberDialogFragment dialogFragment = new EditAccountnumberDialogFragment();
                     dialogFragment.setOrderListActivity(mParentActivity);
+                    dialogFragment.setCompanyPosition(mParentActivity.companyPosition);
                     dialogFragment.show(mParentActivity.getSupportFragmentManager(), "blub");
                 }
             });
@@ -157,6 +158,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             Context context = view.getContext();
             Intent intent = new Intent(context, OrderDetailActivity.class);
+            intent.putExtra("company_array_position", mParentActivity.companyPosition);
             intent.putExtra("purchaseOrder", purchaseOrders.get(position -1));
             context.startActivity(intent);
         }

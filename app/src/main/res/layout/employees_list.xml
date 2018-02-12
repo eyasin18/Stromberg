@@ -9,7 +9,7 @@
         android:id="@+id/employees_list_accountnumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/error"
         style="@style/TextAppearance.AppCompat.Title"
         android:padding="@dimen/activity_horizontal_margin"/>
 

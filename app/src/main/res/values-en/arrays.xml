@@ -5,4 +5,14 @@
         <item>German</item>
         <item>English</item>
     </string-array>
+    <string-array name="featuresNames" translatable="false">
+        <item>Manage products</item>
+        <item>Manage QR-Codes</item>
+        <item>Checkout</item>
+        <item>Manage employees</item>
+        <item>Statistics</item>
+        <item>Change money</item>
+        <item>Add employees</item>
+        <item>Add prepaid account</item>
+    </string-array>
 </resources>

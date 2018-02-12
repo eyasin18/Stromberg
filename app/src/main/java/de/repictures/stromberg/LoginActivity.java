@@ -43,21 +43,11 @@ import de.repictures.stromberg.Helper.LocaleHelper;
 
 //LoginScreen. Startactivity der App.
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    //TODO Wenn LoginActivity aufgrund eines Timeouts gestartet wurde, soll die Ursprüngliche Activity wieder aufgerufen werden (BUG!)
 
     private final String TAG = "LoginActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 42;
 
-    public static String SERVERURL = "https://fingerhut388.appspot.com/";
-    public static String PIN = "";
-    public static String ACCOUNTNUMBER = "";
-    public static String COMPANY_NUMBER = null;
-    public static int COMPANY_SECTOR = 0;
-    public static String COMPANY_NAME = "";
-    public static String WEBSTRING = "";
-    public static int VAT = 0;
-    public static List<Integer> FEATURES = new ArrayList<>();
-    public static String DEVICE_TOKEN = "";
+    public static String SERVERURL = "https://2-dot-fingerhut388.appspot.com/";
 
     public boolean loginButtonClicked = false;
 
@@ -116,14 +106,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     loginProgressBar.setVisibility(View.VISIBLE);
                     accountnumberEditLayout.setErrorEnabled(false);
                     accountnumberEditLayout.setError("");
-                    ACCOUNTNUMBER = accountnumberEdit.getText().toString();
                     passwordEditLayout.setError("");
                     passwordEditLayout.setErrorEnabled(false);
-                    PIN = passwordEdit.getText().toString();
+
+                    SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getResources().getString(R.string.sp_pin), passwordEdit.getText().toString());
+                    editor.apply();
 
                     LoginAsyncTask mAuth = new LoginAsyncTask(accountnumberEditLayout, passwordEditLayout, loginButton, loginProgressBar, LoginActivity.this);
-                    String[] authParts = {authCode.substring(0, getResources().getInteger(R.integer.auth_key_length)/2), authCode.substring(getResources().getInteger(R.integer.auth_key_length)/2)};
-                    mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1], FirebaseInstanceId.getInstance().getToken());
+                    if (authCode != null) {
+                        String[] authParts = {authCode.substring(0, getResources().getInteger(R.integer.auth_key_length) / 2), authCode.substring(getResources().getInteger(R.integer.auth_key_length) / 2)};
+                        mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), authParts[0], authParts[1], FirebaseInstanceId.getInstance().getToken());
+                    } else {
+                        mAuth.execute(accountnumberEdit.getText().toString(), passwordEdit.getText().toString(), null, null, FirebaseInstanceId.getInstance().getToken());
+                    }
                 } else if (authCode == null && !loginButtonClicked){
                     accountnumberEditLayout.setErrorEnabled(false);
                     accountnumberEditLayout.setError(getResources().getString(R.string.not_authenticated));

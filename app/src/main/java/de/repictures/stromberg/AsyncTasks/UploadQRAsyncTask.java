@@ -51,9 +51,10 @@ public class UploadQRAsyncTask extends AsyncTask<Bitmap, Void, String[]> {
             StringBody accountnumberBody = new StringBody(accountnumber, ContentType.TEXT_PLAIN);
             SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             String accountnumber = sharedPref.getString(activity.getResources().getString(R.string.sp_accountnumber), "");
+            String pin = sharedPref.getString(activity.getResources().getString(R.string.sp_pin), "");
             StringBody userAccountnumberBody = new StringBody(accountnumber, ContentType.TEXT_PLAIN);
 
-            byte[] hashedPassword = cryptor.hashToByte(LoginActivity.PIN);
+            byte[] hashedPassword = cryptor.hashToByte(pin);
 
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             transferArray[0].compress(Bitmap.CompressFormat.PNG, 100, bao);

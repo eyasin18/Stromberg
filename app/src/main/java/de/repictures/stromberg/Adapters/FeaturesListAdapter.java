@@ -1,16 +1,27 @@
 package de.repictures.stromberg.Adapters;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import de.repictures.stromberg.Features.AddAuthKeyActivity;
+import de.repictures.stromberg.Features.AddEmployeeActivity;
+import de.repictures.stromberg.Features.AddPrepaidAccountActivity;
 import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.CompanyActivity;
+import de.repictures.stromberg.Features.ChangeMoneyActivity;
 import de.repictures.stromberg.Features.EmployeesActivity;
+import de.repictures.stromberg.Features.ProductsActivity;
+import de.repictures.stromberg.Features.StatsActivity;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
 import de.repictures.stromberg.R;
@@ -45,10 +56,13 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
     @Override
     public void onClick(View v, int position, boolean isLongClick) {
         Intent i;
-        int featureCode = LoginActivity.FEATURES.get(position);
+        SharedPreferences sharedPref = companyActivity.getSharedPreferences(companyActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        List<String> featuresStr = new ArrayList<>(sharedPref.getStringSet(companyActivity.getResources().getString(R.string.sp_featureslist), new HashSet<>()));
+        int featureCode = Integer.valueOf(featuresStr.get(position));
         switch (featureCode){
             case 0:
-                i = new Intent(companyActivity, AddProductActivity.class);
+                i = new Intent(companyActivity, ProductsActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
                 companyActivity.startActivity(i);
                 break;
             case 1:
@@ -57,14 +71,33 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
                 break;
             case 2:
                 i = new Intent(companyActivity, OrderListActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
                 companyActivity.startActivity(i);
                 break;
             case 3:
                 i = new Intent(companyActivity, EmployeesActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
                 companyActivity.startActivity(i);
                 break;
             case 4:
-                //Statistiken
+                i = new Intent(companyActivity, StatsActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 5:
+                i = new Intent(companyActivity, ChangeMoneyActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 6:
+                i = new Intent(companyActivity, AddEmployeeActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 7:
+                i = new Intent(companyActivity, AddPrepaidAccountActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
                 break;
             default:
                 i = null;

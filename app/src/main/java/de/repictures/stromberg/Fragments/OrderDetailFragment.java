@@ -31,6 +31,7 @@ public class OrderDetailFragment extends Fragment {
 
     public PurchaseOrder purchaseOrder;
     public boolean valuesChanged = false;
+    public int companyPosition = 0;
 
     public static final String ARG_ACCOUNTNUMBER_ID = "accountnumber_id";
     private String TAG = "OrderDetailFragment";

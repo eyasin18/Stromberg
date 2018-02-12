@@ -17,11 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.TransferListAdapter;
 import de.repictures.stromberg.AsyncTasks.GetTransfersAsyncTask;
 import de.repictures.stromberg.Features.TransferDialogActivity;
+import de.repictures.stromberg.POJOs.Transfer;
 
 public class TransfersActivity extends AppCompatActivity {
 
@@ -31,7 +35,7 @@ public class TransfersActivity extends AppCompatActivity {
     @BindView(R.id.transfer_layout) CoordinatorLayout coordinatorLayout;
     SwipeRefreshLayout.OnRefreshListener refreshListener;
     RecyclerView.Adapter transferAdapter;
-    String[][] transfers = new String[0][0];
+    List<Transfer> transfers = new ArrayList<>();
 
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
@@ -81,7 +85,7 @@ public class TransfersActivity extends AppCompatActivity {
                 String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
                 GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
                 refreshLayout.setRefreshing(true);
-                transfers = new String[0][0];
+                transfers = new ArrayList<>();
                 transferAdapter.notifyItemRangeRemoved(0, linearLayoutManager.getItemCount());
                 asyncTask.execute(savedAccountnumber, String.valueOf(0));
             }
@@ -105,9 +109,9 @@ public class TransfersActivity extends AppCompatActivity {
     }
 
     @UiThread
-    public void updateRecycler(String[][] transfers, boolean itemsLeft){
+    public void updateRecycler(List<Transfer> transfers, boolean itemsLeft){
         Log.d(TAG, "updateRecycler: with input: " + transfers);
-        this.transfers = concat(this.transfers, transfers);
+        this.transfers.addAll(transfers);
         transferAdapter = new TransferListAdapter(TransfersActivity.this, this.transfers, itemsLeft);
         transferRecycler.swapAdapter(transferAdapter, false);
         refreshLayout.setRefreshing(false);
@@ -117,7 +121,7 @@ public class TransfersActivity extends AppCompatActivity {
     @UiThread
     public void updateRecycler(){
         Log.d(TAG, "updateRecycler: without input");
-        transfers = new String[0][0];
+        transfers = new ArrayList<>();
         transferAdapter = new TransferListAdapter(TransfersActivity.this, transfers, false);
         transferRecycler.swapAdapter(transferAdapter, false);
         refreshLayout.setRefreshing(false);
@@ -130,19 +134,5 @@ public class TransfersActivity extends AppCompatActivity {
         String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
         GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
         asyncTask.execute(savedAccountnumber, String.valueOf(totalItemCount - 1));
-    }
-
-    private String[][] concat(String[][] A, String[][] B) {
-        int aLen = A.length;
-        int bLen = B.length;
-        int length;
-        if (A.length > 0 && B.length > 0) length = A[0].length > B[0].length ? A[0].length : B[0].length;
-        else if (B.length > 0 && A.length < 1) length = B[0].length;
-        else if (A.length > 0 && B.length < 1) length = A[0].length;
-        else length = 0;
-        String[][] C= new String[aLen+bLen][length];
-        System.arraycopy(A, 0, C, 0, aLen);
-        System.arraycopy(B, 0, C, aLen, bLen);
-        return C;
     }
 }

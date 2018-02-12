@@ -63,10 +63,4 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
                     break;
             }
     }
-
-    private String getDecryptedPerson(String encryptedStringHex) {
-        byte[] encryptedPassword = cryptor.hashToByte(LoginActivity.PIN);
-        byte[] encryptedName = cryptor.hexToBytes(encryptedStringHex);
-        return cryptor.decryptSymmetricToString(encryptedName, encryptedPassword);
-    }
 }

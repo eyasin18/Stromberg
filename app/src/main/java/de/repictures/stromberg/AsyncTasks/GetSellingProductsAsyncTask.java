@@ -1,5 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -7,14 +9,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import javax.mail.internet.MimeMultipart;
 
 import de.repictures.stromberg.CompanyActivity;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.R;
 
-public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product[]> {
+public class GetSellingProductsAsyncTask extends AsyncTask<Integer, Void, Product[]> {
 
     private CompanyActivity companyActivity;
     private Internet internet = new Internet();
@@ -34,8 +41,10 @@ public class GetSellingProductsAsyncTask extends AsyncTask<String, Void, Product
     }
 
     @Override
-    protected Product[] doInBackground(String... strings) {
-        String url = LoginActivity.SERVERURL + "postsellingproducts?companynumber=" + LoginActivity.COMPANY_NUMBER;
+    protected Product[] doInBackground(Integer... params) {
+        SharedPreferences sharedPref = companyActivity.getSharedPreferences(companyActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(companyActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
+        String url = LoginActivity.SERVERURL + "postsellingproducts?companynumber=" + companyNumbers.get(params[0]);
         MimeMultipart multipart = internet.doGetMultipart(url,"multipart/x-mixed-replace;boundary=End");
         String responseCodeStr = internet.parseTextBodyPart(multipart, 0);
         responseCode = Integer.parseInt(responseCodeStr);

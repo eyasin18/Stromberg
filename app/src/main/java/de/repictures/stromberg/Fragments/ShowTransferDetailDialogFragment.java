@@ -3,6 +3,7 @@ package de.repictures.stromberg.Fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -57,8 +58,17 @@ public class ShowTransferDetailDialogFragment extends DialogFragment {
         if (!isSender) personTitle.setText(getActivity().getResources().getString(R.string.transfer_sender));
         else personTitle.setText(getActivity().getResources().getString(R.string.transfer_receiver));
 
-        personBody.setText(person);
-        purposeBody.setText(purpose);
+        if (person != null) personBody.setText(person);
+        else {
+            personBody.setText(getActivity().getResources().getString(R.string.prepaid_cannot_decrypt_name));
+            personBody.setTypeface(personBody.getTypeface(), Typeface.BOLD);
+        }
+        if (purpose != null) purposeBody.setText(purpose);
+        else {
+            purposeBody.setText(getActivity().getResources().getString(R.string.prepaid_cannot_decrypt_purpose));
+            purposeBody.setTypeface(purposeBody.getTypeface(), Typeface.BOLD);
+        }
+
         typeBody.setText(type);
         accountnumberBody.setText(accountnumber);
 

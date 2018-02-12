@@ -5,4 +5,14 @@
         <item>Deutsch</item>
         <item>Englisch</item>
     </string-array>
+    <string-array name="featuresNames" translatable="false">
+        <item>Produkte verwalten</item>
+        <item>QR-Codes verwalten</item>
+        <item>Kasse</item>
+        <item>Mitarbeiter verwalten</item>
+        <item>Statistiken</item>
+        <item>Geld wechseln</item>
+        <item>Mitarbeiter hinzufügen</item>
+        <item>Prepaidkonto hinzufügen</item>
+    </string-array>
 </resources>

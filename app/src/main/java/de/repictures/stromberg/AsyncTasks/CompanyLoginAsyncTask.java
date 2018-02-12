@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import de.repictures.stromberg.Fragments.CompanyLoginDialogFragment;
 import de.repictures.stromberg.Helper.Cryptor;
 import de.repictures.stromberg.Helper.Internet;
@@ -36,11 +40,12 @@ public class CompanyLoginAsyncTask extends AsyncTask<String, Void, Integer>{
 
         SharedPreferences sharedPref = companyLoginDialogFragment.getActivity().getSharedPreferences(companyLoginDialogFragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(companyLoginDialogFragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(companyLoginDialogFragment.getActivity().getResources().getString(R.string.sp_webstring), "");
         String encryptedPassword = cryptor.hashToString(parameters[0]);
-        String baseUrl = LoginActivity.SERVERURL + "/companylogin?companynumber=" + LoginActivity.COMPANY_NUMBER
+        String baseUrl = LoginActivity.SERVERURL + "/companylogin?companynumber=" + parameters[1]
                 + "&accountnumber=" + accountnumber
                 + "&password=" + encryptedPassword
-                + "&webstring=" + LoginActivity.WEBSTRING;
+                + "&webstring=" + webstring;
         String doGetString = internetHelper.doGetString(baseUrl);
         Log.d(TAG, "doInBackground: " + baseUrl);
         return Integer.parseInt(doGetString);

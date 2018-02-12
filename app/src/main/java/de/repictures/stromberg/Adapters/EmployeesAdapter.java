@@ -35,6 +35,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesViewHolder> 
         holder.accountnumber.setText(accounts.get(position).getAccountnumber());
         holder.employeeLayout.setOnClickListener(view -> {
             Intent i = new Intent(employeesActivity, EditEmployeeActivity.class);
+            i.putExtra("company_array_position", employeesActivity.companyPosition);
             i.putExtra("account", accounts.get(position));
             i.putExtra("position", position);
             employeesActivity.startActivityForResult(i, EmployeesActivity.ACCOUNT_REQUEST_CODE);

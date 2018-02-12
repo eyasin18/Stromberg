@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.repictures.stromberg.Adapters.OrdersListAdapter;
@@ -53,18 +55,35 @@ public class OrderListActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: MessageReceived");
-            refreshAdapter(intent);
+            int id = intent.getIntExtra("id", 0);
+            switch (id){
+                case 1:
+                    refreshAdapter(intent);
+                    break;
+                case 2:
+                    refreshLayout.setRefreshing(true);
+                    GetPurchaseOrdersAsyncTask asyncTask = new GetPurchaseOrdersAsyncTask(OrderListActivity.this);
+                    asyncTask.execute(companyPosition);
+                    break;
+                default:
+            }
         }
     };
 
     private List<PurchaseOrder> purchaseOrders = new ArrayList<>();
+    private ArrayList companyNumbers;
+    public int companyPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
 
-        FirebaseMessaging.getInstance().subscribeToTopic(LoginActivity.COMPANY_NUMBER + "-shoppingRequests");
+        companyPosition = getIntent().getIntExtra("company_array_position", 0);
+
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        companyNumbers = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
+        FirebaseMessaging.getInstance().subscribeToTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,7 +93,7 @@ public class OrderListActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 GetPurchaseOrdersAsyncTask asyncTask = new GetPurchaseOrdersAsyncTask(OrderListActivity.this);
-                asyncTask.execute();
+                asyncTask.execute(companyPosition);
             }
         });
         // Show the Up button in the action bar.
@@ -98,7 +117,7 @@ public class OrderListActivity extends AppCompatActivity {
 
         refreshLayout.setRefreshing(true);
         GetPurchaseOrdersAsyncTask asyncTask = new GetPurchaseOrdersAsyncTask(OrderListActivity.this);
-        asyncTask.execute();
+        asyncTask.execute(companyPosition);
     }
 
     @Override
@@ -120,7 +139,7 @@ public class OrderListActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        FirebaseMessaging.getInstance().subscribeToTopic(LoginActivity.COMPANY_NUMBER + "-shoppingRequests");
+        FirebaseMessaging.getInstance().subscribeToTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(FingerhutFirebaseMessagingService.ORDERS_UPDATE_BROADCAST_ACTION);
@@ -130,7 +149,7 @@ public class OrderListActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(LoginActivity.COMPANY_NUMBER + "-shoppingRequests");
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
 
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
@@ -153,6 +172,7 @@ public class OrderListActivity extends AppCompatActivity {
         else newPurchaseOrder.setAmounts(new int[0]);
         newPurchaseOrder.setBuyerAccountnumber(intent.getStringExtra("buyerAccountnumber"));
         newPurchaseOrder.setDateTime(intent.getStringExtra("dateTime"));
+        newPurchaseOrder.setNumber(Integer.valueOf(intent.getStringExtra("number")));
         newPurchaseOrder.setCompleted(Boolean.parseBoolean(intent.getStringExtra("completed")));
         newPurchaseOrder.setMadeByUser(Boolean.parseBoolean(intent.getStringExtra("madeByUser")));
         String[] isSelfBuysStr = intent.getStringExtra("isSelfBuys").split("ò");

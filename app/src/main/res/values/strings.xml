@@ -17,7 +17,7 @@
     <string name="sp_group" translatable="false">SHARED_PREFERENCES_group</string>
     <string name="sp_identifier" translatable="false">de.repictures.stromberg.PEFERENCES_FILE_KEY</string>
     <string name="error">Error</string>
-    <string name="current_account">Current account</string>
+    <string name="citizen_account">Citizen account</string>
     <string name="zero_money" translatable="false">0,00S</string>
     <string name="account_owner">Owner</string>
     <string name="account_balance_format">%1$sS</string>
@@ -182,6 +182,28 @@
     <string name="ministry">Ministry</string>
     <string name="parliament">Parliament</string>
     <string name="police">Police</string>
+    <string name="balance">Balance</string>
+    <string name="selected_balance">Your balance at the selected point was</string>
+    <string name="statistics">Statistics</string>
+    <string name="sp_companynumbers" translatable="false">SHARED_PREFERENCES_companynumbers</string>
+    <string name="sp_companysectors" translatable="false">SHARED_PREFERENCES_companysectors</string>
+    <string name="sp_companynames" translatable="false">SHARED_PREFERENCES_companynames</string>
+    <string name="sp_pin" translatable="false">SHARED_PREFERENCES_pin</string>
+    <string name="sp_vat" translatable="false">SHARED_PREFERENCES_vat</string>
+    <string name="price_sum">Price sum: %1$sS</string>
+    <string name="customer_has_to_pay">Customer has to pay: %1$sS</string>
+    <string name="vat_format">VAT: %s%%</string>
+    <string name="sp_is_prepaid" translatable="false">SHARED_PREFERENCES_is_prepaid</string>
+    <string name="prepaid_cannot_decrypt_name">Prepaid accounts are not able to decrypt names</string>
+    <string name="prepaid_cannot_decrypt_purpose">Prepaid accounts are not able to decrypt purposes</string>
+    <string name="manual">Manuals</string>
+    <string name="prepaid_account">Prepaid account</string>
+    <string name="title_activity_products">ProductsActivity</string>
+    <string name="title_activity_scan_passport">ScanPassportActivity</string>
+    <string name="title_activity_change_money">ChangeMoneyActivity</string>
+    <string name="title_activity_add_prepaid_account">AddPrepaidAccountActivity</string>
+    <string name="title_activity_add_employee">AddEmployeeActivity</string>
+    <string name="title_activity_manual">ManualActivity</string>
 
 
 </resources>

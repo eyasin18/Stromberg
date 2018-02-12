@@ -45,6 +45,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             OrderDetailFragment fragment = new OrderDetailFragment();
+            fragment.companyPosition = getIntent().getIntExtra("company_array_position", 0);
             fragment.purchaseOrder = (PurchaseOrder) getIntent().getSerializableExtra("purchaseOrder");
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

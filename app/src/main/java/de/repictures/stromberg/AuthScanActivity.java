@@ -187,7 +187,6 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            //TODO: Kamera aktiviert sich nicht, nachdem der Zugriff zugelassen wurde
             createCameraSource();
             return;
         }
@@ -218,7 +217,7 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
         SparseArray<Barcode> allBarcodes = detections.getDetectedItems();
         for (int i = 0; i < allBarcodes.size(); i++){
             Barcode barcode = allBarcodes.valueAt(i);
-            addBarcode(barcode.displayValue);
+            addBarcode(barcode.displayValue.trim());
         }
         if (sortedBarcodeValues.size() > sortedBarcodesSize){
             sendAuthRequest();

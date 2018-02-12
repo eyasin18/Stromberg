@@ -21,7 +21,7 @@ import static android.graphics.Color.WHITE;
 
 public class QRCode {
 
-    private Activity activity;
+    public Activity activity;
     private static final int SIZE = 300;
 
     private String authCode;

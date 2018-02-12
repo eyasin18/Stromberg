@@ -48,7 +48,7 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 .create();
 
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View parent = layoutInflater.inflate(R.layout.fragment_company_login_dialog, null);
+        View parent = layoutInflater.inflate(R.layout.fragment_confirm_login_dialog, null);
 
         accountnumberTextView = (TextView) parent.findViewById(R.id.company_login_accountnumber_text);
         accountnumberLabelTextView = (TextView) parent.findViewById(R.id.company_login_accountnumber_text_label);
@@ -110,7 +110,6 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 break;
             case 2:
                 //Webstring falsch
-                //TODO: Return to login
                 i = new Intent(getActivity(), LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);

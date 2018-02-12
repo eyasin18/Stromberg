@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- TODO: LoginActivity: Wenn Text getippt werden soll, muss die Activity sich nach oben verschieben -->
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.repictures.stromberg">
 
@@ -28,7 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".TransfersActivity"
             android:label="@string/title_activity_transfers"
@@ -53,9 +55,6 @@
             android:name="io.fabric.ApiKey"
             android:value="78ed52ec022c6bc124bc7fad0a645f956076813b" />
 
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Features.TransferDialogActivity"
             android:label="@string/title_activity_transfer_dialog_fragment"
@@ -128,7 +127,70 @@
         <activity
             android:name=".Features.EditEmployeeActivity"
             android:label="@string/title_activity_edit_employee"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Features.StatsActivity"
+            android:label="@string/statistics"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.ProductsActivity"
+            android:label="@string/title_activity_products"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.ScanPassportActivity"
+            android:label="@string/title_activity_scan_passport"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.ChangeMoneyActivity"
+            android:label="@string/title_activity_change_money"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.AddPrepaidAccountActivity"
+            android:label="@string/title_activity_add_prepaid_account"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".Features.AddEmployeeActivity"
+            android:label="@string/title_activity_add_employee"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
+        <activity
+            android:name=".ManualActivity"
+            android:label="@string/title_activity_manual"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

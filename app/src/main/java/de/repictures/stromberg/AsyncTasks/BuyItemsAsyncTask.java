@@ -36,10 +36,11 @@ public class BuyItemsAsyncTask  extends AsyncTask<String, Void, String> {
         try {
             SharedPreferences sharedPref = scanProductActivity.getSharedPreferences(scanProductActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             String accountnumber = sharedPref.getString(scanProductActivity.getResources().getString(R.string.sp_accountnumber), "");
-            String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + LoginActivity.WEBSTRING
+            String webstring = sharedPref.getString(scanProductActivity.getResources().getString(R.string.sp_webstring), "");
+            String getUrl = LoginActivity.SERVERURL + "/getshoppingrequest?code=" + webstring
                     + "&authaccountnumber=" + accountnumber
                     + "&accountnumber=" + accountnumber
-                    + "&companynumber=" + LoginActivity.COMPANY_NUMBER
+                    + "&companynumber=" + params[1]
                     + "&shoppinglist=" + URLEncoder.encode(params[0], "UTF-8")
                     + "&madebyuser=true";
             return internet.doGetString(getUrl);

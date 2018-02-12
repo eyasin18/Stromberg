@@ -11,7 +11,7 @@
     <string name="password_wrong">Falsches Passwort</string>
     <string name="account_balance_format">%1$sS</string>
     <string name="account_owner">Besitzer</string>
-    <string name="current_account">Girokonto</string>
+    <string name="citizen_account">Bürgerkonto</string>
     <string name="error">Fehler</string>
     <string name="deposit">Einzahlen</string>
     <string name="domain">Unternehmen</string>
@@ -165,4 +165,14 @@
     <string name="ministry">Ministerium</string>
     <string name="parliament">Parlament</string>
     <string name="police">Polizei</string>
+    <string name="balance">Kontostand</string>
+    <string name="selected_balance">"Dein Kontostand am ausgewählten Zeitpunkt belief sich auf "</string>
+    <string name="statistics">Statistiken</string>
+    <string name="price_sum">Summe: %1$sS</string>
+    <string name="customer_has_to_pay">Kunde muss %1$sS zahlen</string>
+    <string name="vat_format">Mehrwertsteuer: %s%%</string>
+    <string name="prepaid_cannot_decrypt_name">Prepaidkonten können keine Namen entschlüsseln</string>
+    <string name="prepaid_cannot_decrypt_purpose">Prepaidkonten können keine Verwendungszwecke entschlüsseln</string>
+    <string name="manual">Anleitungen</string>
+    <string name="prepaid_account">Prepaidkonto</string>
 </resources>

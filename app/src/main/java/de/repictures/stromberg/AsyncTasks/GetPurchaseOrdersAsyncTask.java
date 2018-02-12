@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.mail.internet.MimeMultipart;
 
@@ -20,7 +22,7 @@ import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
-public class GetPurchaseOrdersAsyncTask extends AsyncTask<String, Void, MimeMultipart>{
+public class GetPurchaseOrdersAsyncTask extends AsyncTask<Integer, Void, MimeMultipart>{
 
     private Internet internetHelper = new Internet();
     private OrderListActivity orderListActivity;
@@ -30,13 +32,15 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<String, Void, MimeMult
     }
 
     @Override
-    protected MimeMultipart doInBackground(String... strings) {
+    protected MimeMultipart doInBackground(Integer... params) {
         SharedPreferences sharedPref = orderListActivity.getSharedPreferences(orderListActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(orderListActivity.getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(orderListActivity.getResources().getString(R.string.sp_webstring), "");
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(orderListActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
-        String urlStr = LoginActivity.SERVERURL + "/postpurchaseorders?companynumber=" + LoginActivity.COMPANY_NUMBER
+        String urlStr = LoginActivity.SERVERURL + "/postpurchaseorders?companynumber=" + companyNumbers.get(params[0])
                                 + "&accountnumber=" + accountnumber
-                                + "&webstring=" + LoginActivity.WEBSTRING;
+                                + "&webstring=" + webstring;
         return internetHelper.doPostMultipart(urlStr, "multipart/x-mixed-replace;boundary=End");
     }
 

@@ -11,15 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import de.repictures.stromberg.BuildConfig;
-import de.repictures.stromberg.Fragments.ConfirmationLoginDialogFragment;
 import de.repictures.stromberg.Helper.Cryptor;
+import de.repictures.stromberg.Helper.GeneralUtils;
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.MainActivity;
@@ -54,44 +56,41 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... keys) {
-        String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
-        String[] doGetResponse;
         try {
+            String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
+            String[] doGetResponse;
             doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
-        } catch (NullPointerException e){
-            e.printStackTrace();
-            return "-2";
-        }
-        if (!doGetResponse[0].equals(keys[3])) return "3";
-        try {
+
+            if (keys[3] != null && !doGetResponse[0].equals(keys[3]))
+                return new JSONObject().put("response_code", 3).toString();
+
             doGetResponse[1] = URLDecoder.decode(doGetResponse[1], "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String hashedPassword = cryptor.hashToString(keys[1]);
-        String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[1]);
-        Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
-        try {
+            String hashedPassword = cryptor.hashToString(keys[1]);
+            String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[1]);
+            Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
+
             keys[4] = URLEncoder.encode(keys[4], "UTF-8");
             doGetResponse[1] = URLEncoder.encode(doGetResponse[1], "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+
+            String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
+                    + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
+            return internetHelper.doPostString(postUrlStr);
+        } catch (JSONException | UnsupportedEncodingException e) {
             e.printStackTrace();
+            return null;
         }
-        String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
-                + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
-        return internetHelper.doPostString(postUrlStr) + "ò" + keys[0];
     }
 
     @Override
     protected void onPostExecute(String responseStr) {
-        if (activity != null) {
+        try {
             Log.d(TAG, "onPostExecute: " + responseStr);
             loginButton.setText(activity.getResources().getString(R.string.login));
             loginProgressBar.setVisibility(View.INVISIBLE);
-            String[] response = responseStr.split("ò");
+            JSONObject object = new JSONObject(responseStr);
             SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            switch (Integer.parseInt(response[0])) {
+            switch (object.getInt("response_code")) {
                 case 0: //Kontonummer existiert nicht
                     accountnumberEditLayout.setErrorEnabled(true);
                     accountnumberEditLayout.setError(activity.getResources().getString(R.string.accountnumber_error));
@@ -100,7 +99,10 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                         editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                         editor.remove(activity.getResources().getString(R.string.sp_webstring));
                         editor.remove(activity.getResources().getString(R.string.sp_featureslist));
-                        editor.remove(activity.getResources().getString(R.string.sp_group));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynumbers));
+                        editor.remove(activity.getResources().getString(R.string.sp_companysectors));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynames));
+                        editor.remove(activity.getResources().getString(R.string.sp_is_prepaid));
                         editor.apply();
                     }
                     ((LoginActivity) activity).loginButtonClicked = false;
@@ -111,26 +113,27 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                         editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                         editor.remove(activity.getResources().getString(R.string.sp_webstring));
                         editor.remove(activity.getResources().getString(R.string.sp_featureslist));
-                        editor.remove(activity.getResources().getString(R.string.sp_group));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynumbers));
+                        editor.remove(activity.getResources().getString(R.string.sp_companysectors));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynames));
+                        editor.remove(activity.getResources().getString(R.string.sp_is_prepaid));
                         editor.apply();
                     }
-                    long loginAttempts = Long.valueOf(response[1]);
+                    long loginAttempts = object.getLong("failed_attempts");
                     ((LoginActivity) activity).loginButtonClicked = false;
                     ((LoginActivity) activity).startCountdown(loginAttempts);
                     break;
                 case 2: //Alles gut
-                    editor.putString(activity.getResources().getString(R.string.sp_accountnumber), response[7]);
-                    editor.putString(activity.getResources().getString(R.string.sp_accountkey), response[1]);
-                    editor.putString(activity.getResources().getString(R.string.sp_webstring), response[2]);
-                    editor.putStringSet(activity.getResources().getString(R.string.sp_featureslist), new HashSet<>(Arrays.asList(response[3].split("ň"))));
+                    editor.putString(activity.getResources().getString(R.string.sp_accountnumber), object.getString("accountnumber"));
+                    editor.putString(activity.getResources().getString(R.string.sp_accountkey), object.getString("account_key"));
+                    editor.putString(activity.getResources().getString(R.string.sp_webstring), object.getString("random_web_string"));
+                    editor.putStringSet(activity.getResources().getString(R.string.sp_featureslist), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "features")));
+                    editor.putStringSet(activity.getResources().getString(R.string.sp_companynumbers), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_accountnumbers")));
+                    editor.putStringSet(activity.getResources().getString(R.string.sp_companysectors), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_sectors")));
+                    editor.putStringSet(activity.getResources().getString(R.string.sp_companynames), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_names")));
+                    editor.putBoolean(activity.getResources().getString(R.string.sp_is_prepaid), object.getBoolean("is_prepaid"));
                     editor.apply();
-                    LoginActivity.WEBSTRING = response[2];
-                    LoginActivity.COMPANY_NUMBER = response[4];
-                    LoginActivity.COMPANY_SECTOR = Integer.valueOf(response[5]);
-                    LoginActivity.COMPANY_NAME = response[6];
-                    for(String s : response[3].split("ň")) LoginActivity.FEATURES.add(Integer.valueOf(s));
-                    Log.d(TAG, "onPostExecute: " + response[2]);
-                    //((LoginActivity) activity).updatePrivateKey();
+
                     Intent i = new Intent(activity, MainActivity.class);
                     activity.startActivity(i);
                     activity.finish();
@@ -143,7 +146,10 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                         editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                         editor.remove(activity.getResources().getString(R.string.sp_webstring));
                         editor.remove(activity.getResources().getString(R.string.sp_featureslist));
-                        editor.remove(activity.getResources().getString(R.string.sp_group));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynumbers));
+                        editor.remove(activity.getResources().getString(R.string.sp_companysectors));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynames));
+                        editor.remove(activity.getResources().getString(R.string.sp_is_prepaid));
                         editor.apply();
                     }
                     ((LoginActivity) activity).loginButtonClicked = false;
@@ -154,10 +160,13 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                         editor.remove(activity.getResources().getString(R.string.sp_accountkey));
                         editor.remove(activity.getResources().getString(R.string.sp_webstring));
                         editor.remove(activity.getResources().getString(R.string.sp_featureslist));
-                        editor.remove(activity.getResources().getString(R.string.sp_group));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynumbers));
+                        editor.remove(activity.getResources().getString(R.string.sp_companysectors));
+                        editor.remove(activity.getResources().getString(R.string.sp_companynames));
+                        editor.remove(activity.getResources().getString(R.string.sp_is_prepaid));
                         editor.apply();
                     }
-                    String dateTimeStr = response[1];
+                    String dateTimeStr = object.getString("cooldown_time");
                     ((LoginActivity) activity).loginButtonClicked = false;
                     ((LoginActivity) activity).startCountdown(dateTimeStr);
                     break;
@@ -180,6 +189,8 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     ((LoginActivity) activity).loginButtonClicked = false;
                     break;
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

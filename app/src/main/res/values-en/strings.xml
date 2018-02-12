@@ -9,7 +9,7 @@
     <string name="accountnumber_error">Accout number not valid</string>
     <string name="password_wrong">Password not valid</string>
     <string name="error">Error</string>
-    <string name="current_account">Current account</string>
+    <string name="citizen_account">Citizen account</string>
     <string name="account_owner">Owner</string>
     <string name="account_balance_format">%1$sS</string>
     <string name="transfer">Transfer</string>
@@ -166,6 +166,16 @@
     <string name="ministry">Ministry</string>
     <string name="parliament">Parliament</string>
     <string name="police">Police</string>
+    <string name="balance">Balance</string>
+    <string name="selected_balance">Your balance at the selected point was</string>
+    <string name="statistics">Statistics</string>
+    <string name="price_sum">Price sum: %1$sS</string>
+    <string name="customer_has_to_pay">Customer has to pay: %1$sS</string>
+    <string name="vat_format">VAT: %s%%</string>
+    <string name="prepaid_cannot_decrypt_name">Prepaid accounts are not able to decrypt names</string>
+    <string name="prepaid_cannot_decrypt_purpose">Prepaid accounts are not able to decrypt purposes</string>
+    <string name="manual">Manuals</string>
+    <string name="prepaid_account">Prepaid account</string>
 
 
 </resources>

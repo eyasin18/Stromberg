@@ -65,31 +65,29 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/main_inbox"
+            android:id="@+id/main_manual"
             android:clickable="true"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:layout_gravity="fill"
             android:gravity="center"
-            android:enabled="false">
-            <!--TODO: android:background="?attr/selectableItemBackground"-->
+            android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/main_inbox_text"
-                android:text="@string/inbox"
+                android:id="@+id/main_manual_text"
+                android:text="@string/manual"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerHorizontal="true"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:enabled="false"/>
+                style="@style/TextAppearance.AppCompat.Subhead"/>
 
             <ImageView
-                android:id="@+id/main_inbox_image"
+                android:id="@+id/main_manual_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                app:srcCompat="@drawable/email_outline"
+                app:srcCompat="@drawable/dictionary"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/main_inbox_text"
+                android:layout_below="@+id/main_manual_text"
                 android:enabled="false"/>
 
         </RelativeLayout>

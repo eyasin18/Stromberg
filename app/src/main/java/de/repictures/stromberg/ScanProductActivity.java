@@ -2,7 +2,9 @@ package de.repictures.stromberg;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -268,7 +270,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            //TODO: Kamera aktiviert sich nicht, nachdem der Zugriff zugelassen wurde
             createCameraSource();
             try{
                 mCameraSource.start(cameraView.getHolder());
@@ -379,9 +380,11 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     }
 
     public void updateSums() {
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        float tax = sharedPref.getInt(getResources().getString(R.string.sp_vat), 100);
+        vatText.setText(String.format("%s%%", String.valueOf(tax)));
         netTotal = 0.0f;
         grossTotal = 0.0f;
-        float tax = LoginActivity.VAT;
         tax = tax/100;
         for (int i = 0; i < productsList.size(); i++){
             float productPrice = Float.parseFloat(productsList.get(i)[3]);
@@ -391,7 +394,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         }
         DecimalFormat df = new DecimalFormat("0.00");
         grossTotalText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(grossTotal)));
-        vatText.setText(String.valueOf(LoginActivity.VAT) + "%");
         netTotalText.setText(String.format(getResources().getString(R.string.account_balance_format), df.format(netTotal)));
     }
 
@@ -454,6 +456,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         JSONArray pricesArray = new JSONArray();
         JSONArray isSelfBuyArray = new JSONArray();
         JSONArray amountsArray = new JSONArray();
+        String sellingCompany = null;
 
         for (int i = 0; i < productsList.size(); i++){
             String[] product = productsList.get(i);
@@ -462,6 +465,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             pricesArray.put(product[3]);
             isSelfBuyArray.put(product[5]);
             amountsArray.put(productAmounts.get(i));
+            if (sellingCompany == null) sellingCompany = product[2];
         }
 
         try {
@@ -471,7 +475,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             object.put("amounts", amountsArray);
 
             BuyItemsAsyncTask asyncTask = new BuyItemsAsyncTask(ScanProductActivity.this);
-            asyncTask.execute(object.toString());
+            asyncTask.execute(object.toString(), sellingCompany);
         } catch (JSONException e) {
             e.printStackTrace();
             buyItemResult(-2);

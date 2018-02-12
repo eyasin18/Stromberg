@@ -25,6 +25,7 @@ import de.repictures.stromberg.R;
 public class FingerhutFirebaseMessagingService extends FirebaseMessagingService {
 
     public static String ORDERS_UPDATE_BROADCAST_ACTION = "de.repictures.stromberg.ORDERS_UPDATE";
+    public static String ORDERS_REFRESH_BROADCAST_ACTION = "de.repictures.stromberg.ORDERS_REFRESH";
     private static String TAG = "FFbMessagingService";
     private NotificationManager mNotificationManager;
     private String notificationChannelId = "fingerhut_notfication_channel";
@@ -33,6 +34,7 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("notificationId"));
+        Intent broadcast;
 
         switch (remoteMessage.getData().get("notificationId")){
             case "0":
@@ -68,14 +70,20 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
                 break;
             case "1":
                 Log.d(TAG, "onMessageReceived: Message from Company Shopping Requests Update: " + remoteMessage.getData().get("updateKey"));
-                Intent broadcast = new Intent();
+                broadcast = new Intent();
                 String[] dataNames = {"amounts", "buyerAccountnumber", "dateTime", "isSelfBuys", "number", "prices", "productCodes", "productNames", "completed", "madeByUser"};
                 for (String dataName : dataNames) {
                     broadcast.putExtra(dataName, remoteMessage.getData().get(dataName));
                 }
+                broadcast.putExtra("id", 1);
                 broadcast.setAction(ORDERS_UPDATE_BROADCAST_ACTION);
                 sendBroadcast(broadcast);
                 break;
+            case "2":
+                broadcast = new Intent();
+                broadcast.putExtra("id", 2);
+                broadcast.setAction(ORDERS_UPDATE_BROADCAST_ACTION);
+                sendBroadcast(broadcast);
             default:
                 break;
         }

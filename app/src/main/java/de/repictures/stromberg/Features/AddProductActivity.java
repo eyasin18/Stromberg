@@ -1,5 +1,7 @@
 package de.repictures.stromberg.Features;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,12 +39,18 @@ public class AddProductActivity extends AppCompatActivity {
     @BindView(R.id.features_add_price_self_buy_check_box) CheckBox selfBuyCheckBox;
 
     Snackbar sendingSnackbar;
+    private int companyPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         ButterKnife.bind(this);
+
+        companyPosition = getIntent().getIntExtra("company_array_position", 0);
+
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
         sendingSnackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.send_product_loading), Snackbar.LENGTH_INDEFINITE);
 
@@ -56,7 +68,7 @@ public class AddProductActivity extends AppCompatActivity {
                     sendingSnackbar.show();
                     PostProductAsyncTask asyncTask = new PostProductAsyncTask(AddProductActivity.this);
                     asyncTask.execute(barcodeEditText.getText().toString(), nameEditText.getText().toString(), priceEditText.getText().toString(),
-                            LoginActivity.COMPANY_NUMBER, String.valueOf(selfBuyCheckBox.isChecked()));
+                            companyNumbers.get(companyPosition), String.valueOf(selfBuyCheckBox.isChecked()));
                 }
             }
         });

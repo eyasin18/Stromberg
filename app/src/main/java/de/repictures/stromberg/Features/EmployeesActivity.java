@@ -28,6 +28,7 @@ public class EmployeesActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter employeeAdapter;
     private List<Account> accounts;
+    public int companyPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,12 @@ public class EmployeesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        companyPosition = getIntent().getIntExtra("company_array_position", 0);
+
         employeesList.setHasFixedSize(true);
         employeesList.setLayoutManager(new LinearLayoutManager(this));
         GetEmployeesAsyncTask asyncTask = new GetEmployeesAsyncTask(EmployeesActivity.this);
-        asyncTask.execute();
+        asyncTask.execute(companyPosition);
     }
 
     @Override

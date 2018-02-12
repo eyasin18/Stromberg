@@ -38,8 +38,9 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         SharedPreferences sharedPref = confirmationLoginDialogFragment.getActivity().getSharedPreferences(confirmationLoginDialogFragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(confirmationLoginDialogFragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(confirmationLoginDialogFragment.getActivity().getResources().getString(R.string.sp_webstring), "");
 
-        String getUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + LoginActivity.WEBSTRING;
+        String getUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + webstring;
         String serverTimeStamp = internetHelper.doGetString(getUrlStr);
         String encodedServerTimeStamp;
         if (internetHelper.getResponseCode() == 206){
@@ -54,7 +55,7 @@ public class ConfirmPasswordAsyncTask extends AsyncTask<String, Void, String> {
         Log.d(TAG, "Server Timestamp: " + serverTimeStamp);
         String hashedPassword = cryptor.hashToString(params[1]);
         String hashedSaltetPassword = cryptor.hashToString(hashedPassword + serverTimeStamp);
-        String postUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + LoginActivity.WEBSTRING
+        String postUrlStr = LoginActivity.SERVERURL + "/confirmlogin?accountnumber=" + params[0] + "&sessionaccountnumber=" + accountnumber + "&webstring=" + webstring
                 + "&password=" + hashedSaltetPassword + "&servertimestamp=" + encodedServerTimeStamp;
         return internetHelper.doPostString(postUrlStr);
     }

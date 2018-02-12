@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
@@ -46,11 +50,13 @@ public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, Stri
 
         SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(fragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_webstring), "");
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(fragment.getActivity().getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
         HttpEntity entity = MultipartEntityBuilder.create()
-                .addTextBody("webstring", LoginActivity.WEBSTRING)
+                .addTextBody("webstring", webstring)
                 .addTextBody("buyeraccountnumber", fragment.purchaseOrder.getBuyerAccountnumber())
-                .addTextBody("companynumber", LoginActivity.COMPANY_NUMBER)
+                .addTextBody("companynumber", companyNumbers.get(fragment.companyPosition))
                 .addTextBody("purchaseOrderNumber", String.valueOf(fragment.purchaseOrder.getNumber()))
                 .addTextBody("productcodes", productCodesBuilder.toString())
                 .addTextBody("amounts", amountsBuilder.toString())

@@ -35,6 +35,7 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
     private Button finishButton;
     private String TAG = "TAG";
     private OrderListActivity orderListActivity;
+    private int companyPosition;
 
     public void setOrderListActivity(OrderListActivity orderListActivity){
         this.orderListActivity = orderListActivity;
@@ -81,7 +82,7 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
                 buyerAccountnumber = accountnumberEdit.getText().toString();
                 accountnumberLayout.setErrorEnabled(false);
                 accountnumberLayout.setError("");
-                AddPurchaseOrderAsyncTask asyncTask = new AddPurchaseOrderAsyncTask(EditAccountnumberDialogFragment.this);
+                AddPurchaseOrderAsyncTask asyncTask = new AddPurchaseOrderAsyncTask(EditAccountnumberDialogFragment.this, companyPosition);
                 asyncTask.execute(buyerAccountnumber);
                 break;
         }
@@ -124,5 +125,9 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
                 accountnumberLayout.setError(getActivity().getResources().getString(R.string.accountnumber_error));
                 break;
         }
+    }
+
+    public void setCompanyPosition(int companyPosition) {
+        this.companyPosition = companyPosition;
     }
 }

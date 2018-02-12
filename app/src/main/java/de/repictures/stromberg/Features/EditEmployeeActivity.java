@@ -29,6 +29,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
     @BindView(R.id.edit_employee_coordinator_layout) CoordinatorLayout coordinatorLayout;
     public Account account;
     private int position;
+    public int companyPosition;
     private EditEmployeeAdapter editEmployeeAdapter;
 
     @Override
@@ -41,6 +42,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> finishEditing());
         ButterKnife.bind(this);
 
+        companyPosition = getIntent().getIntExtra("company_array_position", 0);
         position = getIntent().getIntExtra("position", 0);
         account = (Account) getIntent().getSerializableExtra("account");
         editEmployeeAdapter = new EditEmployeeAdapter(this);

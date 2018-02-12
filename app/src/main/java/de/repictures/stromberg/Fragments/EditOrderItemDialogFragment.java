@@ -2,7 +2,9 @@ package de.repictures.stromberg.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.repictures.stromberg.CompanyActivity;
@@ -52,6 +55,9 @@ public class EditOrderItemDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        List<String> features = new ArrayList<>(sharedPref.getStringSet(getActivity().getResources().getString(R.string.sp_featureslist), new HashSet<>()));
+
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View parent = layoutInflater.inflate(R.layout.fragment_edit_order_item_dialog, null);
 
@@ -61,7 +67,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
         EditText priceEdit = (EditText) parent.findViewById(R.id.edit_order_item_price_edit);
         Spinner productSpinner = (Spinner) parent.findViewById(R.id.edit_order_item_product_spinner);
 
-        if (!LoginActivity.FEATURES.contains(0)){
+        if (!features.contains("0")){
             priceEdit.setEnabled(false);
             priceLayout.setEnabled(false);
         }
@@ -97,7 +103,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
                         int newAmount = Integer.parseInt(amountEdit.getText().toString());
                         double newPrice = Double.parseDouble(priceEdit.getText().toString());
 
-                        if (newPrice > CompanyActivity.SELLING_PRODUCTS[productIndex].getPrice() && !LoginActivity.FEATURES.contains(0)){
+                        if (newPrice > CompanyActivity.SELLING_PRODUCTS[productIndex].getPrice() && !features.contains("0")){
                             priceLayout.setErrorEnabled(true);
                             priceLayout.setError(getActivity().getResources().getString(R.string.price_cannot_be_raised));
                         } else {

@@ -1,5 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,6 +20,7 @@ import java.net.URLConnection;
 
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.Helper.Cryptor;
+import de.repictures.stromberg.R;
 import de.repictures.stromberg.uiHelper.QRCode;
 
 public class GetQRAsyncTask extends AsyncTask<String, Void, Bitmap> {
@@ -76,7 +79,11 @@ public class GetQRAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
             byte[] encryptedImage = buffer.toByteArray();
             Log.d(TAG, "doInBackground: " + new String(encryptedImage));
-            byte[] imageData = cryptor.decryptSymmetricToByte(encryptedImage, cryptor.hashToByte(LoginActivity.PIN));
+
+            SharedPreferences sharedPref = qrCode.activity.getSharedPreferences(qrCode.activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String pin = sharedPref.getString(qrCode.activity.getResources().getString(R.string.sp_pin), "");
+
+            byte[] imageData = cryptor.decryptSymmetricToByte(encryptedImage, cryptor.hashToByte(pin));
             return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
         } catch (IOException e) {
             e.printStackTrace();

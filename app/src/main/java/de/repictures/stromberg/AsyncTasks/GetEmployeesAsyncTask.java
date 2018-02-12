@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.repictures.stromberg.Features.EmployeesActivity;
@@ -21,7 +22,7 @@ import de.repictures.stromberg.MainActivity;
 import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.R;
 
-public class GetEmployeesAsyncTask extends AsyncTask<String, Void, JSONObject>{
+public class GetEmployeesAsyncTask extends AsyncTask<Integer, Void, JSONObject>{
 
     private Internet internetHelper = new Internet();
     private EmployeesActivity employeesActivity;
@@ -47,11 +48,13 @@ public class GetEmployeesAsyncTask extends AsyncTask<String, Void, JSONObject>{
     }
 
     @Override
-    protected JSONObject doInBackground(String... strings) {
+    protected JSONObject doInBackground(Integer... params) {
         SharedPreferences sharedPref = employeesActivity.getSharedPreferences(employeesActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(employeesActivity.getResources().getString(R.string.sp_accountnumber), "");
+        String webstring = sharedPref.getString(employeesActivity.getResources().getString(R.string.sp_webstring), "");
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(employeesActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
-        String urlStr = LoginActivity.SERVERURL + "postemployees?code=" + LoginActivity.WEBSTRING + "&accountnumber=" + accountnumber + "&companynumber=" + LoginActivity.COMPANY_NUMBER;
+        String urlStr = LoginActivity.SERVERURL + "postemployees?code=" + webstring + "&accountnumber=" + accountnumber + "&companynumber=" + companyNumbers.get(params[0]);
         String response = internetHelper.doGetString(urlStr);
         try {
             return new JSONObject(response);
