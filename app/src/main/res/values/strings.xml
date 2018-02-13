@@ -191,19 +191,22 @@
     <string name="sp_pin" translatable="false">SHARED_PREFERENCES_pin</string>
     <string name="sp_vat" translatable="false">SHARED_PREFERENCES_vat</string>
     <string name="price_sum">Price sum: %1$sS</string>
-    <string name="customer_has_to_pay">Customer has to pay: %1$sS</string>
+    <string name="rest_sum">Rest sum (without VAT): %1$sS</string>
     <string name="vat_format">VAT: %s%%</string>
     <string name="sp_is_prepaid" translatable="false">SHARED_PREFERENCES_is_prepaid</string>
     <string name="prepaid_cannot_decrypt_name">Prepaid accounts are not able to decrypt names</string>
     <string name="prepaid_cannot_decrypt_purpose">Prepaid accounts are not able to decrypt purposes</string>
     <string name="manual">Manuals</string>
     <string name="prepaid_account">Prepaid account</string>
-    <string name="title_activity_products">ProductsActivity</string>
-    <string name="title_activity_scan_passport">ScanPassportActivity</string>
-    <string name="title_activity_change_money">ChangeMoneyActivity</string>
-    <string name="title_activity_add_prepaid_account">AddPrepaidAccountActivity</string>
-    <string name="title_activity_add_employee">AddEmployeeActivity</string>
-    <string name="title_activity_manual">ManualActivity</string>
+    <string name="title_activity_scan_passport">Scan passport</string>
+    <string name="title_activity_change_money">Change money</string>
+    <string name="title_activity_add_prepaid_account">Add prepaid account</string>
+    <string name="title_activity_manual">Manuals</string>
+    <string name="price_cannot_be_changed">You don\'t have the permission to change prices</string>
+    <string name="customer_has_already_payed">Customer has already payed %1$sS (without VAT)</string>
+    <string name="customer_has_to_pay_vat">Customer still has to pay: %1$sS (VAT included)</string>
+    <string name="title_activity_add_employee">Add Employee</string>
+    <string name="title_activity_products">Manage products</string>
 
 
 </resources>

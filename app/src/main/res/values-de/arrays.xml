@@ -5,7 +5,7 @@
         <item>Deutsch</item>
         <item>Englisch</item>
     </string-array>
-    <string-array name="featuresNames" translatable="false">
+    <string-array name="featuresNames">
         <item>Produkte verwalten</item>
         <item>QR-Codes verwalten</item>
         <item>Kasse</item>

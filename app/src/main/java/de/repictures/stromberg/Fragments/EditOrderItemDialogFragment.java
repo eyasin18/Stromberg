@@ -24,6 +24,7 @@ import java.util.List;
 import de.repictures.stromberg.CompanyActivity;
 import de.repictures.stromberg.Helper.GeneralUtils;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.R;
 
@@ -56,7 +57,9 @@ public class EditOrderItemDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        List<String> features = new ArrayList<>(sharedPref.getStringSet(getActivity().getResources().getString(R.string.sp_featureslist), new HashSet<>()));
+        String featuresJsonStr = sharedPref.getString(getActivity().getResources().getString(R.string.sp_featureslist), "");
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
+        List<Integer> features = Account.getSpecificFeaturesLongListFromString(featuresJsonStr, companyNumbers.get(orderDetailFragment.companyPosition));
 
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View parent = layoutInflater.inflate(R.layout.fragment_edit_order_item_dialog, null);
@@ -67,7 +70,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
         EditText priceEdit = (EditText) parent.findViewById(R.id.edit_order_item_price_edit);
         Spinner productSpinner = (Spinner) parent.findViewById(R.id.edit_order_item_product_spinner);
 
-        if (!features.contains("0")){
+        if (!features.contains(0)){
             priceEdit.setEnabled(false);
             priceLayout.setEnabled(false);
         }
@@ -103,9 +106,9 @@ public class EditOrderItemDialogFragment extends DialogFragment {
                         int newAmount = Integer.parseInt(amountEdit.getText().toString());
                         double newPrice = Double.parseDouble(priceEdit.getText().toString());
 
-                        if (newPrice > CompanyActivity.SELLING_PRODUCTS[productIndex].getPrice() && !features.contains("0")){
+                        if (!features.contains(0)){
                             priceLayout.setErrorEnabled(true);
-                            priceLayout.setError(getActivity().getResources().getString(R.string.price_cannot_be_raised));
+                            priceLayout.setError(getActivity().getResources().getString(R.string.price_cannot_be_changed));
                         } else {
                             orderDetailFragment.valuesChanged = true;
                             if (newProduct) {

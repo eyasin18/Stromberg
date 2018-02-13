@@ -61,19 +61,19 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
             String[] doGetResponse;
             doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
 
-            if (keys[3] != null && !doGetResponse[0].equals(keys[3]))
+            if (keys[3] != null && !doGetResponse[1].equals(keys[3]))
                 return new JSONObject().put("response_code", 3).toString();
 
-            doGetResponse[1] = URLDecoder.decode(doGetResponse[1], "UTF-8");
+            doGetResponse[0] = URLDecoder.decode(doGetResponse[0], "UTF-8");
             String hashedPassword = cryptor.hashToString(keys[1]);
-            String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[1]);
-            Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
+            String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[0]);
+            Log.d(TAG, "Server Timestamp: " + doGetResponse[0]);
 
             keys[4] = URLEncoder.encode(keys[4], "UTF-8");
-            doGetResponse[1] = URLEncoder.encode(doGetResponse[1], "UTF-8");
+            doGetResponse[0] = URLEncoder.encode(doGetResponse[0], "UTF-8");
 
             String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
-                    + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
+                    + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[0] + "&appversion=" + BuildConfig.VERSION_CODE;
             return internetHelper.doPostString(postUrlStr);
         } catch (JSONException | UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     editor.putString(activity.getResources().getString(R.string.sp_accountnumber), object.getString("accountnumber"));
                     editor.putString(activity.getResources().getString(R.string.sp_accountkey), object.getString("account_key"));
                     editor.putString(activity.getResources().getString(R.string.sp_webstring), object.getString("random_web_string"));
-                    editor.putStringSet(activity.getResources().getString(R.string.sp_featureslist), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "features")));
+                    editor.putString(activity.getResources().getString(R.string.sp_featureslist), object.getString("features"));
                     editor.putStringSet(activity.getResources().getString(R.string.sp_companynumbers), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_accountnumbers")));
                     editor.putStringSet(activity.getResources().getString(R.string.sp_companysectors), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_sectors")));
                     editor.putStringSet(activity.getResources().getString(R.string.sp_companynames), new HashSet<>(GeneralUtils.parseJsonStringArray(object, "company_names")));

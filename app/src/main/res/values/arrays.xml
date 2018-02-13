@@ -10,7 +10,7 @@
         <item>ň</item>
         <item>ĵ</item>
     </string-array>
-    <string-array name="featuresNames" translatable="false">
+    <string-array name="featuresNames">
         <item>Manage products</item>
         <item>Manage QR-Codes</item>
         <item>Checkout</item>

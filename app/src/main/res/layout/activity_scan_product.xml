@@ -63,7 +63,7 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
             android:id="@+id/activity_scan_flash_button"
-            app:srcCompat="@drawable/ic_flash_on_white_24dp"/>
+            app:srcCompat="@drawable/ic_flash_off_white_24dp"/>
 
     </RelativeLayout>
 

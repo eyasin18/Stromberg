@@ -24,6 +24,7 @@ import de.repictures.stromberg.Features.ProductsActivity;
 import de.repictures.stromberg.Features.StatsActivity;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
+import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.R;
 
 public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHolder> implements FeaturesListViewHolder.ClickListener {
@@ -56,9 +57,7 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
     @Override
     public void onClick(View v, int position, boolean isLongClick) {
         Intent i;
-        SharedPreferences sharedPref = companyActivity.getSharedPreferences(companyActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        List<String> featuresStr = new ArrayList<>(sharedPref.getStringSet(companyActivity.getResources().getString(R.string.sp_featureslist), new HashSet<>()));
-        int featureCode = Integer.valueOf(featuresStr.get(position));
+        int featureCode = companyActivity.features.get(position);
         switch (featureCode){
             case 0:
                 i = new Intent(companyActivity, ProductsActivity.class);

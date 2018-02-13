@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/order_detail_list_sum"
+        android:id="@+id/order_detail_list_customer_has_payed"
         android:paddingTop="12dp"
         style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="match_parent"
@@ -21,14 +21,13 @@
         android:paddingRight="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/order_detail_list_sum"
+        android:layout_below="@+id/order_detail_list_customer_has_payed"
         android:text="@string/error"
         android:textColor="@color/grey" />
 
     <TextView
-        android:id="@+id/order_detail_list_customer_pays"
+        android:id="@+id/order_detail_list_customer_has_to_pay"
         style="@style/TextAppearance.AppCompat.Body2"
-        android:paddingBottom="12dp"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
         android:layout_width="match_parent"
@@ -37,11 +36,23 @@
         android:text="@string/error"
         android:textColor="@color/grey" />
 
+    <TextView
+        android:id="@+id/order_detail_list_customer_has_to_pay_vat"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:paddingBottom="12dp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order_detail_list_customer_has_to_pay"
+        android:text="@string/error"
+        android:textColor="@color/grey" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/light_grey"
-        android:layout_below="@+id/order_detail_list_customer_pays"
+        android:layout_below="@+id/order_detail_list_customer_has_to_pay_vat"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:id="@+id/separator" />

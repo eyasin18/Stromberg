@@ -169,10 +169,19 @@
     <string name="selected_balance">"Dein Kontostand am ausgewählten Zeitpunkt belief sich auf "</string>
     <string name="statistics">Statistiken</string>
     <string name="price_sum">Summe: %1$sS</string>
-    <string name="customer_has_to_pay">Kunde muss %1$sS zahlen</string>
+    <string name="rest_sum">Restsumme (ohne MwSt): %1$sS</string>
     <string name="vat_format">Mehrwertsteuer: %s%%</string>
     <string name="prepaid_cannot_decrypt_name">Prepaidkonten können keine Namen entschlüsseln</string>
     <string name="prepaid_cannot_decrypt_purpose">Prepaidkonten können keine Verwendungszwecke entschlüsseln</string>
     <string name="manual">Anleitungen</string>
     <string name="prepaid_account">Prepaidkonto</string>
+    <string name="customer_has_already_payed">Kunde hat bereits %1$sS gezahlt (ohne MwSt)</string>
+    <string name="customer_has_to_pay_vat">Kunde muss noch %1$sS zahlen (mit MwSt)</string>
+    <string name="price_cannot_be_changed">Du hast nicht die Berechtigung um Preise zu ändern</string>
+    <string name="title_activity_add_employee">Mitarbeiter hinzufügen</string>
+    <string name="title_activity_add_prepaid_account">Prepaidkonto hinzufügen</string>
+    <string name="title_activity_change_money">Geld wechseln</string>
+    <string name="title_activity_manual">Anleitungen</string>
+    <string name="title_activity_products">Produkte verwalten</string>
+    <string name="title_activity_scan_passport">Ausweis scannen</string>
 </resources>

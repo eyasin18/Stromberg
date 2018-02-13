@@ -4,6 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,38 +40,37 @@ public class CompletePurchaseOrderAsyncTask extends AsyncTask<String, Void, Stri
 
     @Override
     protected String doInBackground(String... params) {
-        String url = LoginActivity.SERVERURL + "/completepurchaseorder";
+        try {
+            JSONArray productCodes = new JSONArray(), amounts = new JSONArray(), prices = new JSONArray(), isSelfBuys = new JSONArray();
+            for (int i = 0; i < fragment.purchaseOrder.getAmounts().length; i++) {
+                productCodes.put(fragment.purchaseOrder.getProducts()[i].getCode());
+                amounts.put(fragment.purchaseOrder.getAmounts()[i]);
+                prices.put(fragment.purchaseOrder.getProducts()[i].getPrice());
+                isSelfBuys.put(fragment.purchaseOrder.getProducts()[i].isSelfBuy());
+            }
 
-        StringBuilder productCodesBuilder = new StringBuilder();
-        StringBuilder amountsBuilder = new StringBuilder();
-        StringBuilder pricesBuilder = new StringBuilder();
-        StringBuilder isSelfBuysBuilder = new StringBuilder();
+            SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(fragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String accountnumber = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
+            String webstring = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_webstring), "");
+            List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(fragment.getActivity().getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
 
-        for (int i = 0; i < fragment.purchaseOrder.getAmounts().length; i++){
-            productCodesBuilder.append(fragment.purchaseOrder.getProducts()[i].getCode()).append("ò");
-            amountsBuilder.append(fragment.purchaseOrder.getAmounts()[i]).append("ò");
-            pricesBuilder.append(fragment.purchaseOrder.getProducts()[i].getPrice()).append("ò");
-            isSelfBuysBuilder.append(fragment.purchaseOrder.getProducts()[i].isSelfBuy()).append("ò");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("webstring", webstring);
+            jsonObject.put("buyeraccountnumber", fragment.purchaseOrder.getBuyerAccountnumber());
+            jsonObject.put("companynumber", companyNumbers.get(fragment.companyPosition));
+            jsonObject.put("purchaseOrderNumber", fragment.purchaseOrder.getNumber());
+            jsonObject.put("selleraccountnumber", accountnumber);
+            jsonObject.put("isselfbuy", isSelfBuys);
+            jsonObject.put("prices", prices);
+            jsonObject.put("amounts", amounts);
+            jsonObject.put("productcodes", productCodes);
+
+            String url = LoginActivity.SERVERURL + "/completepurchaseorder?json=" + URLEncoder.encode(jsonObject.toString(), "UTF-8");
+            return internetHelper.doPostString(url).trim();
+        } catch (JSONException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
         }
-
-        SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(fragment.getActivity().getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        String accountnumber = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_accountnumber), "");
-        String webstring = sharedPref.getString(fragment.getActivity().getResources().getString(R.string.sp_webstring), "");
-        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(fragment.getActivity().getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
-
-        HttpEntity entity = MultipartEntityBuilder.create()
-                .addTextBody("webstring", webstring)
-                .addTextBody("buyeraccountnumber", fragment.purchaseOrder.getBuyerAccountnumber())
-                .addTextBody("companynumber", companyNumbers.get(fragment.companyPosition))
-                .addTextBody("purchaseOrderNumber", String.valueOf(fragment.purchaseOrder.getNumber()))
-                .addTextBody("productcodes", productCodesBuilder.toString())
-                .addTextBody("amounts", amountsBuilder.toString())
-                .addTextBody("prices", pricesBuilder.toString())
-                .addTextBody("isselfbuy", isSelfBuysBuilder.toString())
-                .addTextBody("selleraccountnumber", accountnumber)
-                .build();
-
-        return internetHelper.doMultipartRequest(Internet.POST, url, entity).trim();
     }
 
     @Override

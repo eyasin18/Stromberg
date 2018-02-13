@@ -1,8 +1,14 @@
 package de.repictures.stromberg.POJOs;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.repictures.stromberg.R;
 
 public class Account implements Serializable {
 
@@ -68,5 +74,19 @@ public class Account implements Serializable {
 
     public static int getMinutesFromValues(int days, int hours, int minutes){
         return days*1440 + hours*60 + minutes;
+    }
+
+    public static List<Integer> getSpecificFeaturesLongListFromString(String jsonStr, String companynumber){
+        List<Integer> features = new ArrayList<>();
+        try {
+            JSONObject featuresObject = new JSONObject(jsonStr);
+            JSONArray featuresArray = featuresObject.getJSONArray(companynumber);
+            for (int i = 0; i < featuresArray.length(); i++){
+                features.add(featuresArray.getInt(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return features;
     }
 }

@@ -118,17 +118,23 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             SharedPreferences sharedPref = activity.getSharedPreferences(activity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
             float tax = sharedPref.getInt(activity.getResources().getString(R.string.sp_vat), 100);
             taxViewHolder.vatTextView.setText(String.format(activity.getResources().getString(R.string.vat_format), String.valueOf(tax)));
-            float netTotal = 0.0f;
-            float grossTotal = 0.0f;
+            float hasToPayNetTotal = 0.0f;
+            float payedGrossTotal = 0.0f;
+            float hasToPayGrossTotal = 0.0f;
             tax = tax/100;
             for (int i = 0; i < orderDetailFragment.purchaseOrder.getProducts().length; i++){
                 double productPrice = orderDetailFragment.purchaseOrder.getProducts()[i].getPrice();
                 int count = orderDetailFragment.purchaseOrder.getAmounts()[i];
-                grossTotal += (float) (count*productPrice);
-                netTotal += (float) (count*(productPrice*tax + productPrice));
+                if (orderDetailFragment.purchaseOrder.getProducts()[i].isSelfBuy()) {
+                    payedGrossTotal += (float) (count * productPrice);
+                } else {
+                    hasToPayGrossTotal += (float) (count * productPrice);
+                    hasToPayNetTotal += (float) (count * (productPrice * tax + productPrice));
+                }
             }
-            taxViewHolder.sumTextView.setText(String.format(activity.getResources().getString(R.string.price_sum), df.format(grossTotal)));
-            taxViewHolder.customerTextView.setText(String.format(activity.getResources().getString(R.string.customer_has_to_pay), df.format(netTotal)));
+            taxViewHolder.customerHasPayedTextView.setText(String.format(activity.getResources().getString(R.string.customer_has_already_payed), df.format(payedGrossTotal)));
+            taxViewHolder.customerHasToPayTextView.setText(String.format(activity.getResources().getString(R.string.rest_sum), df.format(hasToPayGrossTotal)));
+            taxViewHolder.customerHasToPayVATTextView.setText(String.format(activity.getResources().getString(R.string.customer_has_to_pay_vat), df.format(hasToPayNetTotal)));
         }
     }
 
@@ -177,13 +183,14 @@ public class OrderDetailListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private class TaxViewHolder extends RecyclerView.ViewHolder {
-        TextView sumTextView, vatTextView, customerTextView;
+        TextView customerHasToPayTextView, vatTextView, customerHasToPayVATTextView, customerHasPayedTextView;
 
         TaxViewHolder(View view) {
             super(view);
-            sumTextView = (TextView) view.findViewById(R.id.order_detail_list_sum);
+            customerHasToPayTextView = (TextView) view.findViewById(R.id.order_detail_list_customer_has_to_pay);
             vatTextView = (TextView) view.findViewById(R.id.order_detail_list_vat);
-            customerTextView = (TextView) view.findViewById(R.id.order_detail_list_customer_pays);
+            customerHasToPayVATTextView = (TextView) view.findViewById(R.id.order_detail_list_customer_has_to_pay_vat);
+            customerHasPayedTextView = (TextView) view.findViewById(R.id.order_detail_list_customer_has_payed);
         }
     }
 }

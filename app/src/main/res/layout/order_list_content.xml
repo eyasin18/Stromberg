@@ -81,5 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/order_list_company_name"
-        android:background="@color/light_grey"/>
+        android:background="@color/light_grey"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
 </RelativeLayout>

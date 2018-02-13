@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -50,21 +49,23 @@ public class EditEmployeeAdapter  extends RecyclerView.Adapter<RecyclerView.View
 
     private final EditEmployeeActivity editEmployeeActivity;
     private final String[] allFeaturesNames;
-    private List<String> featuresStr;
+    private List<Integer> features;
 
     public EditEmployeeAdapter(EditEmployeeActivity editEmployeeActivity){
         this.editEmployeeActivity = editEmployeeActivity;
         this.allFeaturesNames = editEmployeeActivity.getResources().getStringArray(R.array.featuresNames);
         SharedPreferences sharedPref = editEmployeeActivity.getSharedPreferences(editEmployeeActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-        featuresStr = new ArrayList<>(sharedPref.getStringSet(editEmployeeActivity.getResources().getString(R.string.sp_featureslist), new HashSet<>()));
+        List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(editEmployeeActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
+        String featuresJsonStr = sharedPref.getString(editEmployeeActivity.getResources().getString(R.string.sp_featureslist), "");
+        features = Account.getSpecificFeaturesLongListFromString(featuresJsonStr, companyNumbers.get(editEmployeeActivity.companyPosition));
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position == 0) return VIEW_TYPE_HEADER;
-        else if (position == featuresStr.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3) return VIEW_TYPE_SAVE_BUTTON;
+        else if (position == features.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3) return VIEW_TYPE_SAVE_BUTTON;
         else if (position == editEmployeeActivity.account.getStartTimesInt().size() + 2) return VIEW_TYPE_PERMISSION_TITLE;
-        else if (position > editEmployeeActivity.account.getStartTimesInt().size() + 2 && position < featuresStr.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3)
+        else if (position > editEmployeeActivity.account.getStartTimesInt().size() + 2 && position < features.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3)
             return VIEW_TYPE_PERMISSION_BODY;
         else if (position == editEmployeeActivity.account.getStartTimesInt().size() +1) return VIEW_TYPE_ADD_WORK_TIME;
         else return VIEW_TYPE_BODY;
@@ -175,21 +176,22 @@ public class EditEmployeeAdapter  extends RecyclerView.Adapter<RecyclerView.View
             case VIEW_TYPE_PERMISSION_BODY:
                 PermissionBodyViewHolder permissionBodyViewHolder = (PermissionBodyViewHolder) holder;
                 int permissionPosition = holder.getAdapterPosition() - (editEmployeeActivity.account.getStartTimesInt().size() + 3);
-                permissionBodyViewHolder.permissionText.setText(allFeaturesNames[Integer.valueOf(featuresStr.get(permissionPosition))]);
+                int permission = features.get(permissionPosition);
+                permissionBodyViewHolder.permissionText.setText(allFeaturesNames[features.get(permissionPosition)]);
                 permissionBodyViewHolder.permissionCheckBox.setOnCheckedChangeListener(null);
-                permissionBodyViewHolder.permissionCheckBox.setChecked(editEmployeeActivity.account.getPermissions().contains(permissionPosition));
+                permissionBodyViewHolder.permissionCheckBox.setChecked(editEmployeeActivity.account.getPermissions().contains(permission));
                 permissionBodyViewHolder.permissionLayout.setOnClickListener(view -> permissionBodyViewHolder.permissionCheckBox.setChecked(!permissionBodyViewHolder.permissionCheckBox.isChecked()));
                 permissionBodyViewHolder.permissionCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
                     List<Integer> permissions = editEmployeeActivity.account.getPermissions();
-                    if (!permissions.contains(permissionPosition)){
-                        permissions.add(permissionPosition);
+                    if (!permissions.contains(permission)){
+                        permissions.add(permission);
                     } else {
-                        int permissionArrayPosition = permissions.indexOf(permissionPosition);
+                        int permissionArrayPosition = permissions.indexOf(permission);
                         permissions.remove(permissionArrayPosition);
                     }
                     editEmployeeActivity.account.setPermissions(permissions);
                     edited = true;
-                    notifyItemChanged(featuresStr.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3);
+                    notifyItemChanged(features.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3);
                 });
         }
     }
@@ -216,7 +218,7 @@ public class EditEmployeeAdapter  extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return featuresStr.size() + editEmployeeActivity.account.getStartTimesInt().size() + 4;
+        return features.size() + editEmployeeActivity.account.getStartTimesInt().size() + 4;
     }
 
     private class HeaderViewHolder extends RecyclerView.ViewHolder implements TextWatcher {
@@ -249,7 +251,7 @@ public class EditEmployeeAdapter  extends RecyclerView.Adapter<RecyclerView.View
                 editEmployeeActivity.account.setWage(wage);
                 if (!edited) {
                     edited = true;
-                    notifyItemChanged(featuresStr.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3);
+                    notifyItemChanged(features.size() + editEmployeeActivity.account.getStartTimesInt().size() + 3);
                 }
             }
         }
