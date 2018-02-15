@@ -34,7 +34,7 @@ import de.repictures.stromberg.Fragments.EditEmployeeWorkTimeDialogFragment;
 import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.R;
 
-public class EditEmployeeAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public boolean edited = false;
     private DateFormat textFormat = new SimpleDateFormat("EEEE HH:mm", Locale.GERMANY);

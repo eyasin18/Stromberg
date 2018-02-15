@@ -49,13 +49,14 @@ public class TransfersActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        boolean isPrepaid = sharedPref.getBoolean(getResources().getString(R.string.sp_is_prepaid), true);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_scan_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(TransfersActivity.this, TransferDialogActivity.class);
-                TransfersActivity.this.startActivityForResult(i, 1);
-            }
+        if (isPrepaid) fab.hide();
+        fab.setOnClickListener(view -> {
+            Intent i = new Intent(TransfersActivity.this, TransferDialogActivity.class);
+            TransfersActivity.this.startActivityForResult(i, 1);
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -78,17 +79,14 @@ public class TransfersActivity extends AppCompatActivity {
             }
         });
 
-        refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
-                String savedAccountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), "");
-                GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
-                refreshLayout.setRefreshing(true);
-                transfers = new ArrayList<>();
-                transferAdapter.notifyItemRangeRemoved(0, linearLayoutManager.getItemCount());
-                asyncTask.execute(savedAccountnumber, String.valueOf(0));
-            }
+        refreshListener = () -> {
+            SharedPreferences sharedPref1 = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+            String savedAccountnumber = sharedPref1.getString(getResources().getString(R.string.sp_accountnumber), "");
+            GetTransfersAsyncTask asyncTask = new GetTransfersAsyncTask(TransfersActivity.this);
+            refreshLayout.setRefreshing(true);
+            transfers = new ArrayList<>();
+            transferAdapter.notifyItemRangeRemoved(0, linearLayoutManager.getItemCount());
+            asyncTask.execute(savedAccountnumber, String.valueOf(0));
         };
         refreshLayout.setOnRefreshListener(refreshListener);
     }

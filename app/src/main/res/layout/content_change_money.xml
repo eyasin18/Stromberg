@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,4 +8,299 @@
     tools:context="de.repictures.stromberg.Features.ChangeMoneyActivity"
     tools:showIn="@layout/activity_change_money">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/change_money_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/change_money_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:hint="@string/account_number"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:maxLength="4"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/change_money_mode_text_label"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/mode"
+            android:paddingBottom="4dp"
+            android:textSize="12sp"
+            android:gravity="bottom"
+            android:layout_below="@+id/change_money_input_layout"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/change_money_mode_text_label"
+            android:id="@+id/change_money_euro_to_stromer_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:checked="true"
+                android:id="@+id/change_money_euro_to_stromer_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_euro_to_stromer_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/euro_to_stromer"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_money_stromer_to_euro_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/change_money_euro_to_stromer_layout">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/change_money_stromer_to_euro_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_stromer_to_euro_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/stromer_to_euro"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/change_money_amount_text_label"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/amount"
+            android:paddingBottom="4dp"
+            android:textSize="12sp"
+            android:gravity="bottom"
+            android:layout_below="@+id/change_money_stromer_to_euro_layout"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/change_money_amount_text_label"
+            android:id="@+id/change_money_5_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:checked="true"
+                android:id="@+id/change_money_5_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_5_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/error"
+                android:id="@+id/change_money_5_text"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_money_10_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/change_money_5_layout">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/change_money_10_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_10_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/error"
+                android:id="@+id/change_money_10_text"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_money_15_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/change_money_10_layout">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/change_money_15_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_15_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/error"
+                android:id="@+id/change_money_15_text"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_money_20_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/change_money_15_layout">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/change_money_20_radio_button"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_20_radio_button"
+                android:paddingRight="16dp"
+                android:text="@string/error"
+                android:id="@+id/change_money_20_text"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_money_edit_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_below="@+id/change_money_20_layout">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/change_money_edit_radio_button"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@+id/change_money_edit_radio_button"
+                android:layout_marginRight="16dp"
+                android:inputType="numberDecimal"
+                android:id="@+id/change_money_edit"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/change_money_button"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/title_activity_change_money"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/change_money_edit_layout"
+            android:theme="@style/LoginButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/change_money_button"
+            android:layout_alignLeft="@+id/change_money_button"
+            android:layout_alignStart="@+id/change_money_button"
+            android:id="@+id/change_money_progress_bar"
+            android:layout_alignBottom="@+id/change_money_button"
+            android:layout_alignRight="@+id/change_money_button"
+            android:layout_alignEnd="@+id/change_money_button"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+</ScrollView>

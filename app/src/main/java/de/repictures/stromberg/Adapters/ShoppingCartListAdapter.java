@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.R;
 import de.repictures.stromberg.ScanProductActivity;
 
@@ -17,9 +18,9 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
 
     private static final String TAG = "ShoppingCartListAdapter";
     private ScanProductActivity productActivity;
-    private ArrayList<String[]> productsList = new ArrayList<>();
+    private ArrayList<Product> productsList = new ArrayList<>();
 
-    public ShoppingCartListAdapter(ScanProductActivity productActivity, ArrayList<String[]> productsList) {
+    public ShoppingCartListAdapter(ScanProductActivity productActivity, ArrayList<Product> productsList) {
         this.productActivity = productActivity;
         this.productsList = productsList;
     }
@@ -35,10 +36,10 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         Log.d(TAG, "onBindViewHolder: executed");
         holder.setClickListener(this);
 
-        if (!Boolean.parseBoolean(productsList.get(position)[5])){
+        if (!productsList.get(position).isSelfBuy()){
             holder.productTextBig.setVisibility(View.INVISIBLE);
             holder.productTextSmall.setVisibility(View.VISIBLE);
-            holder.productTextSmall.setText(productsList.get(position)[0]);
+            holder.productTextSmall.setText(productsList.get(position).getName());
             holder.errorText.setVisibility(View.VISIBLE);
             for (int i = 0; i < holder.productLayout.getChildCount(); i++) {
                 View child = holder.productLayout.getChildAt(i);
@@ -47,7 +48,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
             holder.productDeleteImage.setEnabled(true);
             holder.productLayout.setClickable(false);
         } else {
-            holder.productTextBig.setText(productsList.get(position)[0]);
+            holder.productTextBig.setText(productsList.get(position).getName());
         }
 
         productActivity.productAmounts.add(1);
@@ -81,7 +82,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     public void onClick(View v, int position, boolean isLongClick) {
         switch (v.getId()){
             case R.id.shopping_list_product_delete:
-                int productIndex = productActivity.scanResults.indexOf(productActivity.productsList.get(position)[6]);
+                int productIndex = productActivity.scanResults.indexOf(productActivity.productsList.get(position).getCode());
                 if (productIndex > -1) productActivity.scanResults.remove(productIndex);
                 productActivity.productsList.remove(position);
                 notifyItemRemoved(position);

@@ -185,6 +185,25 @@
     <string name="title_activity_manual">Manuals</string>
     <string name="title_activity_products">Manage products</string>
     <string name="title_activity_scan_passport">Scan passport</string>
+    <string name="create_account">Create account</string>
+    <string name="customer_has_not_enough_money">Customer has not enough money to buy these items</string>
+    <string name="complete_creation">Complete creation</string>
+    <string name="prepaid_data_cannot_be_restored">The shown data can never be restored (even the server admins cannot restore this data). Be sure all data was noted down. Dismiss data?</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="stromer_to_euro">Stromer to euro</string>
+    <string name="euro_to_stromer">Euro to stromer</string>
+    <string name="mode">Mode</string>
+    <string name="successful">Successful</string>
+    <string name="pay_off_only_from_company_account">Only company accounts can pay off money</string>
+    <string name="prepaid_accounts_cannot_pay_in_free_amounts">You are not able to pay in free amounts of money on a prepaid account</string>
+    <string name="you_dont_have_the_permission_to_do_this_task">You don\'t have the permission to execute this task</string>
+    <string name="account_does_not_exist">This account does not exist</string>
+    <string name="stromer_value">Total Stromer: %1$s S</string>
+    <string name="euro_value">Total Euros: %1$s €</string>
+    <string name="no_items_in_shopping_cart">Your shopping cart is empty</string>
+    <string name="product_name_format">Product name: %1$s</string>
+    <string name="product_price_format">Price: %1$sS</string>
+    <string name="multiple_companies_sell_this_product_choose_one">Multiple companies sell this product. Choose one…</string>
 
 
 </resources>

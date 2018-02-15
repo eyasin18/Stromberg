@@ -47,7 +47,8 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, List<Transfer
         sharedPref = transfersActivity.getSharedPreferences(transfersActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String encryptedPrivateKeyHex = sharedPref.getString(transfersActivity.getResources().getString(R.string.sp_encrypted_private_key_hex_2), null);
         String pin = sharedPref.getString(transfersActivity.getResources().getString(R.string.sp_pin), null);
-        if (pin != null && encryptedPrivateKeyHex != null) {
+        boolean isPrepaid = sharedPref.getBoolean(transfersActivity.getResources().getString(R.string.sp_is_prepaid), true);
+        if (pin != null && encryptedPrivateKeyHex != null && !isPrepaid) {
             byte[] encryptedPrivateKey = cryptor.hexToBytes(encryptedPrivateKeyHex);
             byte[] passwordBytes = new byte[0];
             try {

@@ -50,7 +50,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPreExecute() {
         if (!internetHelper.isNetworkAvailable(activity)){
             cancel(true);
-            onPostExecute("-1");
+            onPostExecute("{\"response_code\": -1}");
         }
     }
 
@@ -58,22 +58,28 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... keys) {
         try {
             String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
-            String[] doGetResponse;
-            doGetResponse = internetHelper.doGetString(getUrlStr).split("ò");
+            String responseStr = internetHelper.doGetString(getUrlStr);
+            String[] doGetResponse = responseStr.split("ò");
 
-            if (keys[3] != null && !doGetResponse[1].equals(keys[3]))
-                return new JSONObject().put("response_code", 3).toString();
+            if (responseStr.length() < 2){
+                return "{\"response_code\": 6}";
+            }
 
-            doGetResponse[0] = URLDecoder.decode(doGetResponse[0], "UTF-8");
+            if ((doGetResponse.length > 2 && doGetResponse[2].length() > 0)) {
+                if (keys[3] != null && !doGetResponse[2].equals(keys[3]))
+                    return new JSONObject().put("response_code", 3).toString();
+            }
+
+            doGetResponse[1] = URLDecoder.decode(doGetResponse[1], "UTF-8");
             String hashedPassword = cryptor.hashToString(keys[1]);
-            String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[0]);
-            Log.d(TAG, "Server Timestamp: " + doGetResponse[0]);
+            String hashedSaltedPassword = cryptor.hashToString(hashedPassword + doGetResponse[1]);
+            Log.d(TAG, "Server Timestamp: " + doGetResponse[1]);
 
             keys[4] = URLEncoder.encode(keys[4], "UTF-8");
-            doGetResponse[0] = URLEncoder.encode(doGetResponse[0], "UTF-8");
+            doGetResponse[1] = URLEncoder.encode(doGetResponse[1], "UTF-8");
 
             String postUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0] + "&authPart=" + keys[2]
-                    + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[0] + "&appversion=" + BuildConfig.VERSION_CODE;
+                    + "&token=" + keys[4] + "&password=" + hashedSaltedPassword + "&servertimestamp=" + doGetResponse[1] + "&appversion=" + BuildConfig.VERSION_CODE;
             return internetHelper.doPostString(postUrlStr);
         } catch (JSONException | UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -172,6 +178,11 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
                     break;
                 case 5: //Zur Zentralbank und Konto entsperren lassen
                     ((LoginActivity) activity).showAccountLockedMessage();
+                    break;
+                case 6: //Konto existiert nicht
+                    accountnumberEditLayout.setErrorEnabled(true);
+                    accountnumberEditLayout.setError(activity.getResources().getString(R.string.account_does_not_exist));
+                    ((LoginActivity) activity).loginButtonClicked = false;
                     break;
                 case -1:
                     accountnumberEditLayout.setErrorEnabled(true);

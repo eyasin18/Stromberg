@@ -184,4 +184,23 @@
     <string name="title_activity_manual">Anleitungen</string>
     <string name="title_activity_products">Produkte verwalten</string>
     <string name="title_activity_scan_passport">Ausweis scannen</string>
+    <string name="create_account">Konto erstellen</string>
+    <string name="customer_has_not_enough_money">Kunde hat nicht genug Geld um diese Waaren zu kaufen</string>
+    <string name="complete_creation">Erstellung abschließen</string>
+    <string name="prepaid_data_cannot_be_restored">Die erstellten Daten können nie wieder angezeigt werden (nicht einmal von den Serveradmins). Sei dir sicher, dass du alle Daten fehlerfrei notiert hast. Daten verwerfen?</string>
+    <string name="dismiss">Verwerfen</string>
+    <string name="stromer_to_euro">Stromer zu Euro</string>
+    <string name="euro_to_stromer">Euro zu Stromer</string>
+    <string name="mode">Modus</string>
+    <string name="successful">Successful</string>
+    <string name="pay_off_only_from_company_account">Es kann nur von Unternehmenskonten Geld ausgezahlt werden</string>
+    <string name="prepaid_accounts_cannot_pay_in_free_amounts">Es können keine freien Beträge auf Prepaidkonten eingezahlt werden</string>
+    <string name="you_dont_have_the_permission_to_do_this_task">Du hast nicht die Berechtigung um diesen Prozess auszuführen</string>
+    <string name="account_does_not_exist">Dieses Konto existiert nicht</string>
+    <string name="stromer_value">Gesamte Stromer: %1$s S</string>
+    <string name="euro_value">Gesamte Euros: %1$s €</string>
+    <string name="no_items_in_shopping_cart">Dein Einkaufswagen ist leer</string>
+    <string name="product_name_format">Produktname: %1$s</string>
+    <string name="product_price_format">Preis: %1$sS</string>
+    <string name="multiple_companies_sell_this_product_choose_one">Mehrere Unternehmen verkaufen dieses Produkt. Suche dir eins aus…</string>
 </resources>

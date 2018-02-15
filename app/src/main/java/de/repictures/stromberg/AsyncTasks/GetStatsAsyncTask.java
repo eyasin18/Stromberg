@@ -85,6 +85,9 @@ public class GetStatsAsyncTask extends AsyncTask<Integer, Void, JSONObject>{
                         balanceValues[i] = balanceValuesJson.getDouble(i);
                         balanceTimes[i] = balanceTimesJson.getInt(i);
                     }
+                    if (resp.has("stromer_value") && resp.has("euro_value")){
+                        activity.setStromerEuroCard(resp.getDouble("stromer_value"), resp.getDouble("euro_value"));
+                    }
                     activity.setBalanceDevelopment(balanceTimes, balanceValues);
                     activity.updateData();
                     break;

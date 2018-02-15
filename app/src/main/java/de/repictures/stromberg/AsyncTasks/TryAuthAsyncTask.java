@@ -42,9 +42,13 @@ public class TryAuthAsyncTask extends AsyncTask<String, Void, Boolean> {
         try {
             Log.d(TAG, "doInBackground:\nAuthCode: " + authCode + "\nAccountnumber: " + accountnumber);
             String baseUrl = LoginActivity.SERVERURL + "/auth?accountnumber=" + URLEncoder.encode(accountnumber, "UTF-8");
-            String response = internetHelper.doGetString(baseUrl);
+            String responseStr = internetHelper.doGetString(baseUrl);
+            String[] response = responseStr.split("ò");
+            if (response[0] == "0"){
+                return false;
+            }
 
-            if (authParts[1].equals(response)){
+            if (authParts[1].equals(response[1])){
                 String postUrlStr = LoginActivity.SERVERURL + "/auth?accountnumber=" + URLEncoder.encode(accountnumber, "UTF-8") + "&authPart=" + URLEncoder.encode(authParts[0], "UTF-8");
                 String postResponse = internetHelper.doPostString(postUrlStr);
                 if (postResponse.length() > 1){

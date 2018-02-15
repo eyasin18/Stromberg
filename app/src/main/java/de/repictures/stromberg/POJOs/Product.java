@@ -6,6 +6,8 @@ public class Product implements Serializable {
 
     private String code;
     private String name;
+    private String companynumber;
+    private String companyname;
     private double price;
     private boolean isSelfBuy;
 
@@ -39,5 +41,21 @@ public class Product implements Serializable {
 
     public void setSelfBuy(boolean selfBuy) {
         isSelfBuy = selfBuy;
+    }
+
+    public String getCompanynumber() {
+        return companynumber;
+    }
+
+    public void setCompanynumber(String companynumber) {
+        this.companynumber = companynumber;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 }

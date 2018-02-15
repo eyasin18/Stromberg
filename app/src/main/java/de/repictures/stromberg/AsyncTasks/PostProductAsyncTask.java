@@ -1,6 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -41,7 +42,8 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
                 + "&price=" + productInfos[2]
                 + "&accountnumber=" + productInfos[3]
                 + "&selfbuy=" + productInfos[4];
-        return new Internet().doGetString(baseUrl);
+        Log.d(TAG, "doInBackground: " + baseUrl);
+        return internetHelper.doGetString(baseUrl);
     }
 
     @Override

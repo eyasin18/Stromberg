@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,4 +8,83 @@
     tools:context="de.repictures.stromberg.Features.AddPrepaidAccountActivity"
     tools:showIn="@layout/activity_add_prepaid_account">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account_number"
+            android:paddingTop="16dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="4dp"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/add_prepaid_accountnumber_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_prepaid_accountnumber_title"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="16dp"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/add_prepaid_accountnumber_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pin"
+            android:layout_below="@+id/add_prepaid_accountnumber_body"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="4dp"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/add_prepaid_pin_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_prepaid_pin_title"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="16dp"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:id="@+id/add_prepaid_pin_body"/>
+
+        <Button
+            android:id="@+id/add_prepaid_create_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/create_account"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:theme="@style/LoginButton"
+            android:layout_below="@+id/add_prepaid_pin_body"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/add_prepaid_create_button"
+            android:layout_alignLeft="@+id/add_prepaid_create_button"
+            android:layout_alignStart="@+id/add_prepaid_create_button"
+            android:id="@+id/add_prepaid_progress_bar"
+            android:layout_alignBottom="@+id/add_prepaid_create_button"
+            android:layout_alignRight="@+id/add_prepaid_create_button"
+            android:layout_alignEnd="@+id/add_prepaid_create_button"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+</ScrollView>

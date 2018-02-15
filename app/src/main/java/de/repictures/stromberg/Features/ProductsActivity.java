@@ -1,5 +1,6 @@
 package de.repictures.stromberg.Features;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,8 @@ import de.repictures.stromberg.R;
 
 public class ProductsActivity extends AppCompatActivity {
 
+    private int companyPosition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,12 +21,15 @@ public class ProductsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        companyPosition = getIntent().getIntExtra("company_array_position", 0);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(ProductsActivity.this, AddProductActivity.class);
+                i.putExtra("company_array_position", companyPosition);
+                startActivity(i);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

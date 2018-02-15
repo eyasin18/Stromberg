@@ -18,128 +18,162 @@
         android:layout_marginTop="26dp"
         android:background="@drawable/rounded_up_corners_bg">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:id="@+id/shopping_list_slide_down_arrow"
-            android:paddingTop="32dp"
-            android:paddingBottom="32dp"/>
-
-        <Button
-            android:id="@+id/shopping_list_checkout_button"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="16dp"
-            android:text="@string/checkout"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:enabled="false" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/shopping_list_checkout_button"
-            android:id="@+id/price_sums_layout">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/gross_total"
-                    android:paddingTop="4dp"
-                    android:paddingLeft="24dp"
-                    android:paddingStart="24dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/vat"
-                    android:paddingTop="2dp"
-                    android:paddingLeft="24dp"
-                    android:paddingStart="24dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/net_total"
-                    android:paddingTop="2dp"
-                    android:paddingLeft="24dp"
-                    android:paddingStart="24dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/error"
-                    android:id="@+id/shopping_list_gross_total"
-                    android:paddingTop="4dp"
-                    android:paddingRight="16dp"
-                    android:paddingEnd="16dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/error"
-                    android:id="@+id/shopping_list_vat"
-                    android:paddingTop="2dp"
-                    android:paddingRight="16dp"
-                    android:paddingEnd="16dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:text="@string/error"
-                    android:id="@+id/shopping_list_net_total"
-                    android:paddingTop="2dp"
-                    android:paddingRight="16dp"
-                    android:paddingEnd="16dp"/>
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shopping_list_checkout_button"
-            android:layout_alignLeft="@+id/shopping_list_checkout_button"
-            android:layout_alignStart="@+id/shopping_list_checkout_button"
-            android:id="@+id/shopping_list_checkout_progress_bar"
-            android:layout_alignBottom="@+id/shopping_list_checkout_button"
-            android:layout_alignRight="@+id/shopping_list_checkout_button"
-            android:layout_alignEnd="@+id/shopping_list_checkout_button"
-            android:padding="10dp"
-            android:elevation="2dp"
-            android:visibility="invisible"/>
-
-        <android.support.v7.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/shopping_list_slide_down_arrow"
-            android:id="@+id/shopping_list_recycler_view"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_above="@id/price_sums_layout"/>
+            android:id="@+id/cart_list_layout"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
+                android:id="@+id/shopping_list_slide_down_arrow"
+                android:paddingTop="32dp"
+                android:paddingBottom="32dp"/>
+
+            <Button
+                android:id="@+id/shopping_list_checkout_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:text="@string/checkout"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:enabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/shopping_list_checkout_button"
+                android:id="@+id/price_sums_layout">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/gross_total"
+                        android:paddingTop="4dp"
+                        android:paddingLeft="24dp"
+                        android:paddingStart="24dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/vat"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="24dp"
+                        android:paddingStart="24dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/net_total"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="24dp"
+                        android:paddingStart="24dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/error"
+                        android:id="@+id/shopping_list_gross_total"
+                        android:paddingTop="4dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/error"
+                        android:id="@+id/shopping_list_vat"
+                        android:paddingTop="2dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/error"
+                        android:id="@+id/shopping_list_net_total"
+                        android:paddingTop="2dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/shopping_list_checkout_button"
+                android:layout_alignLeft="@+id/shopping_list_checkout_button"
+                android:layout_alignStart="@+id/shopping_list_checkout_button"
+                android:id="@+id/shopping_list_checkout_progress_bar"
+                android:layout_alignBottom="@+id/shopping_list_checkout_button"
+                android:layout_alignRight="@+id/shopping_list_checkout_button"
+                android:layout_alignEnd="@+id/shopping_list_checkout_button"
+                android:padding="10dp"
+                android:elevation="2dp"
+                android:visibility="invisible"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/shopping_list_slide_down_arrow"
+                android:id="@+id/shopping_list_recycler_view"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_above="@id/price_sums_layout"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/sad_cart_layout">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxWidth="240dp"
+                android:maxHeight="240dp"
+                app:srcCompat="@drawable/ic_einkaufswagen_leer"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/sad_cart_image"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sad_cart_image"
+                android:text="@string/no_items_in_shopping_cart"
+                android:gravity="center_horizontal"
+                android:padding="16dp"
+                style="@style/TextAppearance.AppCompat.Body2"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
-
 </RelativeLayout>

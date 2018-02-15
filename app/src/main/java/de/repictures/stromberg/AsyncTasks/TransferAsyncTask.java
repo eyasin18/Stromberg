@@ -42,10 +42,8 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
             String[] getResponse = getUrlRespStr.split("ò");
 
-            if (Integer.parseInt(getResponse[0]) != 1){
-                Intent i = new Intent(transferDialogActivity, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                transferDialogActivity.startActivity(i);
+            if (Integer.parseInt(getResponse[0]) != 7){
+                onPostExecute(getResponse[0]);
                 return null;
             }
 
@@ -86,4 +84,3 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
         if (transferDialogActivity != null) transferDialogActivity.postResult(Integer.parseInt(s));
     }
 }
-

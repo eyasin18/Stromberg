@@ -1,9 +1,18 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.repictures.stromberg.Helper.Internet;
 import de.repictures.stromberg.LoginActivity;
+import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.ScanProductActivity;
 
 public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
@@ -26,22 +35,35 @@ public class GetProductAsyncTask extends AsyncTask<String, Void, String>{
 
     @Override
     protected String doInBackground(String... codes) {
-        String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0];
+        String baseUrl = LoginActivity.SERVERURL + "/postproducts?code=" + codes[0] + "&mbb=true";
         return internetHelper.doGetString(baseUrl);
     }
 
     @Override
     protected void onPostExecute(String s) {
-        if (scanProductActivity != null && s.length() == 1 && s.charAt(0) == '0'){
-            //Produkt gibts nicht
-            scanProductActivity.receiveResult();
-        } else if (scanProductActivity != null){
-            String[] responsesRaw = s.split("ň");
-            String[][] products = new String[responsesRaw.length][4];
-            for (int i = 0; i < products.length; i++) {
-                products[i] = responsesRaw[i].split("ò");
+        Log.d(TAG, "onPostExecute: " + s);
+        try {
+            JSONObject responseObject = new JSONObject(s);
+            if (responseObject.getInt("response_code") == 0){
+                scanProductActivity.receiveResult();
+            } else {
+                JSONArray productsArray = responseObject.getJSONArray("products");
+                List<Product> products = new ArrayList<>();
+                for (int i = 0; i < productsArray.length(); i++) {
+                    JSONObject productObject = productsArray.getJSONObject(i);
+                    Product product = new Product();
+                    product.setName(productObject.getString("name"));
+                    product.setCompanyname(productObject.getString("company_name"));
+                    product.setCompanynumber(productObject.getString("company_accountnumber"));
+                    product.setPrice(productObject.getDouble("price"));
+                    product.setSelfBuy(productObject.getBoolean("is_self_buy"));
+                    product.setCode(productObject.getString("code"));
+                    products.add(product);
+                }
+                scanProductActivity.receiveResult(products);
             }
-            scanProductActivity.receiveResult(products);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

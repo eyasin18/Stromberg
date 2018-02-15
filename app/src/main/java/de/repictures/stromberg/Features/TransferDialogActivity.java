@@ -197,6 +197,7 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
 
     public void postResult(int result){
         Log.d(TAG, "postResult: " + result);
+        Intent i;
         sendButtonClicked = false;
         loadingDialogFragment.dismiss();
         switch (result){
@@ -213,13 +214,25 @@ public class TransferDialogActivity extends AppCompatActivity implements View.On
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_not_exist), Snackbar.LENGTH_LONG).show();
                 break;
             case 3:
-                Intent i = new Intent();
+                i = new Intent();
                 i.putExtra("success", true);
                 setResult(RESULT_OK, i);
                 finish();
                 break;
             case 4:
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.transfer_receiver_equals_sender), Snackbar.LENGTH_LONG).show();
+                break;
+            case 5:
+                //Konto existiert nicht/ist ein Unternehmenskonto
+                break;
+            case 6:
+                //Webstring nicht aktuell
+                i = new Intent(TransferDialogActivity.this, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                break;
+            default:
+                Log.d(TAG, "postResult: " + result);
                 break;
         }
     }

@@ -2,6 +2,7 @@ package de.repictures.stromberg.Features;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +37,9 @@ public class StatsActivity extends AppCompatActivity implements OnChartValueSele
     @BindView(R.id.toolbar_progress_bar) ProgressBar toolbarProgressBar;
     @BindView(R.id.toolbar_image_view) ImageView toolbarReloadImageView;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.stromer_vs_euro_card) CardView stromerEuroCard;
+    @BindView(R.id.stromer_value) TextView stromerText;
+    @BindView(R.id.euro_value) TextView euroText;
 
     private List<Entry> entries = new ArrayList<>();
     private DecimalFormat stromerFormat = new DecimalFormat("0.00");
@@ -67,6 +71,8 @@ public class StatsActivity extends AppCompatActivity implements OnChartValueSele
         balanceDevelopmentChart.setOnChartValueSelectedListener(this);
         balanceDevelopmentChart.getDescription().setEnabled(false);
 
+        stromerEuroCard.setVisibility(View.GONE);
+
         GetStatsAsyncTask asyncTask = new GetStatsAsyncTask(StatsActivity.this);
         asyncTask.execute(companyPosition);
     }
@@ -76,6 +82,13 @@ public class StatsActivity extends AppCompatActivity implements OnChartValueSele
         for (int i = 0; i < times.length; i++){
             entries.add(new Entry(times[i], (float) values[i]));
         }
+    }
+
+    public void setStromerEuroCard(double stromer, double euro){
+        DecimalFormat df = new DecimalFormat("0.00");
+        stromerEuroCard.setVisibility(View.VISIBLE);
+        stromerText.setText(String.format(getResources().getString(R.string.stromer_value), df.format(stromer)));
+        euroText.setText(String.format(getResources().getString(R.string.euro_value), df.format(euro)));
     }
 
     public void updateData(){
