@@ -23,6 +23,35 @@
 
     <include layout="@layout/content_transfers" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sad_note_layout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:maxHeight="240dp"
+            app:srcCompat="@drawable/ic_sad_note"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/sad_note_image"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sad_note_image"
+            android:text="@string/no_transfers_found"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            style="@style/TextAppearance.AppCompat.Body2"/>
+
+    </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_scan_fab"
         android:layout_width="wrap_content"

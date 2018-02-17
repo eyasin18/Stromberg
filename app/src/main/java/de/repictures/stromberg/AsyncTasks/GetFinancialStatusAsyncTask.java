@@ -59,6 +59,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
                     //Webstring falsch
                     Intent i = new Intent(mainActivity, LoginActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.putExtra("webstring_start", true);
                     mainActivity.startActivity(i);
                     break;
             }

@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.repictures.stromberg.Features.EditEmployeeActivity;
@@ -13,15 +16,17 @@ import de.repictures.stromberg.Features.EmployeesActivity;
 import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.R;
 
-public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesViewHolder> {
+public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesViewHolder> implements Filterable {
 
     private final EmployeesActivity employeesActivity;
     private final List<Account> accounts;
+    private List<Account> finishedFilteredAccounts;
 
     public EmployeesAdapter(EmployeesActivity employeesActivity, List<Account> accounts){
 
         this.employeesActivity = employeesActivity;
         this.accounts = accounts;
+        this.finishedFilteredAccounts = accounts;
     }
 
     @Override
@@ -32,11 +37,11 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesViewHolder> 
 
     @Override
     public void onBindViewHolder(EmployeesViewHolder holder, int position) {
-        holder.accountnumber.setText(accounts.get(position).getAccountnumber());
+        holder.accountnumber.setText(finishedFilteredAccounts.get(position).getAccountnumber());
         holder.employeeLayout.setOnClickListener(view -> {
             Intent i = new Intent(employeesActivity, EditEmployeeActivity.class);
             i.putExtra("company_array_position", employeesActivity.companyPosition);
-            i.putExtra("account", accounts.get(position));
+            i.putExtra("account", finishedFilteredAccounts.get(position));
             i.putExtra("position", position);
             employeesActivity.startActivityForResult(i, EmployeesActivity.ACCOUNT_REQUEST_CODE);
         });
@@ -44,6 +49,37 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesViewHolder> 
 
     @Override
     public int getItemCount() {
-        return accounts.size();
+        return finishedFilteredAccounts.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()){
+                    finishedFilteredAccounts = accounts;
+                } else {
+                    List<Account> filteredAccounts = new ArrayList<>();
+                    for (Account account : accounts){
+                        if (account.getAccountnumber().contains(charString)){
+                            filteredAccounts.add(account);
+                        }
+                    }
+                    finishedFilteredAccounts = filteredAccounts;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = finishedFilteredAccounts;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                finishedFilteredAccounts = (ArrayList<Account>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

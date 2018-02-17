@@ -113,16 +113,10 @@ public class OrderDetailFragment extends Fragment {
                         .show();
                 break;
             case 2: //Webstring nicht aktuell
-                Snackbar.make(rootView, R.string.session_invalid, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.login_again, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(getActivity(), LoginActivity.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(i);
-                            }
-                        })
-                        .show();
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("webstring_start", true);
+                getActivity().startActivity(i);
                 break;
             case 3:
                 //koi Geld

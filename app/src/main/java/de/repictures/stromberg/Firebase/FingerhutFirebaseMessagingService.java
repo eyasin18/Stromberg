@@ -104,7 +104,7 @@ public class FingerhutFirebaseMessagingService extends FirebaseMessagingService 
         // channel, if the device supports this product.
         mChannel.setLightColor(Color.GREEN);
         mChannel.enableVibration(true);
-        mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        mChannel.setVibrationPattern(new long[]{100, 100, 100});
         mNotificationManager.createNotificationChannel(mChannel);
     }
 }

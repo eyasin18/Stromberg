@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -20,16 +23,18 @@ import de.repictures.stromberg.Fragments.EditAccountnumberDialogFragment;
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
 import de.repictures.stromberg.OrderDetailActivity;
 import de.repictures.stromberg.OrderListActivity;
+import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
-public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OrdersListViewHolder.ClickListener {
+public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OrdersListViewHolder.ClickListener, Filterable {
 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_ADD_ORDER = 1;
 
     private final boolean mTwoPane;
     private List<PurchaseOrder> purchaseOrders;
+    private List<PurchaseOrder> finishedFilteredPurchaseOrders;
     private final OrderListActivity mParentActivity;
 
     public OrdersListAdapter(OrderListActivity orderListActivity,
@@ -39,6 +44,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mParentActivity = orderListActivity;
         this.mTwoPane = mTwoPane;
         this.purchaseOrders = purchaseOrders;
+        this.finishedFilteredPurchaseOrders = purchaseOrders;
     }
 
     @Override
@@ -68,7 +74,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSSS z", Locale.GERMANY);
             Calendar calendar = Calendar.getInstance();
             try {
-                calendar.setTime(sdf.parse(purchaseOrders.get(arrayPosition).getDateTime()));
+                calendar.setTime(sdf.parse(finishedFilteredPurchaseOrders.get(arrayPosition).getDateTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -80,21 +86,21 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             double priceSum = 0.0;
 
-            for (int i = 0; i < purchaseOrders.get(arrayPosition).getAmounts().length; i++) {
-                double price = purchaseOrders.get(arrayPosition).getProducts()[i].getPrice();
-                int amount = purchaseOrders.get(arrayPosition).getAmounts()[i];
+            for (int i = 0; i < finishedFilteredPurchaseOrders.get(arrayPosition).getAmounts().length; i++) {
+                double price = finishedFilteredPurchaseOrders.get(arrayPosition).getProducts()[i].getPrice();
+                int amount = finishedFilteredPurchaseOrders.get(arrayPosition).getAmounts()[i];
                 priceSum += (price * amount);
             }
             String amountWholeStr;
-            if (priceSum < 0.0 && !purchaseOrders.get(arrayPosition).isCompleted()) {
+            if (priceSum < 0.0 && !finishedFilteredPurchaseOrders.get(arrayPosition).isCompleted()) {
                 amountWholeStr = "-";
                 itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
                 itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_minus));
-            } else if (!purchaseOrders.get(arrayPosition).isCompleted()){
+            } else if (!finishedFilteredPurchaseOrders.get(arrayPosition).isCompleted()){
                 amountWholeStr = "+";
                 itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
                 itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.balance_plus));
-            } else if (priceSum < 0.0 && purchaseOrders.get(arrayPosition).isCompleted()){
+            } else if (priceSum < 0.0 && finishedFilteredPurchaseOrders.get(arrayPosition).isCompleted()){
                 amountWholeStr = "-";
                 itemHolder.cents.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
                 itemHolder.euros.setTextColor(mParentActivity.getResources().getColor(R.color.grey));
@@ -111,9 +117,9 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemHolder.cents.setText(amountFractionStr);
             itemHolder.euros.setText(amountWholeStr);
 
-            itemHolder.customer.setText(purchaseOrders.get(arrayPosition).getBuyerAccountnumber());
+            itemHolder.customer.setText(finishedFilteredPurchaseOrders.get(arrayPosition).getBuyerAccountnumber());
 
-            if (!purchaseOrders.get(arrayPosition).isCompleted()) {
+            if (!finishedFilteredPurchaseOrders.get(arrayPosition).isCompleted()) {
                 itemHolder.day.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
                 itemHolder.time.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
                 itemHolder.customer.setTextColor(mParentActivity.getResources().getColor(R.color.transfer_date_color));
@@ -141,7 +147,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return purchaseOrders.size() + 1;
+        return finishedFilteredPurchaseOrders.size() + 1;
     }
 
     @Override
@@ -150,7 +156,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Bundle arguments = new Bundle();
 
             OrderDetailFragment fragment = new OrderDetailFragment();
-            fragment.purchaseOrder = purchaseOrders.get(position -1);
+            fragment.purchaseOrder = finishedFilteredPurchaseOrders.get(position -1);
             fragment.setArguments(arguments);
             mParentActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.order_detail_container, fragment)
@@ -159,9 +165,40 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Context context = view.getContext();
             Intent intent = new Intent(context, OrderDetailActivity.class);
             intent.putExtra("company_array_position", mParentActivity.companyPosition);
-            intent.putExtra("purchaseOrder", purchaseOrders.get(position -1));
+            intent.putExtra("purchaseOrder", finishedFilteredPurchaseOrders.get(position -1));
             context.startActivity(intent);
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()){
+                    finishedFilteredPurchaseOrders = purchaseOrders;
+                } else {
+                    List<PurchaseOrder> filteredPurchaseOrders = new ArrayList<>();
+                    for (PurchaseOrder purchaseOrder : purchaseOrders){
+                        if (purchaseOrder.getBuyerAccountnumber().contains(charString)){
+                            filteredPurchaseOrders.add(purchaseOrder);
+                        }
+                    }
+                    finishedFilteredPurchaseOrders = filteredPurchaseOrders;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = finishedFilteredPurchaseOrders;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                finishedFilteredPurchaseOrders = (ArrayList<PurchaseOrder>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     private class AddPurchaseOrderViewHolder extends RecyclerView.ViewHolder {

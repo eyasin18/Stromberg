@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/products_list_layout"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/products_list_product_name"
+        android:paddingTop="12dp"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:text="@string/error"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/products_list_product_code"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:paddingBottom="12dp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/products_list_product_name"
+        android:text="@string/error" />
+
+</RelativeLayout>

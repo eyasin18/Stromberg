@@ -14,5 +14,7 @@
         <item>Change money</item>
         <item>Add employees</item>
         <item>Add prepaid account</item>
+        <item>Passport controlling</item>
+        <item>Import goods</item>
     </string-array>
 </resources>

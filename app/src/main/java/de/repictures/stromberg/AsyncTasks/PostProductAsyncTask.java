@@ -41,7 +41,8 @@ public class PostProductAsyncTask extends AsyncTask<String, Void, String>{
                 + "&name=" + productInfos[1]
                 + "&price=" + productInfos[2]
                 + "&accountnumber=" + productInfos[3]
-                + "&selfbuy=" + productInfos[4];
+                + "&selfbuy=" + productInfos[4]
+                + "&buyable=" + productInfos[5];
         Log.d(TAG, "doInBackground: " + baseUrl);
         return internetHelper.doGetString(baseUrl);
     }

@@ -112,6 +112,7 @@ public class ConfirmationLoginDialogFragment extends DialogFragment implements V
                 //Webstring falsch
                 i = new Intent(getActivity(), LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("webstring_start", true);
                 startActivity(i);
                 break;
             case 3:

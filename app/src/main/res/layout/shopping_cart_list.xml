@@ -40,7 +40,7 @@
         android:visibility="gone"
         android:id="@+id/shopping_list_product_text_error"
         android:textSize="10sp"
-        android:textColor="@color/color_red"
+        android:textColor="@color/red"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_width="wrap_content"

@@ -50,7 +50,7 @@ public class StatsActivity extends AppCompatActivity implements OnChartValueSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
         ButterKnife.bind(this);
-        toolbar.setTitle(R.string.statistics);
+        toolbar.setTitle(getResources().getString(R.string.statistics));
         setSupportActionBar(toolbar);
 
         companyPosition = getIntent().getIntExtra("company_array_position", 0);

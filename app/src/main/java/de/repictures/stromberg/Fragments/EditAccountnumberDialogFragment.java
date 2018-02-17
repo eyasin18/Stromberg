@@ -102,6 +102,7 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
             case -1:
                 Intent i = new Intent(getActivity(), LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("webstring_start", true);
                 getActivity().startActivity(i);
                 break;
             case 0:

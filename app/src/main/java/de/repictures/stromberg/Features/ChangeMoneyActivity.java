@@ -245,6 +245,7 @@ public class ChangeMoneyActivity extends AppCompatActivity implements CompoundBu
                 //Daten nicht richtig übertragen/Authstring falsch
                 Intent i = new Intent(ChangeMoneyActivity.this, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("webstring_start", true);
                 startActivity(i);
                 break;
             case 1:

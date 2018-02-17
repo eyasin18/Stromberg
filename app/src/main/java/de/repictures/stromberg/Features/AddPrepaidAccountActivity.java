@@ -102,6 +102,7 @@ public class AddPrepaidAccountActivity extends AppCompatActivity {
                 case 0:
                     Intent i = new Intent(AddPrepaidAccountActivity.this, LoginActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.putExtra("webstring_start", true);
                     startActivity(i);
                     break;
                 case 1:

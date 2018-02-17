@@ -204,6 +204,23 @@
     <string name="product_name_format">Product name: %1$s</string>
     <string name="product_price_format">Price: %1$sS</string>
     <string name="multiple_companies_sell_this_product_choose_one">Multiple companies sell this product. Choose one…</string>
+    <string name="product_is_buyable">Customers can buy this product</string>
+    <string name="exit_edit_product">Exit product edit</string>
+    <string name="edit_product">Edit product</string>
+    <string name="leave">Leave</string>
+    <string name="search">Search</string>
+    <string name="session_timed_out">Your session timed out. Someone logged into your account from a different device.</string>
+    <string name="accept">Accept</string>
+    <string name="privacy_terms">Privacy terms</string>
+    <string name="no_transfers_found">There were no transfers found</string>
+    <string name="company_insolvent_message">This company is insolvent. Please contact the ministry of economics!</string>
+    <string name="title_activity_customs">Custom</string>
+    <string name="euro_price">price (in €)</string>
+    <string name="meat_custom">Meat custom</string>
+    <string name="package_custom">Package custom</string>
+    <string name="squared_custom_message">Custom (%1$s) successfully squared</string>
+    <string name="company_not_enough_money_insolvent">The company has not enough money or is insolvent</string>
+    <string name="bio_meat_custom">Bio meat custom</string>
 
 
 </resources>

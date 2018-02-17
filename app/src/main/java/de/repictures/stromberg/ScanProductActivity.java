@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -28,6 +29,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -356,8 +359,6 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                     productsList.add(products.get(i));
                     productAmounts.add(1);
                     updateSums();
-                    sadCartLayout.setVisibility(View.INVISIBLE);
-                    cartListLayout.setVisibility(View.VISIBLE);
                     productFound = true;
                     break;
                 }
@@ -379,15 +380,47 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             productsList.add(products.get(0));
             productAmounts.add(1);
             updateSums();
-            sadCartLayout.setVisibility(View.INVISIBLE);
-            cartListLayout.setVisibility(View.VISIBLE);
+        }
+        if (shoppingAdapter.getItemCount() == 0){
+            enableCheckoutButton(true);
         }
         shoppingAdapter.notifyDataSetChanged();
         showScanProgressBar(false);
-        if (shoppingAdapter.getItemCount() > 0){
-            checkoutButton.setEnabled(true);
-        }
         floatingActionButton.setImageDrawable(getFloatingActionButtonIcon());
+    }
+
+    private void showShoppingCart(boolean show) {
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.simple_fade_in_alpha_animation);
+
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.simple_fade_out_alpha_animation);
+        fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (show){
+                    sadCartLayout.setVisibility(View.INVISIBLE);
+                    cartListLayout.setVisibility(View.VISIBLE);
+                    cartListLayout.startAnimation(fadeInAnimation);
+                }
+                else{
+                    cartListLayout.setVisibility(View.INVISIBLE);
+                    sadCartLayout.setVisibility(View.VISIBLE);
+                    sadCartLayout.startAnimation(fadeInAnimation);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        if (show) sadCartLayout.startAnimation(fadeOutAnimation);
+        else cartListLayout.startAnimation(fadeOutAnimation);
     }
 
     public void updateSums() {
@@ -496,6 +529,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         checkoutProgressBar.setVisibility(View.INVISIBLE);
         checkoutButton.setText(getResources().getString(R.string.checkout));
         AlertDialog.Builder builder;
+        Intent intent;
         switch (responsecode){
             case -2:
                 builder = new AlertDialog.Builder(ScanProductActivity.this);
@@ -509,15 +543,10 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
                         .show();
                 break;
             case -1:
-                builder = new AlertDialog.Builder(ScanProductActivity.this);
-                builder.setTitle(getResources().getString(R.string.session_invalid))
-                        .setMessage(getResources().getString(R.string.loged_in_on_other_device))
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .show();
+                intent = new Intent(ScanProductActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("webstring_start", true);
+                startActivity(intent);
                 break;
             case 0:
                 break;
@@ -570,13 +599,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
 
     public void enableCheckoutButton(boolean enabled){
         checkoutButton.setEnabled(enabled);
-        if (enabled){
-            sadCartLayout.setVisibility(View.INVISIBLE);
-            cartListLayout.setVisibility(View.VISIBLE);
-        } else {
-            sadCartLayout.setVisibility(View.VISIBLE);
-            cartListLayout.setVisibility(View.INVISIBLE);
-        }
+        showShoppingCart(enabled);
     }
 
     private Drawable getFloatingActionButtonIcon(){
@@ -630,8 +653,9 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
         productsList.add(product);
         productAmounts.add(1);
         updateSums();
-        sadCartLayout.setVisibility(View.INVISIBLE);
-        cartListLayout.setVisibility(View.VISIBLE);
+        if (shoppingAdapter.getItemCount() == 0){
+            enableCheckoutButton(true);
+        }
         shoppingAdapter.notifyDataSetChanged();
         floatingActionButton.setImageDrawable(getFloatingActionButtonIcon());
     }

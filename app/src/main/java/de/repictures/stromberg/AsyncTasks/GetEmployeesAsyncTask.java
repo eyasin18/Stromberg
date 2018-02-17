@@ -116,6 +116,7 @@ public class GetEmployeesAsyncTask extends AsyncTask<Integer, Void, JSONObject>{
                     //Authstring abgelaufen
                     i = new Intent(employeesActivity, LoginActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.putExtra("webstring_start", true);
                     employeesActivity.startActivity(i);
                     break;
             }

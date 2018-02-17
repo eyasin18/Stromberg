@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="240dp"
                 android:maxHeight="240dp"
-                app:srcCompat="@drawable/ic_einkaufswagen_leer"
+                app:srcCompat="@drawable/ic_sad_cart"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:layout_centerVertical="true"

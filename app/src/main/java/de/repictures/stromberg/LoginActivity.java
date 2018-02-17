@@ -39,6 +39,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.LoginAsyncTask;
+import de.repictures.stromberg.Fragments.TermsDialogFragment;
 import de.repictures.stromberg.Helper.LocaleHelper;
 
 //LoginScreen. Startactivity der App.
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final String TAG = "LoginActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 42;
 
-    public static String SERVERURL = "https://2-dot-fingerhut388.appspot.com/";
+    public static String SERVERURL = "https://fingerhut388.appspot.com/";
 
     public boolean loginButtonClicked = false;
 
@@ -77,6 +78,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
         LocaleHelper.onCreate(LoginActivity.this);
 
+        if (getIntent().hasExtra("webstring_start")){
+            Snackbar snackbar = Snackbar.make(loginLayout, getResources().getString(R.string.session_timed_out), Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.ok, view -> snackbar.dismiss());
+            snackbar.show();
+        }
+
         //Die Buttons sollen triggern, wenn sie gedrückt werden.
         loginButton.setOnClickListener(this);
         authenticateText.setOnClickListener(this);
@@ -89,6 +96,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         authCode = sharedPref.getString(getResources().getString(R.string.sp_authcode), null);
         if(savedAccountnumber != ""){
             accountnumberEdit.setText(savedAccountnumber);
+        }
+
+        boolean acceptedPrivacePolice = sharedPref.getBoolean(getResources().getString(R.string.sp_privacy_policy), false);
+        if (!acceptedPrivacePolice){
+            TermsDialogFragment fragment = new TermsDialogFragment();
+            fragment.setCancelable(false);
+            fragment.show(getSupportFragmentManager(), "sfsdf");
         }
 
         //languageSelect.setOnClickListener(this);
@@ -140,10 +154,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK){
-            authCode = data.getStringExtra("authcode");
-        } else {
-            Log.d(TAG, "onActivityResult: failed!");
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                    authCode = data.getStringExtra("authcode");
+                } else {
+                    Log.d(TAG, "onActivityResult: failed!");
+                }
+                break;
+            case 2:
+                Log.d(TAG, "onActivityResult: webstring abgelaufen");
+                break;
+            default:
         }
     }
 

@@ -105,6 +105,7 @@ public class CompanyLoginDialogFragment extends DialogFragment implements View.O
                 //Login erfolgreich
                 i = new Intent(getActivity(), CompanyActivity.class);
                 i.putExtra("company_array_position", companyNumberSpinner.getSelectedItemPosition());
+                i.putExtra("webstring_start", true);
                 getActivity().startActivity(i);
                 dismiss();
                 break;
@@ -118,6 +119,10 @@ public class CompanyLoginDialogFragment extends DialogFragment implements View.O
                 //Passwort falsch
                 passwordInputLayout.setErrorEnabled(true);
                 passwordInputLayout.setError(getActivity().getResources().getString(R.string.password_wrong));
+                break;
+            case 4:
+                passwordInputLayout.setErrorEnabled(true);
+                passwordInputLayout.setError(getResources().getString(R.string.company_insolvent_message));
                 break;
         }
     }

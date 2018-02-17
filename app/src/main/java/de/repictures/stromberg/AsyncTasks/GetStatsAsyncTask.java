@@ -1,6 +1,7 @@
 package de.repictures.stromberg.AsyncTasks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
@@ -74,6 +75,10 @@ public class GetStatsAsyncTask extends AsyncTask<Integer, Void, JSONObject>{
                     break;
                 case 3:
                     //Webstring nicht aktuell
+                    Intent intent = new Intent(activity, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("webstring_start", true);
+                    activity.startActivity(intent);
                     break;
                 case 4:
                     //Alles okay

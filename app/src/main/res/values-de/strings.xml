@@ -109,7 +109,7 @@
     <string name="not_enough_money_message">Du hast nicht genügend Geld auf deinem Konto um diese Produkte zu kaufen</string>
     <string name="session_invalid">Session abgelaufen</string>
     <string name="barcode_not_available">Es gibt bereits ein Produkt mit diesem Produktcode</string>
-    <string name="customer_can_buy_product_by_himself">Kunde kann sich das Produkt selbst kaufen</string>
+    <string name="customer_can_buy_product_by_himself">Kunden können sich dieses Produkt selbst kaufen</string>
     <string name="send_product_loading">Produkt wird gesendet…</string>
     <string name="send_product_success">Produkt wurde gespeichert</string>
     <string name="error_barcode_wrong_length">Dies ist kein gültiger Barcode</string>
@@ -203,4 +203,21 @@
     <string name="product_name_format">Produktname: %1$s</string>
     <string name="product_price_format">Preis: %1$sS</string>
     <string name="multiple_companies_sell_this_product_choose_one">Mehrere Unternehmen verkaufen dieses Produkt. Suche dir eins aus…</string>
+    <string name="product_is_buyable">Kunden können dieses Produkt kaufen</string>
+    <string name="exit_edit_product">Produktbearbeitung verlassen</string>
+    <string name="edit_product">Produkt bearbeiten</string>
+    <string name="leave">Verlassen</string>
+    <string name="search">Suchen</string>
+    <string name="session_timed_out">Deine Session ist abgelaufen. Es wurde sich von einem anderen Gerät auf dein Konto angemeldet.</string>
+    <string name="accept">Aktzeptieren</string>
+    <string name="privacy_terms">Datenschutzerklärung</string>
+    <string name="no_transfers_found">Du hast noch nichts überwiesen</string>
+    <string name="company_insolvent_message">Dieses Unternehmen ist insolvent. Bitte kontaktiere so schnell wie möglich das Wirtschaftsministerium!</string>
+    <string name="title_activity_customs">Waareneinfuhr</string>
+    <string name="euro_price">Preis (in €)</string>
+    <string name="meat_custom">Fleischzoll</string>
+    <string name="package_custom">Verpackungszoll</string>
+    <string name="squared_custom_message">Zoll in Höhe von %1$sS wurde erfolgreich abgebucht</string>
+    <string name="company_not_enough_money_insolvent">Dieses Unternehmen hat nicht genug Geld oder ist insolvent</string>
+    <string name="bio_meat_custom">Bio-Fleischzoll</string>
 </resources>

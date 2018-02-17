@@ -14,5 +14,7 @@
         <item>Geld wechseln</item>
         <item>Mitarbeiter hinzufügen</item>
         <item>Prepaidkonto hinzufügen</item>
+        <item>Ausweiskontrolle</item>
+        <item>Waareneinfuhr</item>
     </string-array>
 </resources>

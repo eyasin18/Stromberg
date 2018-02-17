@@ -3,6 +3,8 @@ package de.repictures.stromberg.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +15,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import de.repictures.stromberg.AuthScanActivity;
 import de.repictures.stromberg.Features.AddAuthKeyActivity;
 import de.repictures.stromberg.Features.AddEmployeeActivity;
 import de.repictures.stromberg.Features.AddPrepaidAccountActivity;
 import de.repictures.stromberg.Features.AddProductActivity;
 import de.repictures.stromberg.CompanyActivity;
 import de.repictures.stromberg.Features.ChangeMoneyActivity;
+import de.repictures.stromberg.Features.CustomsActivity;
 import de.repictures.stromberg.Features.EmployeesActivity;
 import de.repictures.stromberg.Features.ProductsActivity;
+import de.repictures.stromberg.Features.ScanPassportActivity;
 import de.repictures.stromberg.Features.StatsActivity;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
@@ -95,6 +100,16 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
                 break;
             case 7:
                 i = new Intent(companyActivity, AddPrepaidAccountActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 8:
+                i = new Intent(companyActivity, ScanPassportActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 9:
+                i = new Intent(companyActivity, CustomsActivity.class);
                 i.putExtra("company_array_position", companyActivity.companyPosition);
                 companyActivity.startActivity(i);
                 break;

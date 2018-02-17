@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="de.repictures.stromberg.TransfersActivity"
-    tools:showIn="@layout/activity_transfers">
+    tools:showIn="@layout/activity_transfers"
+    android:id="@+id/transfer_list_layout">
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

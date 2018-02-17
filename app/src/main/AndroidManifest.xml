@@ -21,7 +21,7 @@
             android:name=".LoginActivity"
             android:configChanges="locale|orientation"
             android:theme="@style/LoginTheme"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,6 +36,10 @@
             android:label="@string/title_activity_transfers"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.MainActivity" />
@@ -67,7 +71,12 @@
         <activity
             android:name=".Features.AddProductActivity"
             android:label="@string/title_add_product"
-            android:parentActivityName=".CompanyActivity" />
+            android:parentActivityName=".Features.ProductsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.Features.ProductsActivity" />
+        </activity>
         <activity
             android:name=".CompanyActivity"
             android:parentActivityName=".MainActivity" />
@@ -91,6 +100,9 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="de.repictures.stromberg.ORDERS_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
             <meta-data
@@ -120,6 +132,10 @@
             android:label="@string/title_activity_employees"
             android:parentActivityName=".CompanyActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.CompanyActivity" />
@@ -150,7 +166,7 @@
             android:name=".Features.ScanPassportActivity"
             android:label="@string/title_activity_scan_passport"
             android:parentActivityName=".CompanyActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.CompanyActivity" />
@@ -190,6 +206,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Features.CustomsActivity"
+            android:label="@string/title_activity_customs"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
         </activity>
     </application>
 

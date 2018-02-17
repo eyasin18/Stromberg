@@ -229,6 +229,25 @@
     <string name="product_name_format">Product name: %1$s</string>
     <string name="product_price_format">Price: %1$sS</string>
     <string name="multiple_companies_sell_this_product_choose_one">Multiple companies sell this product. Choose one…</string>
+    <string name="product_is_buyable">Customers can buy this product</string>
+    <string name="exit_edit_product">Exit product edit</string>
+    <string name="edit_product">Edit product</string>
+    <string name="leave">Leave</string>
+    <string name="search">Search</string>
+    <string name="session_timed_out">Your session timed out. Someone logged into your account from a different device.</string>
+    <string name="terms" translatable="false">Das Bezahlsystem Fingerhut wurde durch Yasin Ekinci, Max Buchholz und Fabian Schmid erstellt. Bei der Nutzung der Fingerhut App und Webapp werden keine Personenbezogenen Daten gespeichert. Der Zugriff auf das Konto erfolgt einzig und allein \u00FCber eine vierstellige Kontonummer sowie einer vierstelligen Pin, welche in keinster Weise mit dem Kontoinhaber in Verbindung zu bringen sind. \nZur Nutzung ben\u00F6tigt die Android App folgende Zugriffsrechte:\n\u2022\u0009Internet\n\u2022\u0009Kamera: Um QR- und Barcodes zur Authentifizierung und zum Produkte kaufen nutzen zu k\u00F6nnen ben\u00F6tigt die App Zugriff auf die Kamera des Ger\u00E4tes.\nAlle Eingaben die der Nutzer in der  Android App sowie Webapp selbst macht, also z.B. Verwendungszwecke werden auf unbestimmte Zeit gespeichert. Kann \u00FCber diese Eingaben ein Personenbezug hergestellt werden liegt dies in der Verantwortung des Nutzers und wir \u00FCbernehmen keine Haftung.\nIn der Android App wird der Firebase Service verwendet, dessen Datenschutzerkl\u00E4rung ist unter folgendem Link erreichbar:\nhttps://www.google.com/policies/privacy/\nDie einzige M\u00F6glichkeit dieser Datenschutzerkl\u00E4rung zu wiedersprechen ist diese Applikation nicht zu nutzen. Die vom Nutzer angegebenen Daten k\u00F6nnen im Nachhinein mindestens bis zum 17.03.2018 nicht gel\u00F6scht werden. Jegliche Anfragen der Nutzer zum L\u00F6schen ihrer Daten werden bis dahin also ignoriert.\n\nKontaktdaten: support@stromberg-gymnasium-saz.de</string>
+    <string name="accept">Accept</string>
+    <string name="privacy_terms">Privacy terms</string>
+    <string name="sp_privacy_policy" translatable="false">SHARED_PREFERENCE_privacy_policy</string>
+    <string name="no_transfers_found">There were no transfers found</string>
+    <string name="company_insolvent_message">This company is insolvent. Please contact the ministry of economics!</string>
+    <string name="euro_price">price (in €)</string>
+    <string name="meat_custom">Meat custom</string>
+    <string name="package_custom">Package custom</string>
+    <string name="squared_custom_message">Custom (%1$sS) successfully squared</string>
+    <string name="company_not_enough_money_insolvent">The company has not enough money or is insolvent</string>
+    <string name="title_activity_customs">Custom</string>
+    <string name="bio_meat_custom">Bio meat custom</string>
 
 
 </resources>

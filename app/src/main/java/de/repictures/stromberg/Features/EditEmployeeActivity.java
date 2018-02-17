@@ -109,6 +109,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
             case 1:
                 i = new Intent(this, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("webstring_start", true);
                 startActivity(i);
                 break;
             case 2:
