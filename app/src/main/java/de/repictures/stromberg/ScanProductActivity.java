@@ -346,6 +346,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
     }
 
     public void receiveResult(List<Product> products){
+        int exProductsListSize = productsList.size();
         if (products.size() > 1 && productsList.size() < 1){
             productChooserDialogFragment = new ChooseProductDialogFragment();
             productChooserDialogFragment.setScanProductActivity(ScanProductActivity.this);
@@ -355,7 +356,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             String buyingCompany = productsList.get(0).getCompanynumber();
             boolean productFound = false;
             for (int i = 0; i < products.size(); i++){
-                if (buyingCompany == products.get(i).getCompanynumber()){
+                if (buyingCompany.equals(products.get(i).getCompanynumber())){
                     productsList.add(products.get(i));
                     productAmounts.add(1);
                     updateSums();
@@ -381,7 +382,7 @@ public class ScanProductActivity extends AppCompatActivity implements Detector.P
             productAmounts.add(1);
             updateSums();
         }
-        if (shoppingAdapter.getItemCount() == 0){
+        if (exProductsListSize < 1){
             enableCheckoutButton(true);
         }
         shoppingAdapter.notifyDataSetChanged();
