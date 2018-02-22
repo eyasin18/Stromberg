@@ -185,7 +185,7 @@
     <string name="title_activity_products">Produkte verwalten</string>
     <string name="title_activity_scan_passport">Ausweis scannen</string>
     <string name="create_account">Konto erstellen</string>
-    <string name="customer_has_not_enough_money">Kunde hat nicht genug Geld um diese Waaren zu kaufen</string>
+    <string name="customer_has_not_enough_money">Kunde hat nicht genug Geld um diese Waren zu kaufen</string>
     <string name="complete_creation">Erstellung abschließen</string>
     <string name="prepaid_data_cannot_be_restored">Die erstellten Daten können nie wieder angezeigt werden (nicht einmal von den Serveradmins). Sei dir sicher, dass du alle Daten fehlerfrei notiert hast. Daten verwerfen?</string>
     <string name="dismiss">Verwerfen</string>
@@ -213,7 +213,7 @@
     <string name="privacy_terms">Datenschutzerklärung</string>
     <string name="no_transfers_found">Du hast noch nichts überwiesen</string>
     <string name="company_insolvent_message">Dieses Unternehmen ist insolvent. Bitte kontaktiere so schnell wie möglich das Wirtschaftsministerium!</string>
-    <string name="title_activity_customs">Waareneinfuhr</string>
+    <string name="title_activity_customs">Wareneinfuhr</string>
     <string name="euro_price">Preis (in €)</string>
     <string name="meat_custom">Fleischzoll</string>
     <string name="package_custom">Verpackungszoll</string>
