@@ -80,6 +80,10 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        if (transferDialogActivity != null) transferDialogActivity.postResult(Integer.parseInt(s));
+        try {
+            transferDialogActivity.postResult(Integer.parseInt(s));
+        } catch (NumberFormatException e){
+            transferDialogActivity.postResult(-1);
+        }
     }
 }

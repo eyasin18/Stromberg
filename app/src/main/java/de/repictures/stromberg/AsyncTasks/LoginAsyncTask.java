@@ -59,6 +59,9 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         try {
             String getUrlStr = LoginActivity.SERVERURL + "/login?accountnumber=" + keys[0];
             String responseStr = internetHelper.doGetString(getUrlStr);
+            if (responseStr == null){
+                return "{\"response_code\": -1}";
+            }
             String[] doGetResponse = responseStr.split("ò");
 
             if (responseStr.length() < 2){

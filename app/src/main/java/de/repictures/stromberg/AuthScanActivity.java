@@ -285,17 +285,25 @@ public class AuthScanActivity extends AppCompatActivity implements Detector.Proc
                 .show();
     }
 
-    public void getAuthResult(Boolean result, String authKey){
-        if (result){
-            Intent intent = new Intent();
-            intent.putExtra("authcode", authKey);
-            Log.d(TAG, "receiveDetections: " + authKey);
-            AuthScanActivity.this.setResult(RESULT_OK, intent);
-            finish();
-        } else {
-            authScanProgressBar.setVisibility(View.INVISIBLE);
-            authScanTitle.setText(getResources().getString(R.string.no_such_authkey));
-            authFab.show();
+    public void getAuthResult(Integer result, String authKey){
+        switch (result){
+            case -1:
+                authScanProgressBar.setVisibility(View.INVISIBLE);
+                authScanTitle.setText(getResources().getString(R.string.internet_problems));
+                authFab.show();
+                break;
+            case 0:
+                authScanProgressBar.setVisibility(View.INVISIBLE);
+                authScanTitle.setText(getResources().getString(R.string.no_such_authkey));
+                authFab.show();
+                break;
+            case 1:
+                Intent intent = new Intent();
+                intent.putExtra("authcode", authKey);
+                Log.d(TAG, "receiveDetections: " + authKey);
+                AuthScanActivity.this.setResult(RESULT_OK, intent);
+                finish();
+                break;
         }
     }
 

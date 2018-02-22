@@ -72,6 +72,9 @@ public class GetTransfersAsyncTask extends AsyncTask<String, Void, List<Transfer
         String baseUrl = LoginActivity.SERVERURL + "/posttransfers?accountnumber=" + params[0] + "&start=" + params[1] + "&code=" + webstring;
 
         String response = internetHelper.doGetString(baseUrl);
+        if (response == null){
+            return null;
+        }
         try {
             JSONObject responseObject = new JSONObject(response);
             Intent i;
