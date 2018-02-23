@@ -220,4 +220,5 @@
     <string name="squared_custom_message">Zoll in Höhe von %1$sS wurde erfolgreich abgebucht</string>
     <string name="company_not_enough_money_insolvent">Dieses Unternehmen hat nicht genug Geld oder ist insolvent</string>
     <string name="bio_meat_custom">Bio-Fleischzoll</string>
+    <string name="register_message">Bürger muss noch %1$s anwesend sein.\nAnwesenheitszeit bis jetzt: %2$s</string>
 </resources>

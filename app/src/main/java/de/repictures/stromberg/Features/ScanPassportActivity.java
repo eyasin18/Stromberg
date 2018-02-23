@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.UiThread;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
@@ -32,10 +35,11 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.AsyncTasks.RegisterPersonAsyncTask;
+import de.repictures.stromberg.Fragments.EditAccountnumberPassportDialogFragment;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.R;
 
-public class ScanPassportActivity extends AppCompatActivity implements Detector.Processor<Barcode> {
+public class ScanPassportActivity extends AppCompatActivity implements Detector.Processor<Barcode>, View.OnClickListener {
 
     private final String TAG = "dsfsf";
 
@@ -43,13 +47,15 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
     @BindView(R.id.passport_scan_presence_time) TextView presenceTimeText;
     @BindView(R.id.passport_scan_minutes_to_go) TextView minutesToGoText;
     @BindView(R.id.passport_scan_color_view) View colorView;
+    @BindView(R.id.passport_coordinator) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.passport_fab) FloatingActionButton fab;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource mCameraSource;
     private boolean hasReceivedResponse = true;
     private String webstring;
     private String accountnumber;
-    private int counter = 151;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,12 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
         webstring = sharedPref.getString(getResources().getString(R.string.sp_webstring), "");
         accountnumber = sharedPref.getString(getResources().getString(R.string.sp_accountnumber), null);
 
+        colorView.setOnClickListener(this);
+        fab.setOnClickListener(view -> {
+            EditAccountnumberPassportDialogFragment fragment = new EditAccountnumberPassportDialogFragment();
+            fragment.setScanPassportActivity(ScanPassportActivity.this);
+            fragment.show(getSupportFragmentManager(), "sdfjs");
+        });
         createCameraSource();
     }
 
@@ -117,7 +129,7 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
     @Override
     public void receiveDetections(Detector.Detections<Barcode> detections) {
         SparseArray<Barcode> barcodes = detections.getDetectedItems();
-        if (barcodes.size() > 0 && counter > 150){
+        if (barcodes.size() > 0){
             String detection = barcodes.valueAt(0).displayValue;
             if (stringIsAuthString(detection) && hasReceivedResponse){
                 hasReceivedResponse = false;
@@ -125,19 +137,7 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
                 RegisterPersonAsyncTask asyncTask = new RegisterPersonAsyncTask(ScanPassportActivity.this);
                 asyncTask.execute(accountnumber, webstring, detectedAccountnumber);
             }
-        } else if (counter < 151){
-            counter++;
-        } else if (barcodes.size() < 1 && counter > 150){
-            //Scanner freigeben
-            if (!hasReceivedResponse){
-                hasReceivedResponse = true;
-                counter = 0;
-            }
-            colorView.setBackgroundColor(getResources().getColor(R.color.transparent));
-            minutesToGoText.setText("");
-            presenceTimeText.setText("");
         }
-        Log.d(TAG, "receiveDetections: " + counter);
     }
 
     @UiThread
@@ -176,25 +176,26 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
                     }
                 }, 850 + timeNow);
                 break;
+            case 3:
+                break;
         }
     }
 
     @UiThread
     public void processResponse(boolean entered, int presenceTime, int minutesToGo){
-        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         if (entered){
             colorView.setBackgroundColor(getResources().getColor(R.color.green));
-            minutesToGoText.setText("");
-            presenceTimeText.setText("");
             toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
         } else {
             DecimalFormat decimalFormat = new DecimalFormat("00");
             String presenceStr = presenceTime/60 + "h " + decimalFormat.format(presenceTime%60) + "min";
             if (minutesToGo > 0){
-                String minutesToGoStr = presenceTime/60 + "h " + decimalFormat.format(presenceTime%60) + "min";
+                String minutesToGoStr = minutesToGo/60 + "h " + decimalFormat.format(minutesToGo%60) + "min";
                 colorView.setBackgroundColor(getResources().getColor(R.color.purple));
-                minutesToGoText.setText(minutesToGoStr);
-                presenceTimeText.setText(presenceStr);
+                String messageText = String.format(getResources().getString(R.string.register_message), minutesToGoStr, presenceStr);
+                snackbar = Snackbar.make(coordinatorLayout, messageText, Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
 
                 long timeNow = SystemClock.uptimeMillis();
                 Handler handler = new Handler();
@@ -220,5 +221,27 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
 
     private boolean stringIsAuthString(String detection){
         return detection.length() == 20;
+    }
+
+    @Override
+    public void onClick(View view) {
+        //Scanner freigeben
+        if (!hasReceivedResponse){
+            hasReceivedResponse = true;
+        }
+        if (snackbar != null && snackbar.isShown()){
+            snackbar.dismiss();
+        }
+        colorView.setBackgroundColor(getResources().getColor(R.color.transparent));
+        minutesToGoText.setText("");
+        presenceTimeText.setText("");
+    }
+
+    public void startControl(String accountnumber) {
+        if (hasReceivedResponse){
+            hasReceivedResponse = false;
+            RegisterPersonAsyncTask asyncTask = new RegisterPersonAsyncTask(ScanPassportActivity.this);
+            asyncTask.execute(accountnumber, webstring, accountnumber);
+        }
     }
 }

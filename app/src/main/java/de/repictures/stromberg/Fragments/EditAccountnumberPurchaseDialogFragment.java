@@ -30,7 +30,7 @@ import de.repictures.stromberg.POJOs.Product;
 import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
-public class EditAccountnumberDialogFragment extends DialogFragment implements View.OnClickListener {
+public class EditAccountnumberPurchaseDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private RelativeLayout layout;
     private TextInputLayout accountnumberLayout;
@@ -88,7 +88,7 @@ public class EditAccountnumberDialogFragment extends DialogFragment implements V
                 buyerAccountnumber = accountnumberEdit.getText().toString();
                 accountnumberLayout.setErrorEnabled(false);
                 accountnumberLayout.setError("");
-                AddPurchaseOrderAsyncTask asyncTask = new AddPurchaseOrderAsyncTask(EditAccountnumberDialogFragment.this, companyPosition);
+                AddPurchaseOrderAsyncTask asyncTask = new AddPurchaseOrderAsyncTask(EditAccountnumberPurchaseDialogFragment.this, companyPosition);
                 asyncTask.execute(buyerAccountnumber);
                 break;
         }

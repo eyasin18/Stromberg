@@ -24,10 +24,9 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/choice_grid"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="4dp"
-
         app:alignmentMode="alignBounds"
         app:columnCount="2"
         app:rowOrderPreserved="false"
@@ -40,6 +39,7 @@
         <RelativeLayout
             android:id="@+id/main_transfer"
             android:clickable="true"
+            android:focusable="true"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:layout_gravity="fill"
@@ -67,6 +67,7 @@
         <RelativeLayout
             android:id="@+id/main_manual"
             android:clickable="true"
+            android:focusable="true"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:layout_gravity="fill"
@@ -95,6 +96,7 @@
         <RelativeLayout
             android:id="@+id/main_domain"
             android:clickable="true"
+            android:focusable="true"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:layout_gravity="fill"
@@ -122,6 +124,7 @@
         <RelativeLayout
             android:id="@+id/main_scan"
             android:clickable="true"
+            android:focusable="true"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:layout_gravity="fill"

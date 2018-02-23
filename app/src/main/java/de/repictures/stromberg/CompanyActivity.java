@@ -66,6 +66,11 @@ public class CompanyActivity extends AppCompatActivity {
         featuresAdapter = new FeaturesListAdapter(CompanyActivity.this);
         featuresRecycler.setAdapter(featuresAdapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (features.contains(0) || features.contains(3)) {
             Bundle args = new Bundle();
             args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.downloading_products);

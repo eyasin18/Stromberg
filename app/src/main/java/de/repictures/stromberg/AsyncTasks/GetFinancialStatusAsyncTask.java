@@ -39,7 +39,8 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
         String baseUrl = LoginActivity.SERVERURL + "/postfinancialstatus?accountnumber=" + accountnumber + "&webstring=" + parameters[0];
         String doGetString = internetHelper.doGetString(baseUrl);
         Log.d(TAG, "doInBackground: " + baseUrl);
-        return doGetString.split("ò");
+        if (doGetString != null) return doGetString.split("ò");
+        else return new String[]{"-1"};
     }
 
     @Override
@@ -48,7 +49,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
             switch (Integer.parseInt(response[0])){
                 case -1:
                     //Keine Internetverbindung
-                    mainActivity.setFinancialStatus("0000", "Max Mustermann", 0.0f);
+                    mainActivity.setFinancialStatus("Kein Internet", "", 0.0f);
                 case 0:
                     //Account mit dieser Accountnumber wurde nicht gefunden
                     break;

@@ -93,7 +93,9 @@ public class EditOrderItemDialogFragment extends DialogFragment {
         if (!newProduct) amountEdit.setText(String.valueOf(orderDetailFragment.purchaseOrder.getAmounts()[position]));
         else amountEdit.setText("1");
         if (!newProduct) priceEdit.setText(String.valueOf(orderDetailFragment.purchaseOrder.getProducts()[position].getPrice()));
-        else priceEdit.setText(String.valueOf(CompanyActivity.SELLING_PRODUCTS[0].getPrice()));
+        else {
+            if (CompanyActivity.SELLING_PRODUCTS.length > 0) priceEdit.setText(String.valueOf(CompanyActivity.SELLING_PRODUCTS[0].getPrice()));
+        }
 
         //Build the Dialog
         AlertDialog builder = new AlertDialog.Builder(getActivity())

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.repictures.stromberg.Fragments.EditAccountnumberDialogFragment"
+    tools:context="de.repictures.stromberg.Fragments.EditAccountnumberPurchaseDialogFragment"
     android:id="@+id/edit_accountnumber_layout">
 
     <android.support.design.widget.TextInputLayout

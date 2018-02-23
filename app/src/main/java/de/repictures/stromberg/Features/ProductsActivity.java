@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,6 +81,10 @@ public class ProductsActivity extends AppCompatActivity {
         this.products.clear();
         this.products.addAll(products);
         adapter.notifyDataSetChanged();
+    }
+
+    public void noInternet(){
+        Snackbar.make(swipeRefreshLayout, getResources().getString(R.string.internet_problems), Snackbar.LENGTH_LONG).show();
     }
 
     public void editProduct(Product product) {

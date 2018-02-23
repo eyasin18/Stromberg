@@ -19,11 +19,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import de.repictures.stromberg.Fragments.EditAccountnumberDialogFragment;
+import de.repictures.stromberg.Fragments.EditAccountnumberPurchaseDialogFragment;
 import de.repictures.stromberg.Fragments.OrderDetailFragment;
 import de.repictures.stromberg.OrderDetailActivity;
 import de.repictures.stromberg.OrderListActivity;
-import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.POJOs.PurchaseOrder;
 import de.repictures.stromberg.R;
 
@@ -136,7 +135,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     Log.d("fuck off", "onClick: clicked");
-                    EditAccountnumberDialogFragment dialogFragment = new EditAccountnumberDialogFragment();
+                    EditAccountnumberPurchaseDialogFragment dialogFragment = new EditAccountnumberPurchaseDialogFragment();
                     dialogFragment.setOrderListActivity(mParentActivity);
                     dialogFragment.setCompanyPosition(mParentActivity.companyPosition);
                     dialogFragment.show(mParentActivity.getSupportFragmentManager(), "blub");

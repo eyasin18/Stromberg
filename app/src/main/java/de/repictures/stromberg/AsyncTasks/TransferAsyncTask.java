@@ -39,6 +39,10 @@ public class TransferAsyncTask extends AsyncTask<String, Void, String> {
                     + "&senderaccountnumber=" + URLEncoder.encode(transferArray[0], "UTF-8") + "&webstring=" + transferArray[2];
             String getUrlRespStr = internetHelper.doGetString(getUrlStr);
 
+            if (getUrlRespStr == null){
+                return "-1";
+            }
+
             String[] getResponse = getUrlRespStr.split("ò");
 
             if (Integer.parseInt(getResponse[0]) != 7){

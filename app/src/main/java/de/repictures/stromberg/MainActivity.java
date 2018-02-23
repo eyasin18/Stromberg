@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.financial_status_progress_bar) ProgressBar financialStatusProgressBar;
     @BindView(R.id.financial_status_account_type) TextView financialStatusAccountType;
     @BindView(R.id.main_domain_text) TextView mainDomainText;
-    @BindView(R.id.main_domain_image) ImageView mainDomainImageView;
+    @BindView(R.id.main_domain_image) AppCompatImageView mainDomainImageView;
     @BindView(R.id.main_transfer) RelativeLayout transferLayout;
     @BindView(R.id.main_manual) RelativeLayout manualLayout;
     @BindView(R.id.main_domain) RelativeLayout domainLayout;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (companyNumbers.size() < 1){
             mainDomainText.setEnabled(false);
-            mainDomainImageView.setImageDrawable(getResources().getDrawable(R.drawable.domain_grey));
+            mainDomainImageView.setImageResource(R.drawable.domain_grey);
             domainLayout.setEnabled(false);
         }
         else if (companyNumbers.size() < 2){
