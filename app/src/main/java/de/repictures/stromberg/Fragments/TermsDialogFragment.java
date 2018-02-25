@@ -26,7 +26,7 @@ public class TermsDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPreferences sharedPref = getActivity().getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putBoolean(getActivity().getResources().getString(R.string.sp_privacy_policy), true);
+                        editor.putBoolean(getActivity().getResources().getString(R.string.sp_privacy_policy_2), true);
                         editor.apply();
                         dialogInterface.dismiss();
                     }

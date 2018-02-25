@@ -133,6 +133,35 @@ public class GeneralUtils {
         }
     }
 
+    public static List<Integer> parseJsonIntArray(JSONArray jsonArray){
+        ArrayList<Integer> list = new ArrayList<>();
+        try {
+            int len = jsonArray.length();
+            for (int i=0;i<len;i++){
+                list.add(jsonArray.getInt(i));
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List<Integer> parseJsonIntArray(String jsonArrayStr){
+        ArrayList<Integer> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayStr);
+            int len = jsonArray.length();
+            for (int i=0;i<len;i++){
+                list.add(jsonArray.getInt(i));
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static List<Boolean> parseJsonBooleanArray(JSONObject jsonObject, String name){
         ArrayList<Boolean> list = new ArrayList<>();
         try {

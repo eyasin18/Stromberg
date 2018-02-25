@@ -26,6 +26,7 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<Integer, Void, MimeMul
 
     private Internet internetHelper = new Internet();
     private OrderListActivity orderListActivity;
+    private SharedPreferences sharedPref;
 
     public GetPurchaseOrdersAsyncTask(OrderListActivity orderListActivity) {
         this.orderListActivity = orderListActivity;
@@ -33,7 +34,7 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<Integer, Void, MimeMul
 
     @Override
     protected MimeMultipart doInBackground(Integer... params) {
-        SharedPreferences sharedPref = orderListActivity.getSharedPreferences(orderListActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        sharedPref = orderListActivity.getSharedPreferences(orderListActivity.getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         String accountnumber = sharedPref.getString(orderListActivity.getResources().getString(R.string.sp_accountnumber), "");
         String webstring = sharedPref.getString(orderListActivity.getResources().getString(R.string.sp_webstring), "");
         List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(orderListActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
@@ -64,6 +65,7 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<Integer, Void, MimeMul
                         JSONArray nestedProductNamesJsonArray = jsonObject.getJSONArray("productNames");
                         JSONArray completedJsonArray = jsonObject.getJSONArray("completed");
                         JSONArray madeByUserJsonArray = jsonObject.getJSONArray("madeByUser");
+                        JSONArray sellingProducts = jsonObject.getJSONArray("selling_products");
 
                         ArrayList<PurchaseOrder> purchaseOrders = new ArrayList<>();
                         for (int i = 0; i < nestedAmountsJsonArray.length(); i++){
@@ -92,6 +94,11 @@ public class GetPurchaseOrdersAsyncTask extends AsyncTask<Integer, Void, MimeMul
                             purchaseOrder.setMadeByUser(madeByUserJsonArray.getBoolean(i));
                             purchaseOrders.add(purchaseOrder);
                         }
+
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(orderListActivity.getResources().getString(R.string.sp_selling_products), sellingProducts.toString());
+                        editor.apply();
+
                         orderListActivity.refreshAdapter(purchaseOrders);
                     } catch (JSONException e) {
                         e.printStackTrace();

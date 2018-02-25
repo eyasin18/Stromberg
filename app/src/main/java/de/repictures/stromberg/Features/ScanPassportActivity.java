@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -30,6 +32,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 
 import butterknife.BindView;
@@ -49,6 +52,7 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
     @BindView(R.id.passport_scan_color_view) View colorView;
     @BindView(R.id.passport_coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.passport_fab) FloatingActionButton fab;
+    @BindView(R.id.scan_passport_flash_button) ImageButton flashButton;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource mCameraSource;
@@ -56,6 +60,7 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
     private String webstring;
     private String accountnumber;
     private Snackbar snackbar;
+    private boolean isFlash = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
             fragment.show(getSupportFragmentManager(), "sdfjs");
         });
         createCameraSource();
+        flashButton.setOnClickListener(view -> changeFlash());
     }
 
     private void createCameraSource() {
@@ -242,6 +248,40 @@ public class ScanPassportActivity extends AppCompatActivity implements Detector.
             hasReceivedResponse = false;
             RegisterPersonAsyncTask asyncTask = new RegisterPersonAsyncTask(ScanPassportActivity.this);
             asyncTask.execute(accountnumber, webstring, accountnumber);
+        }
+    }
+
+    private void changeFlash() {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(mCameraSource);
+                    if (camera != null) {
+                        Camera.Parameters params = camera.getParameters();
+
+                        if(!isFlash){
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                            flashButton.setImageResource(R.drawable.ic_flash_on_white_24dp);
+                            isFlash = true;
+                        } else {
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            flashButton.setImageResource(R.drawable.ic_flash_off_white_24dp);
+                            isFlash = false;
+
+                        }
+                        camera.setParameters(params);
+
+                    }
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            }
         }
     }
 }

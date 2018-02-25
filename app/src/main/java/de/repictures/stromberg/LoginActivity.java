@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             accountnumberEdit.setText(savedAccountnumber);
         }
 
-        boolean acceptedPrivacePolice = sharedPref.getBoolean(getResources().getString(R.string.sp_privacy_policy), false);
+        boolean acceptedPrivacePolice = sharedPref.getBoolean(getResources().getString(R.string.sp_privacy_policy_2), false);
         if (!acceptedPrivacePolice){
             TermsDialogFragment fragment = new TermsDialogFragment();
             fragment.setCancelable(false);

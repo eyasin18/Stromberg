@@ -56,6 +56,7 @@ public class OrderListActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private SearchView searchView;
     private String query = "";
+    private SharedPreferences sharedPref;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -87,7 +88,7 @@ public class OrderListActivity extends AppCompatActivity {
 
         companyPosition = getIntent().getIntExtra("company_array_position", 0);
 
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
         companyNumbers = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
         FirebaseMessaging.getInstance().subscribeToTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
 
@@ -159,8 +160,11 @@ public class OrderListActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(getResources().getString(R.string.sp_selling_products));
+        editor.apply();
 
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(companyNumbers.get(companyPosition) + "-shoppingRequests");
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }

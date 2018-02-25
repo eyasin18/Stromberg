@@ -8,10 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,15 +15,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.repictures.stromberg.Adapters.FeaturesListAdapter;
-import de.repictures.stromberg.AsyncTasks.GetSellingProductsAsyncTask;
+import de.repictures.stromberg.AsyncTasks.GetWageTaxesAsyncTask;
 import de.repictures.stromberg.Fragments.LoadingDialogFragment;
 import de.repictures.stromberg.POJOs.Account;
-import de.repictures.stromberg.POJOs.Product;
 
 public class CompanyActivity extends AppCompatActivity {
-
-    public static Product[] SELLING_PRODUCTS;
-    public static int[] WAGE_TAX_ARRAY;
 
     public List<String> featuresNames = new ArrayList<>();
     public int companyPosition = 0;
@@ -37,6 +29,7 @@ public class CompanyActivity extends AppCompatActivity {
     RecyclerView.Adapter featuresAdapter;
     private String TAG = "CompanyActivity";
     private LoadingDialogFragment loadingDialogFragment = new LoadingDialogFragment();
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +39,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         companyPosition = getIntent().getIntExtra("company_array_position", 0);
 
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
 
         List<String> companyNames = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynames), new HashSet<>()));
         List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
@@ -73,10 +66,10 @@ public class CompanyActivity extends AppCompatActivity {
         super.onResume();
         if (features.contains(0) || features.contains(3)) {
             Bundle args = new Bundle();
-            args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.downloading_products);
+            args.putInt(LoadingDialogFragment.ARG_TITLE, R.string.updating_taxes);
             loadingDialogFragment.setArguments(args);
             loadingDialogFragment.show(getSupportFragmentManager(), "showLoadingDialogFragment");
-            GetSellingProductsAsyncTask asyncTask = new GetSellingProductsAsyncTask(CompanyActivity.this);
+            GetWageTaxesAsyncTask asyncTask = new GetWageTaxesAsyncTask(CompanyActivity.this);
             asyncTask.execute(companyPosition);
         }
     }
@@ -89,7 +82,8 @@ public class CompanyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SELLING_PRODUCTS = null;
-        WAGE_TAX_ARRAY = null;
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(getResources().getString(R.string.sp_wage_tax));
+        editor.apply();
     }
 }

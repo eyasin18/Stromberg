@@ -32,6 +32,7 @@ import de.repictures.stromberg.AsyncTasks.UpdateEmployeeAsyncTask;
 import de.repictures.stromberg.CompanyActivity;
 import de.repictures.stromberg.Features.EditEmployeeActivity;
 import de.repictures.stromberg.Fragments.EditEmployeeWorkTimeDialogFragment;
+import de.repictures.stromberg.Helper.GeneralUtils;
 import de.repictures.stromberg.POJOs.Account;
 import de.repictures.stromberg.R;
 
@@ -51,6 +52,7 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final EditEmployeeActivity editEmployeeActivity;
     private final String[] allFeaturesNames;
     private List<Integer> features;
+    private List<Integer> wageTaxArray;
 
     public EditEmployeeAdapter(EditEmployeeActivity editEmployeeActivity){
         this.editEmployeeActivity = editEmployeeActivity;
@@ -59,6 +61,8 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         List<String> companyNumbers = new ArrayList<>(sharedPref.getStringSet(editEmployeeActivity.getResources().getString(R.string.sp_companynumbers), new HashSet<>()));
         String featuresJsonStr = sharedPref.getString(editEmployeeActivity.getResources().getString(R.string.sp_featureslist), "");
         features = Account.getSpecificFeaturesLongListFromString(featuresJsonStr, companyNumbers.get(editEmployeeActivity.companyPosition));
+        String wageTaxStr = sharedPref.getString(editEmployeeActivity.getResources().getString(R.string.sp_wage_tax), "");
+        wageTaxArray = GeneralUtils.parseJsonIntArray(wageTaxStr);
     }
 
     @Override
@@ -134,7 +138,7 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         editEmployeeActivity.account.setStartTimesInt(startTimes);
                         editEmployeeActivity.account.setEndTimesInt(endTimes);
                         edited = true;
-                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
                     }
                 });
                 bodyViewHolder.workTimeLayout.setOnClickListener(view -> {
@@ -214,12 +218,12 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //Prozentsatz berechnen
         double integralPercentage = 0;
         for (int i = 0; i < integralPart; i++){
-            if (i < CompanyActivity.WAGE_TAX_ARRAY.length) integralPercentage += CompanyActivity.WAGE_TAX_ARRAY[i];
+            if (i < wageTaxArray.size()) integralPercentage +=wageTaxArray.get(i);
             else integralPercentage += 100;
         }
         integralPercentage = (integralPercentage/integralPart);
         double fractionPercentage = 0;
-        if (integralPart < CompanyActivity.WAGE_TAX_ARRAY.length) fractionPercentage = CompanyActivity.WAGE_TAX_ARRAY[integralPart];
+        if (integralPart < wageTaxArray.size()) fractionPercentage = wageTaxArray.get(integralPart);
         else fractionPercentage = 100;
 
         //Brutto in Netto und Abgabe spalten

@@ -21,142 +21,147 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/transfer_fragment_owner_input_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/transfer_fragment_accountnumber_input_layout"
-            android:layout_toStartOf="@+id/transfer_fragment_accountnumber_input_layout"
-            android:paddingBottom="4dp"
-            android:paddingRight="8dp">
-
-            <AutoCompleteTextView
-                android:id="@+id/transfer_fragment_owner_auto_complete_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:hint="@string/optionee"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/transfer_fragment_accountnumber_input_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:paddingLeft="8dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/transfer_fragment_accountnumber_auto_complete_text"
-                android:layout_width="58dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:inputType="number"
-                android:maxLength="4"
-                android:hint="@string/accountnumber_short"
-                android:maxLines="1" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/transfer_fragment_sender_input_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_owner_input_layout"
-            android:layout_marginTop="16dp"
-            android:paddingBottom="4dp">
+            android:padding="16dp">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/transfer_fragment_sender_edit_text"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transfer_fragment_owner_input_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="64dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/transfer_fragment_accountnumber_input_layout"
+                android:layout_toStartOf="@+id/transfer_fragment_accountnumber_input_layout"
+                android:paddingBottom="4dp"
+                android:paddingRight="8dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/transfer_fragment_owner_auto_complete_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/optionee"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transfer_fragment_accountnumber_input_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="64dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transfer_fragment_accountnumber_auto_complete_text"
+                    android:layout_width="58dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:hint="@string/accountnumber_short"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transfer_fragment_sender_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:hint="@string/transfer_sender"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/transfer_fragment_owner_input_layout"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="4dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/transfer_fragment_amount_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_sender_input_layout"
-            android:layout_marginTop="8dp">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transfer_fragment_sender_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/transfer_sender"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/transfer_fragment_amount_edit_text"
-                android:layout_width="96dp"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transfer_fragment_amount_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="64dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/transfer_fragment_sender_input_layout"
+                android:layout_marginTop="8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transfer_fragment_amount_edit_text"
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:ems="10"
+                    android:hint="@string/amount"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="@dimen/activity_horizontal_margin" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/transfer_fragment_currency"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:ems="10"
-                android:hint="@string/amount"
-                android:inputType="numberDecimal"
-                android:paddingBottom="@dimen/activity_horizontal_margin" />
+                android:layout_alignBottom="@+id/transfer_fragment_amount_layout"
+                android:layout_below="@+id/transfer_fragment_sender_input_layout"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/transfer_fragment_amount_layout"
+                android:layout_toRightOf="@+id/transfer_fragment_amount_layout"
+                android:gravity="center"
+                android:text="@string/currency" />
 
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/transfer_fragment_currency"
-            style="@style/TextAppearance.AppCompat.Body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/transfer_fragment_amount_layout"
-            android:layout_below="@+id/transfer_fragment_sender_input_layout"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/transfer_fragment_amount_layout"
-            android:layout_toRightOf="@+id/transfer_fragment_amount_layout"
-            android:gravity="center"
-            android:text="@string/currency" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/transfer_fragment_purpose_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/transfer_fragment_currency"
-            android:layout_marginTop="16dp"
-            android:paddingBottom="4dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/transfer_fragment_purpose_edit_text"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transfer_fragment_purpose_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:maxLength="300"
-                android:hint="@string/purpose" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/transfer_fragment_currency"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="4dp">
 
-        <Button
-            android:id="@+id/transfer_fragment_transfer_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/transfer"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:theme="@style/LoginButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_centerHorizontal="true"
-            android:textColor="#ffffff"
-            android:layout_below="@+id/transfer_fragment_purpose_input_layout"/>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transfer_fragment_purpose_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:maxLength="300"
+                    android:hint="@string/purpose" />
+            </android.support.design.widget.TextInputLayout>
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/transfer_fragment_transfer_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/transfer"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:theme="@style/LoginButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_centerHorizontal="true"
+                android:textColor="#ffffff"
+                android:layout_below="@+id/transfer_fragment_purpose_input_layout"/>
+
+        </RelativeLayout>
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

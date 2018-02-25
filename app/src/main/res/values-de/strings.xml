@@ -97,7 +97,7 @@
     <string name="one_more_result">1 weiteres Ergebnis</string>
     <string name="can_only_be_bought_on_checkout">Kann nur an der Kasse bezahlt werden</string>
     <string name="checkout">Zur Kasse</string>
-    <string name="server_down">Server sind momentan nicht erreichbar: Versuche es später erneut</string>
+    <string name="server_down">Server sind momentan gesperrt oder nicht erreichbar: Versuche es später erneut</string>
     <string name="only_one_seller_message">Du kannst nicht Produkte von mehreren Verkäufern in deinen Warenkorb legen</string>
     <string name="product_invalid">Scanfehler</string>
     <string name="scan_product">Bar- oder QR-Code scannen</string>
@@ -109,7 +109,7 @@
     <string name="not_enough_money_message">Du hast nicht genügend Geld auf deinem Konto um diese Produkte zu kaufen</string>
     <string name="session_invalid">Session abgelaufen</string>
     <string name="barcode_not_available">Es gibt bereits ein Produkt mit diesem Produktcode</string>
-    <string name="customer_can_buy_product_by_himself">Kunden können sich dieses Produkt selbst kaufen</string>
+    <string name="customer_can_buy_product_by_himself">Kunden können sich dieses Produkt ohne Bestätigung an der Kasse kaufen und direkt bezahlen</string>
     <string name="send_product_loading">Produkt wird gesendet…</string>
     <string name="send_product_success">Produkt wurde gespeichert</string>
     <string name="error_barcode_wrong_length">Dies ist kein gültiger Barcode</string>
@@ -221,4 +221,5 @@
     <string name="company_not_enough_money_insolvent">Dieses Unternehmen hat nicht genug Geld oder ist insolvent</string>
     <string name="bio_meat_custom">Bio-Fleischzoll</string>
     <string name="register_message">Bürger muss noch %1$s anwesend sein.\nAnwesenheitszeit bis jetzt: %2$s</string>
+    <string name="updating_taxes">Steuern aktualisieren…</string>
 </resources>

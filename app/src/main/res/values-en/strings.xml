@@ -222,6 +222,7 @@
     <string name="company_not_enough_money_insolvent">The company has not enough money or is insolvent</string>
     <string name="bio_meat_custom">Bio meat custom</string>
     <string name="register_message">Citizen still has %1$s to go.\nCurrent attendance time: %2$s</string>
+    <string name="updating_taxes">Updating taxes…</string>
 
 
 </resources>

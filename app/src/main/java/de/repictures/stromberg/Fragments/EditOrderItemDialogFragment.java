@@ -17,6 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +39,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
     private boolean newProduct = false;
     private OrderDetailFragment orderDetailFragment;
     private List<String> productNames = new ArrayList<>();
+    private Product[] sellingProducts;
 
     public void setOrderDetailFragment(OrderDetailFragment orderDetailFragment){
         this.orderDetailFragment = orderDetailFragment;
@@ -46,9 +51,24 @@ public class EditOrderItemDialogFragment extends DialogFragment {
         position = getArguments().getInt("position");
         newProduct = getArguments().getBoolean("newProduct", false);
 
-        for (int i = 0; i < CompanyActivity.SELLING_PRODUCTS.length; i++){
-            productNames.add(CompanyActivity.SELLING_PRODUCTS[i].getName());
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getResources().getString(R.string.sp_identifier), Context.MODE_PRIVATE);
+        String sellingProductsArrayStr = sharedPreferences.getString(getActivity().getResources().getString(R.string.sp_selling_products), null);
+        try {
+            JSONArray sellingProductsArray = new JSONArray(sellingProductsArrayStr);
+            sellingProducts = new Product[sellingProductsArray.length()];
+            for (int i = 0; i < sellingProductsArray.length(); i++){
+                JSONObject productObject = sellingProductsArray.getJSONObject(i);
+                sellingProducts[i] = new Product();
+                sellingProducts[i].setCode(productObject.getString("code"));
+                sellingProducts[i].setName(productObject.getString("name"));
+                productNames.add(productObject.getString("name"));
+                sellingProducts[i].setPrice(productObject.getDouble("price"));
+                sellingProducts[i].setSelfBuy(productObject.getBoolean("is_self_buy"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
         if (!newProduct) productIndex = productNames.indexOf(orderDetailFragment.purchaseOrder.getProducts()[position].getName());
         else productIndex = 0;
     }
@@ -81,7 +101,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 productIndex = position;
-                priceEdit.setText(String.valueOf(CompanyActivity.SELLING_PRODUCTS[position].getPrice()));
+                priceEdit.setText(String.valueOf(sellingProducts[position].getPrice()));
             }
 
             @Override
@@ -94,7 +114,7 @@ public class EditOrderItemDialogFragment extends DialogFragment {
         else amountEdit.setText("1");
         if (!newProduct) priceEdit.setText(String.valueOf(orderDetailFragment.purchaseOrder.getProducts()[position].getPrice()));
         else {
-            if (CompanyActivity.SELLING_PRODUCTS.length > 0) priceEdit.setText(String.valueOf(CompanyActivity.SELLING_PRODUCTS[0].getPrice()));
+            if (sellingProducts.length > 0) priceEdit.setText(String.valueOf(sellingProducts[0].getPrice()));
         }
 
         //Build the Dialog
@@ -114,13 +134,13 @@ public class EditOrderItemDialogFragment extends DialogFragment {
                         } else {
                             orderDetailFragment.valuesChanged = true;
                             if (newProduct) {
-                                Product product = CompanyActivity.SELLING_PRODUCTS[productIndex];
+                                Product product = sellingProducts[productIndex];
                                 product.setSelfBuy(false);
                                 orderDetailFragment.purchaseOrder.setProducts(GeneralUtils.appendProduct(orderDetailFragment.purchaseOrder.getProducts(), product));
                                 orderDetailFragment.purchaseOrder.setAmounts(GeneralUtils.appendInt(orderDetailFragment.purchaseOrder.getAmounts(), newAmount));
                                 orderDetailFragment.insertAdapterItem();
                             } else {
-                                orderDetailFragment.purchaseOrder.getProducts()[position] = CompanyActivity.SELLING_PRODUCTS[productIndex];
+                                orderDetailFragment.purchaseOrder.getProducts()[position] = sellingProducts[productIndex];
                                 orderDetailFragment.purchaseOrder.getProducts()[position].setPrice(newPrice);
                                 orderDetailFragment.purchaseOrder.getAmounts()[position] = newAmount;
                                 orderDetailFragment.updateAdapter();
