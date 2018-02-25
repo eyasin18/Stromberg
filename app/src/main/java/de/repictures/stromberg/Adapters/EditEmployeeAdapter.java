@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -123,19 +124,29 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 bodyViewHolder.startTimeText.setText(startTimeStr);
                 String endTimeStr = textFormat.format(endTime.getTime());
                 bodyViewHolder.endTimeText.setText(endTimeStr);
-                bodyViewHolder.workTimeLayout.setOnClickListener(new View.OnClickListener() {
+                bodyViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        EditEmployeeWorkTimeDialogFragment fragment = new EditEmployeeWorkTimeDialogFragment();
-                        fragment.setEditEmployeeActivity(editEmployeeActivity);
-                        Bundle args = new Bundle();
-                        args.putInt("title", R.string.edit_work_time);
-                        args.putInt("start_time_minutes", startTimeMinutes);
-                        args.putInt("end_time_minutes", endTimeMinutes);
-                        args.putInt("position", holder.getAdapterPosition());
-                        fragment.setArguments(args);
-                        fragment.show(editEmployeeActivity.getFragmentManager(), "blub");
+                    public void onClick(View v) {
+                        List<Integer> startTimes = editEmployeeActivity.account.getStartTimesInt();
+                        List<Integer> endTimes = editEmployeeActivity.account.getEndTimesInt();
+                        startTimes.remove(position-1);
+                        endTimes.remove(position-1);
+                        editEmployeeActivity.account.setStartTimesInt(startTimes);
+                        editEmployeeActivity.account.setEndTimesInt(endTimes);
+                        edited = true;
+                        notifyItemRemoved(position);
                     }
+                });
+                bodyViewHolder.workTimeLayout.setOnClickListener(view -> {
+                    EditEmployeeWorkTimeDialogFragment fragment = new EditEmployeeWorkTimeDialogFragment();
+                    fragment.setEditEmployeeActivity(editEmployeeActivity);
+                    Bundle args = new Bundle();
+                    args.putInt("title", R.string.edit_work_time);
+                    args.putInt("start_time_minutes", startTimeMinutes);
+                    args.putInt("end_time_minutes", endTimeMinutes);
+                    args.putInt("position", holder.getAdapterPosition());
+                    fragment.setArguments(args);
+                    fragment.show(editEmployeeActivity.getFragmentManager(), "blub");
                 });
                 break;
             case VIEW_TYPE_ADD_WORK_TIME:
@@ -266,12 +277,14 @@ public class EditEmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         TextView startTimeText, endTimeText;
         RelativeLayout workTimeLayout;
+        ImageView deleteButton;
 
         public BodyViewHolder(View itemView) {
             super(itemView);
             startTimeText = (TextView) itemView.findViewById(R.id.edit_employee_start_time);
             endTimeText = (TextView) itemView.findViewById(R.id.edit_employee_end_time);
             workTimeLayout = (RelativeLayout) itemView.findViewById(R.id.edit_employee_work_times_layout);
+            deleteButton = (ImageView) itemView.findViewById(R.id.edit_employee_delete);
         }
     }
 

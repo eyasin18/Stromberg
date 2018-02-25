@@ -22,134 +22,141 @@
         android:layout_below="@+id/financial_status"
         android:layout_centerHorizontal="true" />
 
-    <android.support.v7.widget.GridLayout
+    <LinearLayout
         android:id="@+id/choice_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
-        app:alignmentMode="alignBounds"
-        app:columnCount="2"
-        app:rowOrderPreserved="false"
-        app:useDefaultMargins="true"
+        android:orientation="vertical"
         android:layout_below="@+id/view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true">
 
-        <RelativeLayout
-            android:id="@+id/main_transfer"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
-            app:layout_gravity="fill"
-            android:gravity="center"
-            android:background="?attr/selectableItemBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/main_transfer_text"
-                android:text="@string/transfer"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                style="@style/TextAppearance.AppCompat.Subhead" />
+            <RelativeLayout
+                android:id="@+id/main_transfer"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground">
 
-            <ImageView
-                android:id="@+id/main_transfer_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:srcCompat="@drawable/cash"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/main_transfer_text"/>
+                <TextView
+                    android:id="@+id/main_transfer_text"
+                    android:text="@string/transfer"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    style="@style/TextAppearance.AppCompat.Subhead" />
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/main_transfer_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:srcCompat="@drawable/cash"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/main_transfer_text"/>
 
-        <RelativeLayout
-            android:id="@+id/main_manual"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
-            app:layout_gravity="fill"
-            android:gravity="center"
-            android:background="?attr/selectableItemBackground">
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/main_manual_text"
-                android:text="@string/manual"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                style="@style/TextAppearance.AppCompat.Subhead"/>
+            <RelativeLayout
+                android:id="@+id/main_manual"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground">
 
-            <ImageView
-                android:id="@+id/main_manual_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:srcCompat="@drawable/dictionary"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/main_manual_text"
-                android:enabled="false"/>
+                <TextView
+                    android:id="@+id/main_manual_text"
+                    android:text="@string/manual"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    style="@style/TextAppearance.AppCompat.Subhead"/>
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/main_manual_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:srcCompat="@drawable/dictionary"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/main_manual_text"
+                    android:enabled="false"/>
 
-        <RelativeLayout
-            android:id="@+id/main_domain"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
-            app:layout_gravity="fill"
-            android:gravity="center"
-            android:background="?attr/selectableItemBackground">
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/main_domain_text"
-                android:text="@string/domain"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                style="@style/TextAppearance.AppCompat.Subhead" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/main_domain_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:srcCompat="@drawable/domain"
-                android:layout_below="@+id/main_domain_text"
-                android:layout_centerHorizontal="true" />
+                <RelativeLayout
+                    android:id="@+id/main_domain"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackground">
 
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/main_domain_text"
+                        android:text="@string/domain"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        style="@style/TextAppearance.AppCompat.Subhead" />
 
-        <RelativeLayout
-            android:id="@+id/main_scan"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
-            app:layout_gravity="fill"
-            android:gravity="center"
-            android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:id="@+id/main_domain_image"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:srcCompat="@drawable/domain"
+                        android:layout_below="@+id/main_domain_text"
+                        android:layout_centerHorizontal="true" />
 
-            <ImageView
-                android:id="@+id/main_scan_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:srcCompat="@drawable/ic_barcode_scan"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/main_scan_text"/>
+                </RelativeLayout>
 
-            <TextView
-                android:id="@+id/main_scan_text"
-                android:text="@string/scan"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textAlignment="center"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_centerHorizontal="true"/>
+                <RelativeLayout
+                    android:id="@+id/main_scan"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackground">
 
-        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/main_scan_image"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:srcCompat="@drawable/ic_barcode_scan"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/main_scan_text"/>
 
-    </android.support.v7.widget.GridLayout>
+                    <TextView
+                        android:id="@+id/main_scan_text"
+                        android:text="@string/scan"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textAlignment="center"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_centerHorizontal="true"/>
 
+                </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

@@ -49,7 +49,7 @@ public class GetFinancialStatusAsyncTask extends AsyncTask<String, Void, String[
             switch (Integer.parseInt(response[0])){
                 case -1:
                     //Keine Internetverbindung
-                    mainActivity.setFinancialStatus("Kein Internet", "", 0.0f);
+                    mainActivity.setFinancialStatus("Kein Internet", "0", 0.0f);
                 case 0:
                     //Account mit dieser Accountnumber wurde nicht gefunden
                     break;

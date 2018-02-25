@@ -83,7 +83,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     public void processResponse(int responseCode) {
         Log.d(TAG, "processResponse: " + responseCode);
-        loadingDialogFragment.dismiss();
+        loadingDialogFragment.dismissAllowingStateLoss();
     }
 
     @Override
