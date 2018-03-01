@@ -253,9 +253,9 @@
     <string name="sp_wage_tax" translatable="false">SHARED_PREFERENCES_wage_tax</string>
     <string name="updating_taxes">Updating taxes…</string>
     <string name="sp_privacy_policy_2" translatable="false">SHARED_PREFERENCE_privacy_policy_2</string>
-    <string name="title_activity_transfer_wage">Lohn manuell überweisen</string>
-    <string name="hours">Stunden</string>
-    <string name="pay_wage">Lohn auszahlen</string>
+    <string name="title_activity_transfer_wage">Transfer wage</string>
+    <string name="hours">Hours</string>
+    <string name="pay_wage">Pay wage</string>
 
 
 </resources>

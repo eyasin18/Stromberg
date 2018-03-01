@@ -222,4 +222,7 @@
     <string name="bio_meat_custom">Bio-Fleischzoll</string>
     <string name="register_message">Bürger muss noch %1$s anwesend sein.\nAnwesenheitszeit bis jetzt: %2$s</string>
     <string name="updating_taxes">Steuern aktualisieren…</string>
+    <string name="title_activity_transfer_wage">Lohn manuell überweisen</string>
+    <string name="hours">Stunden</string>
+    <string name="pay_wage">Lohn auszahlen</string>
 </resources>
