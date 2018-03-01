@@ -27,6 +27,7 @@ import de.repictures.stromberg.Features.EmployeesActivity;
 import de.repictures.stromberg.Features.ProductsActivity;
 import de.repictures.stromberg.Features.ScanPassportActivity;
 import de.repictures.stromberg.Features.StatsActivity;
+import de.repictures.stromberg.Features.TransferWageActivity;
 import de.repictures.stromberg.LoginActivity;
 import de.repictures.stromberg.OrderListActivity;
 import de.repictures.stromberg.POJOs.Account;
@@ -110,6 +111,11 @@ public class FeaturesListAdapter extends RecyclerView.Adapter<FeaturesListViewHo
                 break;
             case 9:
                 i = new Intent(companyActivity, CustomsActivity.class);
+                i.putExtra("company_array_position", companyActivity.companyPosition);
+                companyActivity.startActivity(i);
+                break;
+            case 10:
+                i = new Intent(companyActivity, TransferWageActivity.class);
                 i.putExtra("company_array_position", companyActivity.companyPosition);
                 companyActivity.startActivity(i);
                 break;

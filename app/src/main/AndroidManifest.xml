@@ -217,6 +217,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.repictures.stromberg.CompanyActivity" />
         </activity>
+        <activity
+            android:name=".Features.TransferWageActivity"
+            android:label="@string/title_activity_transfer_wage"
+            android:parentActivityName=".CompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.repictures.stromberg.CompanyActivity" />
+        </activity>
     </application>
 
 </manifest>
